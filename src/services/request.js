@@ -37,7 +37,7 @@ function request(config) {
     } else {
       //登录校验
       if (!res.url.includes('login/login')) {
-        window.location.replace('/#/login/')
+        // window.location.replace('/#/login/')
       }
     }
     return res
