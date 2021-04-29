@@ -1,0 +1,34 @@
+.switch-tabs {
+  // border-bottom: 5px solid #f0f2f5;
+  padding: 0 24px;
+  background-color: #fff;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  height: 58px;
+  display: flex;
+  font-weight: 600;
+  .ant-tabs-nav{
+    height: 100%;
+  }
+  .ant-tabs-tab-btn{   
+      font-size: 16px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 22px;
+  }
+
+  // 激活标签
+  .ant-tabs-tab-active .ant-tabs-tab-btn{
+      color: #007bff!important;
+      font-weight: 600!important;
+  }
+
+  
+  // 底部横条
+  .ant-tabs-ink-bar{
+      height: 4px;
+      background: linear-gradient(315deg, #35FCFF 0%, #0443FC 100%);
+      border-radius: 2px;
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "--main-color": "#007BFF",
+    "--main-color-gradual": " background: linear-gradient(315deg, #ff8464 0%, #f44f44 100%)",
+    
+    "--sub-green-color":"#00AB8C",
+    "--sub-sky-blue-color":"#00A2D5",
+    "--sub-blue-color":"#5461DB",
+    "--sub-violet-color":"#904EE2",
+    
+
+    "--main-error":"#E34443",
+    "--main-warning":"#FF841B"
+
+}

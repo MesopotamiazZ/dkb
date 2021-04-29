@@ -1,0 +1,76 @@
+@import '/src/assets/css/global.less';
+
+.form-page-layout {
+    // border: 1px solid #f40;
+    // padding: 16px;
+    .head-title {
+        height: 46px;
+        line-height: 46px;
+        padding: 0 24px;
+        background: @primary-color;
+        border-radius: 4px 4px 0px 0px;
+        font-size: 18px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+    .form-wrapper{
+        // background-color: gold;
+        // border: 5px solid gold;
+        margin: 0;
+        .form-wrap-item {
+            // border: 1px solid #fff;
+            background-color: #fff;
+            // margin-bottom: 4px;
+            // margin: 30px 0;
+            & .form-wrap-item-inner {
+                padding: 34px 0 14px 0;
+            }
+            .form-item-line {
+                padding-left: 168px;
+            }
+            .sub-title {
+                position: relative;
+                margin: 0 25px 30px;
+                padding: 0 38px;
+                height: 40px;
+                line-height: 40px;
+                background: #fafafa;
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .sub-title:before {
+                content: '';
+                position: absolute;
+                width: 3px;
+                height: 15px;
+                top: 12px;
+                left: 23px;
+                background: @primary-color;
+            }
+        
+        }
+        .form-wrap-item + .form-wrap-item {
+            & .form-wrap-item-inner {
+                padding: 0 0 14px 0;
+            }
+        }
+        .form-wrap-btn {
+            // padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 54px;
+            box-shadow: 0 -4px 5px rgba(0, 0, 0, 0.05);
+        }
+    }
+    .input-textarea .ant-form-item-control-input {
+        width: 440px;
+    }
+    // .submit-wrap {
+    //     box-shadow: 0 2px 2px rgba(255, 255, 255, 0.25);
+    // }
+}
+.ant-picker.ant-picker-range {
+    width: 100%;
+}

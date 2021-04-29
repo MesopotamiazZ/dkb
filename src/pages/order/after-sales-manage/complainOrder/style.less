@@ -1,0 +1,42 @@
+.complain-order {
+  height: 100%;
+  .complain-order-inner {
+    height: 100%;
+  }
+  .ant-table.ant-table-middle .ant-table-tbody > tr > td {
+    padding: 56px 8px 12px 8px;
+  }
+  .ant-table-row {
+    position: relative;
+    .ant-table-selection-column {
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      text-align: left;
+      padding: 0!important;
+      height: 44px;
+      border: none;
+    }
+  }
+  .cell-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    .cell-wrap-line {
+      display: flex;
+      position: absolute;
+      height: 32px;
+      line-height: 32px;
+      left: 0;
+      width: 100%;
+      bottom: 0;
+      padding: 0 8px;
+      background-color: #f1f1f1;
+      .ant-checkbox, .order-no, .order-date, .order-source {
+        margin-right: 10px;
+      }
+    }
+  }
+}

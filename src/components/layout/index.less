@@ -1,0 +1,41 @@
+.layout-wrap{
+    display: flex;
+    height: 100%;
+    background-color: #f8f8f8;
+    
+    .logo{
+        height: 70px;
+    }
+    
+    // 左侧菜单
+    .ant-layout-sider,.ant-menu,.ant-menu-dark,.ant-menu-dark,.ant-menu-inline.ant-menu-sub{
+        background-color: #213262;
+    }
+    .ant-menu-item-selected{
+        background: #1890FF linear-gradient(315deg, #35FCFF 0%, #0443FC 100%);
+    }
+
+    .ant-layout-content{
+        height: 100%;
+        // height: 100vh;
+    }
+    
+    // 主要区域
+    .site-layout{
+        background-color:#f8f8f8; 
+        flex: 1;
+        
+        .layout-conent{
+            // background-color: #fff;
+
+            >div{
+                height: 100%;
+            }
+        }
+    }
+    .layout-header-wrap {
+        box-shadow: none;
+        border-bottom: 1px solid #efefef;
+        border-left: 1px solid #efefef;
+    }
+}

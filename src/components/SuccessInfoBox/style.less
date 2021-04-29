@@ -1,0 +1,32 @@
+.success-info-box {
+  padding: 20px 30px;
+  background: #FAFAFA;
+  .box-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .box-item-title {
+      text-align: left;
+      color: rgba(16, 16, 16, 100);
+      font-size: 16px;
+      text-align: left;
+      font-family: SourceHanSansSC-regular;
+    }
+    .box-item-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      margin-top: 10px;
+      & > div {
+        width: 33%;
+        text-align: left;
+      }
+      span {
+        color: rgba(43, 43, 43, 100);
+        font-size: 14px;
+        text-align: left;
+        font-family: SourceHanSansSC-regular;
+      }
+    }
+  }
+}

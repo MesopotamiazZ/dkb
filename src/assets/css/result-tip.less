@@ -1,0 +1,19 @@
+.result-tip-success, .result-tip-error {
+  color: #fff;
+  & [role="img"] {
+    display: none;
+  }
+  & > .ant-message-notice-content {
+    width: 160px;
+    height: 160px;
+    padding: 30px;
+    border-radius: 4px;
+    // background-color: rgba(0, 171, 140, 0.88);
+  }
+}
+.result-tip-success > .ant-message-notice-content {
+  background-color: rgba(0, 171, 140, 0.88);
+}
+.result-tip-error > .ant-message-notice-content {
+  background-color: rgba(227, 68, 67, 0.88);
+}

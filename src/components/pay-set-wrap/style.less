@@ -1,0 +1,46 @@
+.pay-set-wrap {
+  display: flex;
+  min-height: 105px;
+  padding: 25px 0 25px 25px;
+  background: #fafafa;
+  & .pay-set-wrap-img {
+    display: flex;
+    align-items: center;
+    flex: 0 0 36px;
+    margin-right: 15px;
+    .ant-avatar {
+      width: 100%;
+      height: auto;
+    }
+  }
+  & .pay-set-wrap-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    .title .title-name {
+      font-size: 18px;
+      margin-right: 20px;
+    }
+    .title .title-status {
+      font-size: 14px;
+    }
+    .content {
+      font-size: 12px;
+    }
+  }
+  & .pay-set-wrap-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 150px;
+  }
+  & .ant-divider-vertical {
+    height: 55px;
+    margin: 0;
+  }
+}
+
+.pay-set-wrap + .pay-set-wrap {
+  margin-top: 20px;
+}

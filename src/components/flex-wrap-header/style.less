@@ -1,0 +1,28 @@
+@import '/src/assets/css/reset.less';
+@import '/src/assets/css/global.css';
+
+.flex-wrap-header {
+  margin-bottom: 16px;
+  .data-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 4px;
+    height: 120px;
+    padding: 10px 16px 20px 16px;
+    .data-wrap-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+    .data-wrap-data {
+      font-size: 30px;
+      font-family: HelveticaNeue-Bold, HelveticaNeue;
+      font-weight: bold;
+      color: #FFFFFF;
+    }
+  }
+  .data-wrap + .data-wrap {
+    margin-left: 16px;
+  }
+}

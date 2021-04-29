@@ -1,0 +1,72 @@
+.layout-header-wrap{
+    position: relative;
+    height: 58px;
+    padding: 18px;
+    box-shadow: 0px 1px 4px 0px rgba(0, 21, 41, 0.12);
+
+    .layout-header-right{
+        margin-right: 32px;
+        justify-content: flex-end;
+        >span{
+            padding: 0 10px;
+        }
+        .userinfo{
+            margin-right: 10px;
+            >span{
+               font-size: 24px;
+               margin: 0 10px;
+            }
+        }
+        >div:last-child{
+            margin-left: 30px;
+        }
+        .right-item + .right-item {
+            margin-left: 12px;
+            padding-left: 20px;
+        }
+
+        .right-item {
+            color: rgb(121,121,121);
+            cursor: pointer;
+            img {
+                margin-right: 5px;
+            }
+            &.version img {
+                width: 18px;
+            }
+            &.home img {
+                width: 16px;
+            }
+            &.help img {
+                width: 16px;
+            }
+            &.help a {
+                color: rgba(0,0,0,0.45);
+            }
+        }
+
+        .right-item.avatar {
+            cursor: pointer;
+            img {
+                margin-left: 10px;
+                margin-right: 0;
+                
+            }
+        }
+    }
+
+    // .dorp-down-menu {
+    //     position: absolute;
+    //     top: 50px;
+    //     right: 38px;
+    //     z-index: 10;
+    //     border: 1px solid #eee;
+    //     & .ant-menu-item {
+    //         background: #fff;
+    //         margin: 0;
+    //         div {
+    //             color: rgba(0,0,0,0.85);
+    //         }
+    //     }
+    // }
+}

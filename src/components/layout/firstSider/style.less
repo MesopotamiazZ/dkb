@@ -1,0 +1,31 @@
+@import '@/assets/css/global.less';
+
+.first-sider {
+  flex: 0 0 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  background-color: @layout-first-sider-background;
+  padding: 20px 0;
+  .ant-avatar {
+    margin-bottom: 20px;
+  }
+  .sub-slider-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 66px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+  }
+  .sub-slider-wrap.active {
+    background: linear-gradient(120deg, #ff8464 0%, #f44f44 100%);
+  }
+  .sub-slider-wrap:hover {
+    background: linear-gradient(120deg, #ff8464 0%, #f44f44 100%);
+  }
+}

@@ -1,0 +1,40 @@
+{
+    "data": {
+      "code": 0,
+      "msg": "success",
+      "data": [
+        {
+            "product_id": "201224685432833080345",
+            "product_name": "鱼肝油",
+            "product_price": 100,
+            "product_number": 1,
+            "shop_mobile": "1122221111",
+            "shop_name": "鱼肝油专卖",
+            "revice_name": "嘻嘻",
+            "revice_mobile": "222222111111",
+            "spec": {
+                "color": "黑色",
+                "size": "35"
+            },
+            "status_msg": "已付款",
+            "create_at": "2021-04-21 12:00:00"
+        },
+        {
+          "product_id": "201224685432833080346",
+          "product_name": "鱼肝油",
+          "product_price": 100,
+          "product_number": 1,
+          "shop_mobile": "1122221111",
+          "shop_name": "鱼肝油专卖",
+          "revice_name": "嘻嘻",
+          "revice_mobile": "222222111111",
+          "spec": {
+              "color": "黑色",
+              "size": "35"
+          },
+          "status_msg": "已付款",
+          "create_at": "2021-04-21 12:00:00"
+        }
+      ]
+  }
+}
