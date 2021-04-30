@@ -1,35 +1,193 @@
+@import '@/assets/css/global.less';
+
 .login-wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
     background: url('../../assets/images/bg.svg') 50% 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    .login-box {
+        position: relative;
+        width: 1000px;
+        height: 550px;
+        border-radius: 2px;
+        background: #fff;
+        // overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        .login-carousel-wrap {
+            position: absolute;
+            left: 0;
+            right: 520px;
+            height: 100%;
+            background-image: url(../../assets/images/page-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size:cover;
+        }
 
-    header{
-        width: 100%;
-        position: fixed;
-        top: 0;
-        height: 64px;
-        line-height: 64px;
-        padding: 0 24px;
-        text-align: right;
-        span{
-            cursor: pointer;
+        .login-form-wrap {
+            position: absolute;
+            right: 0;
+            left: 480px;
+            height: 100%;
+            padding: 30px;
+            .login-form-wrap-inner {
+                height: 100%;
+            }
+        }
+        .ant-tabs {
+            height: calc(100% - 76px);
+        }
+
+        .ant-tabs-content-holder {
+            margin: 0 auto;
+            width: 380px;
+            margin-top: 40px;
+        }
+
+        .remember-password {
+            text-align: right;
+            color: rgba(0,0,0,0.55);
+        }
+
+        .form-button {
+            width: 380px;
+            height: 56px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        
+        .login-and-register {
+            text-align: center;
+            & .ant-btn {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+        .mobile-form-item.ant-form-item,
+        .user-form-item.ant-form-item,
+        .reset-valid-code.ant-form-item {
+            margin-bottom: 40px!important;
+        }
+        .reset-new-password.ant-form-item {
+            margin-bottom: 60px;
+        }
+        .valid-wrap {
+            position: relative;
+        }
+        .send-valid-code {
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+            bottom: 10px;
+            width: 104px;
+            padding: 0;
+        }
+
+        // ================== antd tabs ================
+        .ant-tabs-top > .ant-tabs-nav {
+            height: 46px;
+            border-bottom: none;
+        }
+        .ant-tabs-top > .ant-tabs-nav::before {
+            border-color: transparent;
+        }
+        .ant-tabs-tab {
+            margin: 0 28px;
+        }
+        .ant-tabs-tab .ant-tabs-tab-btn {
+            color: @sub-text-color;
+        }
+        .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            color: @main-text-color;
+            font-size: 18p;
+        }
+        .ant-tabs-tab:hover {
+            color: @main-text-color;
+        }
+        .ant-tabs-ink-bar {
+            background-color: @primary-color;
+        }
+        // ===============================================
+
+        // ================== antd input ==================
+        .ant-input-affix-wrapper, .ant-input {
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            outline: none;
+            background: transparent;
+        }
+        .ant-input:focus, .ant-input-affix-wrapper:focus {
+            border-color: @primary-color;
+            box-shadow: none;
+        }
+        .ant-form-item-control-input-content:focus,
+        .ant-form-item-control-input:focus,
+        .ant-form-item-control,
+        .ant-form-item {
+            outline: none;
+        }
+        input:-webkit-autofill{
+            box-shadow:0 0 0 1000px white inset !important;
+        }
+        // ================================================
+    }
+    .wechat-login {
+        .wechat-login-title {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .wechat-login-qr {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+        .wechat-login-tip {
+            text-align: center;
+            color: @sub-text-color;
+            margin-bottom: 40px;
         }
     }
-    .login-box{
-        min-width: 360px;
-        display: flex;
-        flex-direction: column;
-        // background-color: #ccc;
+    .reset-form-wrap,
+    .register-form-wrap {
+        .wrap-title {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 40px;
+            margin: 40px;
+        }
+        & .ant-form {
+            width: 380px;
+            margin: 0 auto;
+        }
+        .ant-checkbox-wrapper {
+            color: @sub-text-color;
+            font-size: 12px;
+        }
+    }
+    .loading{
+        position: fixed;
+        margin: auto;
+        // top: 50%;
+        // left: 50%;
+        // margin-left: 100%;
+        // margin-top: 50%;
     }
 }
-.loading{
-    position: fixed;
-    margin: auto;
-    // top: 50%;
-    // left: 50%;
-    // margin-left: 100%;
-    // margin-top: 50%;
+
+.login-wrap .login-box .ant-input:focus {
+    border-color: none;
 }

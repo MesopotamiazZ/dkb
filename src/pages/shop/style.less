@@ -1,0 +1,111 @@
+@import '../../assets/css/global.less';
+
+.shop-wrap {
+  width: 100vw;
+  height: 100vh;
+  background: @dkb-theme-bgColor;
+  .ant-layout {
+    width: 100%;
+    height: 100%;
+  }
+  .shop-wrap-content {
+    padding: 20px 18%;
+    height: calc(100% - 58px);
+    & .content-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+  .content-wrap-header {
+    display: flex;
+    justify-content: space-between;
+    flex: 0 0 60px;
+    margin-bottom: 20px;
+    & .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    & .title .main-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: @main-text-color;
+    }
+    & .title .sub-title {
+      font-size: 14px;
+      color: @sub-text-color;
+    }
+    & .sort .ant-select {
+      margin-top: 5px;
+    }
+  }
+  .content-wrap-main {
+    display: flex;
+    justify-content: flex-start;
+    // align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    flex: 1;
+    .wrap-main-item {
+      width: 285px;
+      height: 160px;
+      border-radius: 2px;
+      background: @dkb-wrap-bgColor;
+      padding: 20px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      & .wrap-main-top {
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        height: 70px;
+        border-bottom: 1px solid #eee;
+        .ant-avatar {
+          margin-right: 20px;
+        }
+        .store-name {
+          flex: 1;
+          line-height: 50px;
+          font-size: 16px;
+          font-weight: 700;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .anticon-ellipsis {
+          position: absolute;
+          right: 0;
+        }
+      }
+      & .wrap-main-bottom {
+        height: 50px;
+        padding-top: 20px;
+        .ant-badge-status-text {
+          color: @sub-text-color;
+        }
+      }
+    }
+    .add-store.wrap-main-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid transparent;
+      background: linear-gradient(white,white) padding-box, 
+      repeating-linear-gradient(-45deg,#87bef9 0, #87bef9 0.5em,white 0,white 0.75em);
+      & .anticon-plus {
+        font-size: 26px;
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .content-wrap-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    color: @sub-text-color;
+  }
+}

@@ -17,8 +17,10 @@ export default memo(function ({ routers, pathname, toggle }) {
     const [accountInfo, setAccountInfo] = useState(null);
 
     useEffect(() => {
-        const tag = renderTag(routers, pathname);
-        setBreadcrumb(tag);
+        if (pathname) {
+            const tag = renderTag(routers, pathname);
+            setBreadcrumb(tag);
+        }
         setAccountInfo(JSON.parse(localStorage.getItem('accountInfo')));
     }, [pathname])
 
@@ -46,27 +48,31 @@ export default memo(function ({ routers, pathname, toggle }) {
     return (
         <header className="layout-header-wrap bg-white flex space-between align-center">
             <div className="flex align-center">
-                <Space>
-                    {/* <MenuUnfoldOutlined onClick={toggle} /> */}
-                    <Breadcrumb>
-                        {
-                            breadcrumb
-                            && breadcrumb.map(item => {
-                                return (
-                                    <Breadcrumb.Item key={item.path}>
-                                        <span>{item.title}</span>
-                                    </Breadcrumb.Item>
-                                )
-                            })
-                        }
-                    </Breadcrumb>
-                </Space>
+                {
+                    pathname ? <Space>
+                        {/* <MenuUnfoldOutlined onClick={toggle} /> */}
+                        <Breadcrumb>
+                            {
+                                breadcrumb
+                                && breadcrumb.map(item => {
+                                    return (
+                                        <Breadcrumb.Item key={item.path}>
+                                            <span>{item.title}</span>
+                                        </Breadcrumb.Item>
+                                    )
+                                })
+                            }
+                        </Breadcrumb>
+                    </Space> : 'LOGO'
+                }
             </div>
             <div className="layout-header-right flex align-center">
-                <div className="right-item version">
-                    <img src={vip} alt="" />
-                    <span>专业版</span>
-                </div>
+                {
+                    pathname && <div className="right-item version">
+                        <img src={vip} alt="" />
+                        <span>专业版</span>
+                    </div>
+                }
                 {/* <div className="right-item home">
                     <img src={home} alt="" />
                     <span>站点主页</span>

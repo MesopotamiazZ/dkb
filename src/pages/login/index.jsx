@@ -1,5 +1,10 @@
-import React, { memo, useState, useLayoutEffect } from 'react'
-import { Form, Input, Button, message, Spin, } from 'antd';
+import React, { memo, useState, useLayoutEffect, useEffect } from 'react'
+import {
+  Form, Input, Button,
+  message, Spin, Carousel,
+  Tabs,
+  Checkbox
+} from 'antd';
 import { UserOutlined, LockOutlined, } from '@ant-design/icons';
 // import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -8,13 +13,34 @@ import { useHistory } from 'react-router-dom'
 import { loginApi } from '@/services/login'
 import sha1 from '@/utils/sha1'
 // import { actions } from '@/components/layout/store/slice'
+import ToogleLoginStyle from './components/toogle-login-style';
 import './style.less';
+import qrCode from '@/assets/images/qr-code.jpg';
 
+export const PageStatus = {
+  LOGIN: 1, // 密码/验证码登录
+  WECHAT_LOGIN: 2, // 微信登录
+  RESET: 3, // 重置
+  RESIGER: 4, // 注册
+}
+
+const layout = {
+  // labelCol: { span: 4 },
+  wrapperCol: { span: 24 },
+  labelAlign: 'left',
+};
+
+let delayTime = 30;
+let timer = null;
 
 export default memo(function () {
   const history = useHistory();
   // const dispatch = useDispatch();
   const [loading, setLoading] = useState(false) //loading
+
+  const [pageStatus, setPageStatus] = useState(PageStatus.LOGIN);
+
+  const [validText, setValidText] = useState('获取验证码');
 
   const [form] = Form.useForm();
 
@@ -74,70 +100,354 @@ export default memo(function () {
 
   };
 
-  // const menu = (
-  //     <Menu onClick={handleLangChange} style={{ width: 150 }} selectedKeys={[lang]}>
-  //         <Menu.Item key="en_US">us English</Menu.Item>
-  //         <Menu.Item key="zh_CN">cn 简体中文</Menu.Item>
-  //     </Menu>
-  // );
+  /**
+   * 点击发送手机验证
+   */
+  const onSendValidCode = () => {
+    // setValidText('30s')
+    timer = setInterval(() => {
+      if (delayTime <= 1) {
+        setValidText('获取验证码');
+        delayTime = 30;
+        clearInterval(timer);
+        return
+      }
+      setValidText(`${--delayTime}秒后重试`);
+    }, 1000);
+  }
+
+  useEffect(() => {
+    return () => {
+      clearInterval(timer);
+    }
+  }, [])
+
+  /**
+   * 密码登录
+   */
+  const passLoginForm = (
+    <Form
+      className="login-form"
+      onFinish={onFinish}
+      {...layout}
+    >
+      <Form.Item
+        className="user-form-item"
+        name="username"
+      >
+        <Input
+          className="input-height"
+          placeholder="用户名"
+        />
+      </Form.Item>
+      <Form.Item
+        name="password"
+      >
+        <Input.Password
+          className="input-height"
+          type="password"
+          placeholder="密码"
+        />
+      </Form.Item>
+      <Form.Item className="remember-password" wrapperCol={{ span: 24 }}>
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={() => setPageStatus(PageStatus.RESET)}
+        >
+          忘记密码
+        </span>
+      </Form.Item>
+      <div className="ant-row ant-form-item">
+        <Button className="form-button" type="primary" htmlType="submit">
+          登录
+        </Button>
+      </div>
+      <div className="login-and-register">
+        还没账号？
+        <Button
+          type="link"
+          onClick={() => setPageStatus(PageStatus.RESIGER)}
+        >
+          立即注册
+        </Button>
+      </div>
+    </Form >
+  )
+
+  /**
+   * 验证码登录
+   */
+  const validationLoginForm = (
+    <Form
+      className="login-form"
+      onFinish={onFinish}
+      {...layout}
+    >
+      <Form.Item
+        className="mobile-form-item"
+        name="mobile"
+      >
+        <Input
+          className="input-height"
+          placeholder="手机号"
+        />
+      </Form.Item>
+      <div className="valid-wrap">
+        <Form.Item
+          name="validCode"
+        >
+          <Input
+            className="input-height"
+            placeholder="验证码"
+          />
+        </Form.Item>
+        <Button
+          className="send-valid-code"
+          type="primary"
+          ghost
+          disabled={!!(validText !== '获取验证码')}
+          onClick={onSendValidCode}
+        >
+          {validText}
+        </Button>
+      </div>
+      <Form.Item className="remember-password" wrapperCol={{ span: 24 }}>
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={() => setPageStatus(PageStatus.RESET)}
+        >
+          忘记密码
+        </span>
+      </Form.Item>
+      <div className="ant-row ant-form-item">
+        <Button className="form-button" type="primary" htmlType="submit">
+          登录
+        </Button>
+      </div>
+      <div className="login-and-register">
+        还没账号？
+        <Button
+          type="link"
+          onClick={() => setPageStatus(PageStatus.RESIGER)}
+        >
+          立即注册
+        </Button>
+      </div>
+    </Form >
+  )
+
+  /**
+   * 重置密码
+   */
+  const resetPassForm = (
+    <div className="reset-form-wrap">
+      <div className="wrap-title">重置密码</div>
+      <Form
+        className="login-form"
+        onFinish={onFinish}
+        {...layout}
+      >
+        <Form.Item
+          className="mobile-form-item"
+          name="mobile"
+        >
+          <Input
+            className="input-height"
+            placeholder="手机号"
+          />
+        </Form.Item>
+        <div className="valid-wrap">
+          <Form.Item
+            className="reset-valid-code"
+            name="validCode"
+          >
+            <Input
+              className="input-height"
+              placeholder="验证码"
+            />
+          </Form.Item>
+          <Button
+            className="send-valid-code"
+            type="primary"
+            ghost
+            disabled={!!(validText !== '获取验证码')}
+            onClick={onSendValidCode}
+          >
+            {validText}
+          </Button>
+        </div>
+        <Form.Item
+          className="reset-new-password"
+          name="password"
+        >
+          <Input.Password
+            className="input-height"
+            type="password"
+            placeholder="设置密码：6-16位字符，包含字母和数字"
+          />
+        </Form.Item>
+        <div className="ant-row ant-form-item">
+          <Button className="form-button" type="primary" htmlType="submit">
+            登录
+        </Button>
+        </div>
+        <div className="login-and-register">
+          已有账号？
+        <Button
+            type="link"
+            onClick={() => setPageStatus(PageStatus.LOGIN)}
+          >
+            马上登录
+        </Button>
+        </div>
+      </Form >
+    </div>
+  )
+
+  /**
+   * 立即注册
+   */
+  const registerForm = (
+    <div className="register-form-wrap">
+      <div className="wrap-title">立即注册</div>
+      <Form
+        className="login-form"
+        onFinish={onFinish}
+        {...layout}
+      >
+        <Form.Item
+          className="mobile-form-item"
+          name="mobile"
+        >
+          <Input
+            className="input-height"
+            placeholder="手机号"
+          />
+        </Form.Item>
+        <div className="valid-wrap">
+          <Form.Item
+            className="reset-valid-code"
+            name="validCode"
+          >
+            <Input
+              className="input-height"
+              placeholder="验证码"
+            />
+          </Form.Item>
+          <Button
+            className="send-valid-code"
+            type="primary"
+            ghost
+            disabled={!!(validText !== '获取验证码')}
+            onClick={onSendValidCode}
+          >
+            {validText}
+          </Button>
+        </div>
+        <Form.Item
+          className=""
+          name="password"
+        >
+          <Input.Password
+            className="input-height"
+            type="password"
+            placeholder="新密码：6-16位字符，包含字母和数字"
+          />
+        </Form.Item>
+        <Form.Item valuePropName="checked">
+          <Checkbox>
+            我已阅读并同意
+            <a href="" target="_blank">《档口宝服务协议》</a>
+            <a href="" target="_blank">《个人信息保护政策》</a>
+          </Checkbox>
+        </Form.Item>
+        <div className="ant-row ant-form-item">
+          <Button className="form-button" type="primary" htmlType="submit">
+            登录
+        </Button>
+        </div>
+        <div className="login-and-register">
+          已有账号？
+        <Button
+            type="link"
+            onClick={() => setPageStatus(PageStatus.LOGIN)}
+          >
+            马上登录
+        </Button>
+        </div>
+      </Form >
+    </div>
+  )
 
   return (
     <div className="login-wrap">
-      <header>
-        {/* <Dropdown overlay={menu}>
-                    <TranslationOutlined style={{ fontSize: 18, marginBottom: 10 }} />
-                </Dropdown> */}
-      </header>
       <div className="login-box">
-        <h2 style={{ textAlign: 'center' }}>档口宝后台</h2>
-        <Form
-          name="normal_login"
-          className="login-form"
-          form={form}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            name="account"
-            rules={[{ required: true, message: '请输入账号' }]}
-          >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />}
-              style={{ height: 40 }}
-              size="middle"
-              placeholder={'用户名'} />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: '请输入密码' }]}
-          >
-            <Input style={{ height: 40 }}
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder={'密码'}
-            />
-          </Form.Item>
-          <Form.Item style={{ textAlign: 'center' }}>
-
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={() => { }}
-              className="login-form-button"
-              loading={loading}
-            >
-              登录
-            </Button>
-
-
-          </Form.Item>
-
-        </Form>
-
+        <div className="login-carousel-wrap">
+          <Carousel className="slogen-box" autoplay>
+          </Carousel>
+        </div>
+        <div className="login-form-wrap">
+          <div className="login-form-wrap-inner">
+            {
+              (pageStatus === PageStatus.LOGIN
+                || pageStatus === PageStatus.WECHAT_LOGIN)
+              && <ToogleLoginStyle
+                styles={pageStatus}
+                onToogle={() => {
+                  if (pageStatus === PageStatus.LOGIN) {
+                    setPageStatus(PageStatus.WECHAT_LOGIN);
+                  } else {
+                    setPageStatus(PageStatus.LOGIN)
+                  }
+                }}
+              />
+            }
+            {
+              pageStatus === PageStatus.LOGIN
+              &&
+              <Tabs defaultActiveKey="1" centered>
+                <Tabs.TabPane tab="密码登录" key="1">
+                  {
+                    passLoginForm
+                  }
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="验证码登录" key="2">
+                  {
+                    validationLoginForm
+                  }
+                </Tabs.TabPane>
+              </Tabs>
+            }
+            {
+              pageStatus === PageStatus.WECHAT_LOGIN
+              && <div className="wechat-login">
+                <div className="wechat-login-title">微信登录</div>
+                <div className="wechat-login-qr">
+                  <img src={qrCode} alt="" />
+                </div>
+                <div className="wechat-login-tip">
+                  使用微信扫描二维码登录“档口宝”
+                </div>
+                <div className="login-and-register">
+                  还没账号？
+                  <Button
+                    type="link"
+                    onClick={() => setPageStatus(PageStatus.RESIGER)}
+                  >
+                    立即注册
+                  </Button>
+                </div>
+              </div>
+            }
+            {
+              pageStatus === PageStatus.RESET && resetPassForm
+            }
+            {
+              pageStatus === PageStatus.RESIGER && registerForm
+            }
+          </div>
+        </div>
       </div>
-      {
-        loading && <Spin className="loading" size="large" />
-      }
-
     </div>
   )
 })
