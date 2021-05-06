@@ -29,6 +29,7 @@ export default memo(function ({ routers, pathname, toggle }) {
      */
     const logOut = () => {
         localStorage.removeItem('Dense-Diary-Authorization');
+        localStorage.removeItem('dkb-id');
         history.push('/login')
     }
 

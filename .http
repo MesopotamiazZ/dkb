@@ -1,0 +1,11 @@
+POST https://b.api.dangkoubao.com/Core/User/login HTTP/1.1
+content-type: application/json
+
+{
+  "phone":"18510974721",
+  "type":"1",
+  "password":"a123456",
+  "smscode":"",
+  "ticket":"t03BdFiyHGgHz3ATxsoRJMJmVETuT_orfxEzl1PXZaO968GlFz3eiim7yydj46m2V6X_jqBiUgjNYSlQ4WDxUUDeu58FsxZ9LZac0NZwcVLPkdQqkRzN_K-jg**",
+  "randstr":"@E8I"
+}

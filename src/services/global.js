@@ -11,4 +11,15 @@ export const getsectionListApi = data => request({ url: 'section/list', data, })
  * @param {*} data 
  * @returns 
  */
-export const getCurAccountInfo = data => request({ url: '/api/agent/v1/api/profile/detail', data, })
+export const getCurAccountInfo = data => request({ url: '/Publics/Tools/getUser', data, method: 'get' })
+
+/**
+ * 商户信息查询
+ * @param {*} data 
+ * @returns 
+ */
+export const getShopInfo = data => request({
+  url: '/Core/Shop/getConfig',
+  method: 'get',
+  params: { ...data }
+})

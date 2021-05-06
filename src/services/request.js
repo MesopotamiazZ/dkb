@@ -7,12 +7,13 @@ function request(config) {
   const instance = axios.create({
     baseURL: BASE_URL,
     timeout: TIMEOUT,
-    method: 'post',
+    method: config.method || 'post',
     headers: {
       'Cache-Control': 'no-cache',
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json',
-      Authorization: `Bearer${localStorage.getItem('Dense-Diary-Authorization')}`
+      token: `${localStorage.getItem('Dense-Diary-Authorization')}`,
+      dkbid: `${localStorage.getItem('dkb-id')}`,
       // 'x-test': 1
     }
   })
@@ -54,6 +55,7 @@ function request(config) {
       if (err.response) {
         // 错误信息
         console.log(err.response);
+        message.error(err?.response?.data?.msg)
       }
     })
   })

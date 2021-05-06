@@ -85,6 +85,24 @@ export function checkStatus(response) {
   };
 }
 
+/**
+ * 行为验证
+ * @returns 
+ */
+export function behaviorVerification() {
+  return new Promise((resolve, reject) => {
+    try {
+      //方法1: 直接生成一个验证码对象。
+      var captcha1 = new window.TencentCaptcha('2034169128', function (res) {
+        resolve(res)
+      });
+      captcha1.show(); // 显示验证码
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 export function splitUrl(url) {
   const str = url.split('?')[1];
   const items = (str && str.split('&')) || [];

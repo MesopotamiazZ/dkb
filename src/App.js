@@ -15,15 +15,12 @@ moment.locale('zh-cn');
 function App() {
 
   const history = useHistory()
-
-
   useLayoutEffect(() => {
-    // const Authorization = localStorage.getItem('Dense-Diary-Authorization')
-    // !Authorization && history.replace('/merchantManage/list')
-
+    const Authorization = localStorage.getItem('Dense-Diary-Authorization')
+    console.log('Authorization', Authorization);
+    !Authorization && history.push('/login')
   }, [])
   const [lang] = useState(zhCN)
-
 
   return (
     <ConfigProvider locale={lang}>

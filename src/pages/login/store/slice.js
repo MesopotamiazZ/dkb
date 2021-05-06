@@ -1,6 +1,5 @@
 // import * as actionType from './contants'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getTestDataApi } from '@/services/home'
 
 import {
     getsectionListApi,
@@ -36,13 +35,6 @@ const reducers = {
  * signal
  * rejectWithValue
  */
-const changeuserInfoActionAsync = createAsyncThunk(
-    'login/changeuserInfoActionAsync',
-    async (data, thunkAPI) => {
-        const res = await getTestDataApi(data);
-        return res.data;
-    }
-)
 
 /**
  * 获取账号信息
@@ -89,7 +81,7 @@ const loginSlice = createSlice({
 
 export const actions = {
     ...loginSlice.actions,
-    changeuserInfoActionAsync,
+    // changeuserInfoActionAsync,
     changeSectionListAsync,
     getCurAccountInfoActionAsync
 };

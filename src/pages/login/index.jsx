@@ -5,14 +5,19 @@ import {
   Tabs,
   Checkbox
 } from 'antd';
-import { UserOutlined, LockOutlined, } from '@ant-design/icons';
-// import { useDispatch } from 'react-redux'
+// import { UserOutlined, LockOutlined, } from '@ant-design/icons';
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 // import routers from '@/router'
-import { loginApi } from '@/services/login'
-import sha1 from '@/utils/sha1'
-// import { actions } from '@/components/layout/store/slice'
+import {
+  loginApi,
+  sendSms,
+  registerApi,
+} from '@/services/login'
+import { behaviorVerification } from '@/utils'
+// import sha1 from '@/utils/sha1'
+import { actions } from './store/slice'
 import ToogleLoginStyle from './components/toogle-login-style';
 import './style.less';
 import qrCode from '@/assets/images/qr-code.jpg';
@@ -34,20 +39,25 @@ let delayTime = 30;
 let timer = null;
 
 export default memo(function () {
+  const {
+    getCurAccountInfoActionAsync
+  } = actions;
   const history = useHistory();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false) //loading
 
   const [pageStatus, setPageStatus] = useState(PageStatus.LOGIN);
 
   const [validText, setValidText] = useState('获取验证码');
 
+  const [isPassLogin, setIsPassLogin] = useState(true); // 是否是密码登录或是验证码登录
+
   const [form] = Form.useForm();
 
   // 登录后禁止跳转到登录页,跳转到登录后则清空所有数据
   useLayoutEffect(() => {
     if (localStorage.getItem("Dense-Diary-Authorization")) {
-      history.replace('/overview')
+      history.replace('/shop')
     }
   }, [history])
 
@@ -56,55 +66,75 @@ export default memo(function () {
    * @param {object} values 
    */
   const onFinish = async values => {
-    setLoading(true);
-    let res = await loginApi({
-      account: values.account,
-      password: sha1(values.password)
-    })
-
-    if (res.code === '0' || res.code === 0) {
-      message.success('登录成功')
+    try {
+      let result;
+      setLoading(true);
+      switch (pageStatus) {
+        case PageStatus.LOGIN: // 密码登录/验证码登录
+          const res = await behaviorVerification();
+          console.log('行为验证');
+          if (res.ret === 2) {
+            setLoading(false);
+            return
+          }
+          result = await loginApi({
+            phone: values.phone,
+            type: isPassLogin ? 1 : 2,
+            password: values.password || '',
+            smscode: values.smscode || '',
+            ticket: res.ticket,
+            randstr: res.randstr
+          })
+          if (result.code === 200) {
+            message.success('登录成功');
+            setLoading(false);
+            localStorage.setItem('Dense-Diary-Authorization', result?.result?.token);
+            dispatch(getCurAccountInfoActionAsync())
+            history.push({
+              pathname: '/shop'
+            })
+          } else {
+            message.error('账号或密码错误');
+          }
+          break;
+        case PageStatus.WECHAT_LOGIN: // 微信登录
+          break;
+        case PageStatus.RESET: // 重置密码
+          break;
+        case PageStatus.RESIGER: // 注册
+          result = await registerApi({
+            phone: values.phone,
+            password: values.password,
+            smscode: values.smscode,
+          })
+          setLoading(false);
+          if (result.code === 200) {
+            message.success('注册成功');
+            setPageStatus(PageStatus.LOGIN);
+          } else {
+            message.error(result.msg);
+          }
+          break;
+        default: ;
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
       setLoading(false);
-      localStorage.setItem('Dense-Diary-Authorization', res.data.token)
-      // res = await getsectionListApi();
-      // let result = await getCurAccountInfo({});
-      // if (result.code === 0 || result.code === '0') {
-      //   localStorage.setItem('accountInfo', result.accountInfo)
-      // }
-
-      /**
-       * 过滤菜单
-       */
-      // routers.forEach((item, index) => {
-      //     if (item.path === '/orders') {
-      //         routers[index].children = item.children.filter(cItem => {
-      //             return res.data.some(dItem => dItem.section_id === cItem.section_id)
-      //         })
-      //     } else if (item.path === '/products') {
-      //         routers[index].children = item.children.filter(cItem => {
-      //             return res.data.some(dItem => dItem.section_id === cItem.section_id)
-      //         })
-      //     }
-      // })
-      // dispatch(actions.changeRoutersAction(routers))
-
-      // 存储后端菜单
-      // localStorage.setItem('sectionList',JSON.stringify(res.data))
-      // localStorage.setItem('Dense-Diary-Router', JSON.stringify(routers))
-      // console.log('筛选完', routers);
-
-      history.push({ pathname: '/overview' })
-    } else {
-      message.warning(res.msg || '请求超时')
     }
-
   };
 
   /**
    * 点击发送手机验证
    */
-  const onSendValidCode = () => {
-    // setValidText('30s')
+  const onSendValidCode = async () => {
+    let node;
+    const res = await behaviorVerification();
+    console.log('行为验证', res);
+    if (res.ret === 2) {
+      setLoading(false);
+      return
+    }
     timer = setInterval(() => {
       if (delayTime <= 1) {
         setValidText('获取验证码');
@@ -114,6 +144,27 @@ export default memo(function () {
       }
       setValidText(`${--delayTime}秒后重试`);
     }, 1000);
+    switch (pageStatus) {
+      case PageStatus.LOGIN: // 手机号登录
+        node = 2;
+        break;
+      case PageStatus.RESIGER: // 注册
+        node = 1;
+        break;
+      case PageStatus.RESET: //重置
+        node = 3;
+        break;
+      default: ;
+    }
+    const result = await sendSms({
+      phone: form.getFieldValue('phone'),
+      node,
+      ticket: res.ticket,
+      randstr: res.randstr
+    });
+    if (result.code === 200) {
+      message.success('验证码已发送，请注意查收');
+    }
   }
 
   useEffect(() => {
@@ -129,19 +180,26 @@ export default memo(function () {
     <Form
       className="login-form"
       onFinish={onFinish}
+      form={form}
       {...layout}
+      initialValues={{
+        phone: '',
+        password: ''
+      }}
     >
       <Form.Item
         className="user-form-item"
-        name="username"
+        name="phone"
+        rules={[{ required: true, message: '请填写手机号' }]}
       >
         <Input
           className="input-height"
-          placeholder="用户名"
+          placeholder="手机号"
         />
       </Form.Item>
       <Form.Item
         name="password"
+        rules={[{ required: true, message: '请填写密码' }]}
       >
         <Input.Password
           className="input-height"
@@ -158,7 +216,7 @@ export default memo(function () {
         </span>
       </Form.Item>
       <div className="ant-row ant-form-item">
-        <Button className="form-button" type="primary" htmlType="submit">
+        <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
           登录
         </Button>
       </div>
@@ -181,11 +239,13 @@ export default memo(function () {
     <Form
       className="login-form"
       onFinish={onFinish}
+      form={form}
       {...layout}
     >
       <Form.Item
         className="mobile-form-item"
-        name="mobile"
+        name="phone"
+        rules={[{ required: true, message: '请填写手机号' }]}
       >
         <Input
           className="input-height"
@@ -194,7 +254,8 @@ export default memo(function () {
       </Form.Item>
       <div className="valid-wrap">
         <Form.Item
-          name="validCode"
+          name="smscode"
+          rules={[{ required: true, message: '请填写验证码' }]}
         >
           <Input
             className="input-height"
@@ -220,7 +281,7 @@ export default memo(function () {
         </span>
       </Form.Item>
       <div className="ant-row ant-form-item">
-        <Button className="form-button" type="primary" htmlType="submit">
+        <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
           登录
         </Button>
       </div>
@@ -245,11 +306,13 @@ export default memo(function () {
       <Form
         className="login-form"
         onFinish={onFinish}
+        form={form}
         {...layout}
       >
         <Form.Item
           className="mobile-form-item"
-          name="mobile"
+          name="phone"
+          rules={[{ required: true, message: '请填写手机号' }]}
         >
           <Input
             className="input-height"
@@ -259,7 +322,8 @@ export default memo(function () {
         <div className="valid-wrap">
           <Form.Item
             className="reset-valid-code"
-            name="validCode"
+            name="smscode"
+            rules={[{ required: true, message: '请填写验证码' }]}
           >
             <Input
               className="input-height"
@@ -279,6 +343,7 @@ export default memo(function () {
         <Form.Item
           className="reset-new-password"
           name="password"
+          rules={[{ required: true, message: '请填写密码' }]}
         >
           <Input.Password
             className="input-height"
@@ -287,8 +352,8 @@ export default memo(function () {
           />
         </Form.Item>
         <div className="ant-row ant-form-item">
-          <Button className="form-button" type="primary" htmlType="submit">
-            登录
+          <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
+            确定
         </Button>
         </div>
         <div className="login-and-register">
@@ -305,19 +370,24 @@ export default memo(function () {
   )
 
   /**
-   * 立即注册
+   * 免费注册
    */
   const registerForm = (
     <div className="register-form-wrap">
-      <div className="wrap-title">立即注册</div>
+      <div className="wrap-title">免费注册</div>
       <Form
         className="login-form"
         onFinish={onFinish}
+        form={form}
         {...layout}
+        initialValues={{
+          is_agree: true
+        }}
       >
         <Form.Item
           className="mobile-form-item"
-          name="mobile"
+          name="phone"
+          rules={[{ required: true, message: '请填写手机号' }]}
         >
           <Input
             className="input-height"
@@ -327,7 +397,8 @@ export default memo(function () {
         <div className="valid-wrap">
           <Form.Item
             className="reset-valid-code"
-            name="validCode"
+            name="smscode"
+            rules={[{ required: true, message: '请填写验证码' }]}
           >
             <Input
               className="input-height"
@@ -347,6 +418,7 @@ export default memo(function () {
         <Form.Item
           className=""
           name="password"
+          rules={[{ required: true, message: '请填写密码' }]}
         >
           <Input.Password
             className="input-height"
@@ -354,7 +426,11 @@ export default memo(function () {
             placeholder="新密码：6-16位字符，包含字母和数字"
           />
         </Form.Item>
-        <Form.Item valuePropName="checked">
+        <Form.Item
+          valuePropName="checked"
+          name="is_agree"
+        // rules={[{ required: true, message: '请同意协议' }]}
+        >
           <Checkbox>
             我已阅读并同意
             <a href="" target="_blank">《档口宝服务协议》</a>
@@ -362,8 +438,8 @@ export default memo(function () {
           </Checkbox>
         </Form.Item>
         <div className="ant-row ant-form-item">
-          <Button className="form-button" type="primary" htmlType="submit">
-            登录
+          <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
+            确定
         </Button>
         </div>
         <div className="login-and-register">
@@ -405,7 +481,17 @@ export default memo(function () {
             {
               pageStatus === PageStatus.LOGIN
               &&
-              <Tabs defaultActiveKey="1" centered>
+              <Tabs
+                defaultActiveKey="1"
+                centered
+                onChange={(key) => {
+                  if (key === '1') {
+                    setIsPassLogin(true);
+                  } else {
+                    setIsPassLogin(false);
+                  }
+                }}
+              >
                 <Tabs.TabPane tab="密码登录" key="1">
                   {
                     passLoginForm

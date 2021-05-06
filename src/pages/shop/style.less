@@ -11,6 +11,7 @@
   .shop-wrap-content {
     padding: 20px 18%;
     height: calc(100% - 58px);
+    overflow: auto;
     & .content-wrap {
       display: flex;
       flex-direction: column;
@@ -48,7 +49,7 @@
     flex-wrap: wrap;
     flex: 1;
     .wrap-main-item {
-      width: 285px;
+      width: 280px;
       height: 160px;
       border-radius: 2px;
       background: @dkb-wrap-bgColor;
@@ -108,4 +109,30 @@
     height: 40px;
     color: @sub-text-color;
   }
+}
+
+.create-shop-modal {
+  .create-shop-item {
+    position: relative;
+  }
+  .create-shop-item > .sub-label {
+    position: absolute;
+    top: 24px;
+    color: @sub-text-color;
+  }
+  // select
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 36px;
+  }
+}
+
+// form
+.create-shop-modal .ant-form-item-label > label {
+  position: relative;
+  top: -8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.create-shop-modal .ant-modal-footer {
+  text-align: center;
 }
