@@ -1,9 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Select } from 'antd';
+import { getUploadToken } from '@/services/global';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
 const BaseSet = () => {
+  const [uploadToken, setUploadToken] = useState(); // 文件上传token
+
+  /**
+   * 获取文件上传token
+   * @param {*} obj 
+   */
+  const handleGetToken = async (obj) => {
+    const result = await getUploadToken(obj);
+    if (result) {
+      setUploadToken(result);
+    }
+  };
+
+  useEffect(() => {
+    handleGetToken();
+  }, [])
 
   // const [obj, setObj] = useState({
   //   default: 'http',
