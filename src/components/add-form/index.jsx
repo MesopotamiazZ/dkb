@@ -35,7 +35,6 @@ export default memo(function ({ formProps = {} }) {
                         {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}
                     </Select>
                     break;
-
                 case 'rangepicker':
                     ele = <RangePicker allowClear  {...searchProps} className="input-height input-width" />
                     break;
@@ -73,7 +72,7 @@ export default memo(function ({ formProps = {} }) {
                     ele = <ProFormList   {...searchProps} formTableArr={searchProps.filedTitle} formName={searchProps.filedName} />
                     break;
                 case 'proselects':
-                    ele = <ProSelects {...searchProps} />
+                    ele = <ProSelects {...searchProps} form={form} />
                     break;
                 default:
                     ele = <Input allowClear   {...searchProps} className="input-height input-width" />
@@ -81,9 +80,9 @@ export default memo(function ({ formProps = {} }) {
             return ele
         }
 
-        return search.map(item => {
+        return search.map((item, index) => {
             return (
-                <div className="form-item-line">
+                <div className="form-item-line" key={item.wrap.name + index}>
                     <Form.Item colon={false}  {...item.wrap} key={item.wrap.name}>
                         {renderFormEle(item.wrap.type, item.props)}
                     </Form.Item>
@@ -101,7 +100,7 @@ export default memo(function ({ formProps = {} }) {
                     layout="block"
                     // {...formProps.layoutConfig}
                     initialValues={{ ...formProps?.initValue }}
-                    form={form}
+                    form={formProps.form || form}
 
                 >
                     <Form.Item style={{ marginBottom: '0', background: "#fff" }} >
@@ -123,9 +122,10 @@ export default memo(function ({ formProps = {} }) {
                         <div className="form-wrap-item form-wrap-btn">
                             {/* <Col xs={14} sm={14} xl={14} offset={5} > */}
                             {
-                                formProps?.config?.map(item => {
+                                formProps?.config?.map((item, index) => {
                                     return (
                                         <Button
+                                            key={item.text + index}
                                             {...item.wrap}
                                             onClick={() => {
                                                 // 提交数据

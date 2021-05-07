@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Select } from 'antd';
 import './style.less';
 
 const Level2Select = (props) => {
   const {
     baseIndustryList,
-    thinIndustryList
+    thinIndustryList,
+    handleSelectIndustry,
+    form,
+    selects,
   } = props;
 
-  const handleSelectIndustry = ({ value, index }) => {
-    console.log(value, index)
-  }
+  useEffect(() => {
+    console.log('selects', selects);
+    if (selects.length === 1) {
+      handleSelectIndustry({ value: selects[0], index: 1 });
+      form.setFieldsValue({ baseIndustry: selects[0] });
+    } else if (selects.length === 2) {
+      handleSelectIndustry({ value: selects[0], index: 1 });
+      form.setFieldsValue({ baseIndustry: selects[0] });
+      form.setFieldsValue({ thinIndustry: selects[1] });
+    }
+  }, [selects])
 
   return (
     <div className="level-2-select">
@@ -22,11 +33,14 @@ const Level2Select = (props) => {
         <Select
           className="select-width"
           placeholder="选择行业"
-          onChange={(value) => handleSelectIndustry({ value, index: 1 })}
+          onChange={(value) => {
+            handleSelectIndustry({ value, index: 1 });
+            form.setFieldsValue({ thinIndustry: '' })
+          }}
         >
           {baseIndustryList?.length > 0
             && baseIndustryList.map((ind) => (
-              <Select.Option key={ind.id} value={`${ind.name}|${ind.id}|${ind.code}|${ind.merchant_category}`}>
+              <Select.Option key={ind.id} value={`${ind.id}`}>
                 {ind.name}
               </Select.Option>
             ))}
@@ -43,7 +57,7 @@ const Level2Select = (props) => {
         >
           {(baseIndustryList?.length > 0 && thinIndustryList?.length > 0)
             ? thinIndustryList.map((ind) => (
-              <Select.Option key={ind.id} value={`${ind.name}|${ind.id}|${ind.code}`}>
+              <Select.Option key={ind.id} value={`${ind.id}`}>
                 {ind.name}
               </Select.Option>
             )) : ''

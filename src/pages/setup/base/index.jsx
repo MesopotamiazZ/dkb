@@ -1,26 +1,55 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Select } from 'antd';
-import { getUploadToken } from '@/services/global';
+import { Form, message } from 'antd';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from './store/slice';
+import { updateBaseSet } from '@/services/setup';
+import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
 const BaseSet = () => {
-  const [uploadToken, setUploadToken] = useState(); // 文件上传token
+  const dispatch = useDispatch();
 
-  /**
-   * 获取文件上传token
-   * @param {*} obj 
-   */
-  const handleGetToken = async (obj) => {
-    const result = await getUploadToken(obj);
-    if (result) {
-      setUploadToken(result);
-    }
-  };
+  // const [form] = Form.useForm();
+  let {
+    baseInfo,
+    industry1,
+    industry2
+  } = useSelector(state => state.base, shallowEqual) //store数据
+
+  const {
+    getBaseSetActionAsync,
+    getIndustryActionAsync,
+    clearindustry2,
+  } = actions;
+
+  const [industrys, setIndustrys] = useState([]);
+  const [initValue, setInitValue] = useState({});
+  const [indSelects, setIndSelects] = useState([]);
+  const [logoEnum, setLogoEnum] = useState([]);
 
   useEffect(() => {
-    handleGetToken();
+    dispatch(getBaseSetActionAsync())
+    dispatch(getIndustryActionAsync({ pid: 0 }))
   }, [])
+
+  useEffect(() => {
+    if (Object.keys(baseInfo).length) {
+      console.log('baseInfo', baseInfo)
+      setInitValue({ ...baseInfo });
+      setIndSelects(baseInfo?.industry.split(','));
+      // setLogoEnum(baseInfo?.logo.indexOf('http') !== -1 ? [
+      //   {
+      //     path: "图片的路径，没有拼接域名",
+      //     is_cover: 0 //是否为封面图
+      //   }
+      // ] : [
+      //   {
+
+      //   }
+      // ])
+    }
+  }, [baseInfo])
 
   // const [obj, setObj] = useState({
   //   default: 'http',
@@ -59,17 +88,32 @@ const BaseSet = () => {
   //   )
   // }, [obj])
 
+  /**
+   * 选择行业
+   * @param {*} param0 
+   */
+  const handleSelectIndustry = ({ value, index }) => {
+    if (index === 1) {
+      setIndustrys([value]);
+      dispatch(clearindustry2([]));
+      dispatch(getIndustryActionAsync({ pid: parseInt(value) }));
+    } else {
+      setIndustrys([...industrys, value]);
+    }
+  }
+
   const formProps = {
     // propTitle: "新增商品/修改商品",
-    initValue: { "thirdparty_id": "11111" }, //初始值
+    // form,
+    initValue, //初始值
     formArr: [
       {
         title: "基础信息", //每一块的标题
         search: [
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'merchant_name',
-              name: 'merchant_name',
+              key: 'name',
+              name: 'name',
               label: '商户名称',
               type: 'input', // 与antd对应 
               rules: [
@@ -99,8 +143,11 @@ const BaseSet = () => {
               },
             },
             props: {
-
-            }
+              baseIndustryList: industry1,
+              thinIndustryList: industry2,
+              handleSelectIndustry,
+              selects: indSelects,
+            },
           },
           {
             wrap: {
@@ -114,30 +161,34 @@ const BaseSet = () => {
             },
             props: {
               //请求的参数
-              imageParams: {}, //阿里云的密钥 后端返回的
+              imageParams: {
+
+              }, //阿里云的密钥 后端返回的
               //请求地址
-              actionUrl: "https://luckycat-mini.oss-cn-chengdu.aliyuncs.com",
+              actionUrl: baseUrl,
               //图片拼接的域名
-              imgUrl: "https://luckycat-mini.oss-cn-chengdu.aliyuncs.com/",
+              imgUrl: baseUrl,
               // 是否是只上传一张图片 1只上传一张 多张不传这个参数
               is_only: 1,
               //图片的文件路径
-              fileUrl: "dense-diary-manager/banner/",
+              // fileUrl: `${beforeKey}merchant-logo`,
               //接受图片的类型
-              accept: ".png", //默认值是.jpg
+              accept: ".png,.jpg,.jpeg,.svg", //默认值是.jpg
               // 初始列表
               // 如果通过 initValue 设置初始值没有成功，可以直接设置enum的值
-              enum: [],
-              // {
-              //   path: "图片的路径，没有拼接域名",
-              //   is_cover: 0 //是否为封面图
-              // }
+              enum: logoEnum,
+              // [
+              //   {
+              //     path: "图片的路径，没有拼接域名",
+              //     is_cover: 0 //是否为封面图
+              //   }
+              // ],
             }
           },
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'merchant_desc',
-              name: 'merchant_desc',
+              key: 'description',
+              name: 'description',
               label: '商户简介',
               type: 'textarea', // 与antd对应 
               rules: [
@@ -160,8 +211,8 @@ const BaseSet = () => {
         search: [
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'leader',
-              name: 'leader',
+              key: 'su_name',
+              name: 'su_name',
               label: '负责人',
               type: 'input', // 与antd对应 
               rules: [
@@ -178,8 +229,8 @@ const BaseSet = () => {
           },
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'mobile',
-              name: 'mobile',
+              key: 'su_tel',
+              name: 'su_tel',
               label: '电话号码',
               type: 'input', // 与antd对应 
               rules: [
@@ -196,8 +247,8 @@ const BaseSet = () => {
           },
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'qq',
-              name: 'qq',
+              key: 'su_qq',
+              name: 'su_qq',
               label: 'QQ号码',
               type: 'input', // 与antd对应 
               rules: [
@@ -214,8 +265,8 @@ const BaseSet = () => {
           },
           { // wrap 是放在form item上的属性
             wrap: {
-              key: 'email',
-              name: 'email',
+              key: 'su_email',
+              name: 'su_email',
               label: '邮箱账号',
               type: 'input', // 与antd对应 
               rules: [
@@ -230,42 +281,6 @@ const BaseSet = () => {
               placeholder: '请填写负责人邮箱账号',
             }
           },
-          // { // wrap 是放在form item上的属性
-          //   wrap: {
-          //     key: 'email',
-          //     name: obj.default,
-          //     label: '邮箱账号',
-          //     type: 'input', // 与antd对应 
-          //     rules: [
-          //       { required: true },
-          //     ],
-          //     labelCol: {
-          //       span: 2,
-          //     },
-          //   },
-          //   // 放在元素(input)上的属性
-          //   props: {
-          //     addonBefore: (
-          //       <Select
-          //         className="select-before"
-          //         value={obj.default}
-          //         onChange={(value) => {
-          //           console.log(value)
-          //           const objClone = JSON.parse(JSON.stringify(obj))
-          //           objClone.default = value
-          //           setObj(objClone)
-          //         }}
-          //       >
-          //         {
-          //           obj?.arr.map((o) => (
-          //             <Select.Option key={o.key} value={o.value}>{o.value}</Select.Option>
-          //           ))
-          //         }
-          //       </Select>
-          //     ),
-          //     placeholder: '请填写负责人邮箱账号',
-          //   }
-          // },
         ]
       },
     ],
@@ -275,8 +290,19 @@ const BaseSet = () => {
         type: "primary"
       },
       htype: "submit", // submit || reset
-      onBtnClick: (value) => {
+      onBtnClick: async (value) => {
         console.log("按钮点击的事件222", value);
+        const res = await updateBaseSet({
+          ...value,
+          industry: [value.baseIndustry, value.thinIndustry].join(','),
+          logo: (typeof value.logo === 'string') ? value.logo : baseUrl + value.logo[0].path,
+        })
+        if (res.code === 200) {
+          message.success('修改成功');
+          dispatch(getBaseSetActionAsync());
+        } else {
+          message.warning('修改失败');
+        }
       }
     },
     {

@@ -1,11 +1,10 @@
 import React, { memo, useState, useEffect } from 'react'
-import { LoadingOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import './index.less'
+import { Upload, message } from 'antd';
+import { LoadingOutlined, PlusOutlined, DeleteOutlined, LockFilled } from '@ant-design/icons';
 import moment from 'moment'
 import { MD5 } from 'crypto-js';
-import {
-    Upload,
-} from 'antd';
+import { uploadPic, handleOnPreview } from '@/utils/upload';
+import './index.less'
 import paymentImg from '@/assets/images/payment.png'
 
 export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList = [], is_only, actionUrl, imgUrl, onChange, fileUrl }) {
@@ -31,6 +30,10 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
     useEffect(() => {
         setCurrentDate(Date.now());
     }, [])
+
+    // useEffect(() => {
+    //     console.log('proPicList', proPicList);
+    // }, [proPicList])
 
     useEffect(() => {
         // let defaultArr = [...defaultList];
@@ -70,7 +73,8 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
     // }, [proArr]);
 
     // 删除图片
-    const handleDel = (index) => {
+    const handleDel = (index, e) => {
+        e.stopPropagation();
         const arr1 = [...proPics];
         const arr2 = [...proArr];
         arr1.splice(index, 1);
@@ -102,40 +106,119 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
                     // name="file"
                     accept={accept}
                     listType="picture-card"
-                    fileList={proPicList}
+                    // fileList={proPicList}
+                    fileList={[{
+                        uid: '-1',
+                        name: 'image.png',
+                        status: 'done',
+                        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                    }]}
                     className="avatar-uploader"
                     // 不能显示列表
                     showUploadList={false}
-                    action={actionUrl}
-                    data={
-                        {
-                            key: `${fileUrl}${MD5(`${fileUrl}${uploadCount}${currentDate}`)}${accept}`,
-                            OSSAccessKeyId: imageParams.accessid,
-                            ...imageParams,
-                        }
-                    }
-                    onChange={({ fileList: newFileList, event }) => {
-                        setLock(true);
-                        console.log("onchange11 newFileList", newFileList);
-                        setProPicList(newFileList);
-                        if (event) {
-                            setTimeout(() => {
-                                const fileName = `${fileUrl}${MD5(`${fileUrl}${uploadCount}${currentDate}`)}${accept}`;
-                                setUploadCount(uploadCount + 1);
-                                if (is_only === 1) {
-                                    setProPics([{ path: fileName, is_cover: 0 }]);
-                                    setProArr([{ path: `${imgUrl}${fileName}`, is_cover: 0 }]);
-                                    return;
-                                } else {
-                                    setProPics([...proPics, { path: fileName, is_cover: 0 }]);
-                                    setProArr([...proArr, { path: `${imgUrl}${fileName}`, is_cover: 0 }]);
-                                }
-                            }, 200);
-                        }
+                    // action={actionUrl}
+                    // data={
+                    //     {
+                    //         key: `${fileUrl}${MD5(`${fileUrl}${uploadCount}${currentDate}`)}${accept}`,
+                    //         OSSAccessKeyId: imageParams.accessid,
+                    //         ...imageParams,
+                    //     }
+                    // }
+                    method="PUT"
+                    customRequest={(options) => {
+                        const { onSuccess, onError, file, onProgress, headers } = options;
+                        // start：进度条相关
+                        // 伪装成 handleChange里面的图片上传状态
+                        // const imgItem = {
+                        //     uid: '1', // 注意，这个uid一定不能少，否则上传失败
+                        //     name: 'hehe.png',
+                        //     status: 'uploading',
+                        //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+                        //     percent: 99, // 注意不要写100。100表示上传完成
+                        // };
+                        // setProPicList(proPicList.concat(imgItem));
+                        // 更新 imgList
+                        // end：进度条相关
+                        onProgress((data) => {
+                            console.log('onPress', data)
+                        })
+                        onError((err, ret) => {
+                            console.log('error', err, ret);
+                        })
+                        onSuccess((ret, xhr) => {
+                            console.log('success', ret, xhr);
+                        })
+                        uploadPic()(file, (err, data) => {
+                            console.log(err || data?.url?.split('.com')[1]);
+                            if (is_only === 1) {
+                                setProPics([{ path: data?.url?.split('.com')[1], is_cover: 0 }]);
+                                setProArr([{ path: data?.url, is_cover: 0 }]);
+                                return;
+                            } else {
+                                setProPics([...proPics, { path: data?.url?.split('.com')[1], is_cover: 0 }]);
+                                setProArr([...proArr, { path: data?.url, is_cover: 0 }]);
+                            }
+                            // err || (data && setProPics([...proPics, { type: 1, path: data?.url?.split('.com')[0], is_cover: 1 }]));
+                        });
                     }}
+                    onChange={({ file, fileList: newFileList }) => {
+                        setLock(true);
+                        console.log('smyhvae handleChange file:', file);
+                        console.log('smyhvae handleChange fileList:', newFileList);
+
+                        if (file.status === 'removed') {
+                            setProPicList([])
+                        }
+                        if (file.status === 'uploading') {
+                            setLoading(true);
+                        }
+                        if (file.status === 'done') {
+                            setUploadCount(uploadCount + 1);
+                            setProPicList(newFileList);
+                            setLoading(false);
+                            // setProPics([...proPics, { type: 1, path: , is_cover: 1 }])
+                        }
+                        // if (event) {
+                        //     setTimeout(() => {
+                        //         const fileName = `${fileUrl}${MD5(`${fileUrl}${uploadCount}${currentDate}`)}${accept}`;
+                        //         setUploadCount(uploadCount + 1);
+                        //         if (is_only === 1) {
+                        //             setProPics([{ path: fileName, is_cover: 0 }]);
+                        //             setProArr([{ path: `${imgUrl}${fileName}`, is_cover: 0 }]);
+                        //             return;
+                        //         } else {
+                        //             setProPics([...proPics, { path: fileName, is_cover: 0 }]);
+                        //             setProArr([...proArr, { path: `${imgUrl}${fileName}`, is_cover: 0 }]);
+                        //         }
+                        //     }, 200);
+                        // }
+                    }}
+                // onRemove={(file) => {
+                //     proPicList.forEach((list, index) => {
+                //         if (list.name === file.name) {
+                //             setProPics(proPics.slice(index + 1));
+                //         }
+                //     });
+                // }}
+                // onPreview={async (file) => {
+                //     handleOnPreview(file);
+                // }}
                 >
                     {!is_only ? uploadButton : ""}
-                    {is_only ? (proArr.length > 0 ? <img src={proArr[0].path} alt="avatar" style={{ width: '86px', height: '86px' }} /> : uploadButton) : ""}
+                    {
+                        is_only
+                            ? (proArr.length > 0
+                                ? <div className="pic-item">
+                                    <img
+                                        src={proArr[0].path}
+                                        alt="avatar"
+                                    // style={{ width: '80px', height: '80px' }}
+                                    />
+                                    <div onClick={(e) => {
+                                        handleDel(0, e)
+                                    }}><DeleteOutlined style={{ color: "#fff", fontSize: "16px" }} /></div>
+                                </div> : uploadButton) : ""
+                    }
                 </Upload>
                 {
                     is_only !== 1 && proArr.map((item, index) => {

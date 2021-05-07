@@ -12,7 +12,7 @@ import {
   message,
 } from 'antd';
 import { PlusOutlined, UserOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux'
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { actions } from './store/slice';
 import { createShop } from '@/services/shopList';

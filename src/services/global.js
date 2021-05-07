@@ -23,14 +23,3 @@ export const getShopInfo = data => request({
   method: 'get',
   params: { ...data }
 })
-
-/**
- * 附件上传
- * @param {*} data 
- * @returns 
- */
-export const getUploadToken = data => request({
-  url: '/Publics/Tools/getUpToken',
-  method: 'get',
-  params: { ...data }
-})
