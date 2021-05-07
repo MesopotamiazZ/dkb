@@ -36,14 +36,14 @@ export default memo(function (props: propsType): React.ReactElement {
     const tableDataDefault: tableDataType = paginationFlag ? {
         list: [],
         page: 1,
-        page_size: 10
+        limit: 10
     } : {
         list: []
     }
 
     const reqDataDefault = paginationFlag ? {  //请求参数
         page: 1,
-        page_size: 10,
+        limit: 10,
         search: {},
         sort: {},
     } : {
@@ -57,8 +57,8 @@ export default memo(function (props: propsType): React.ReactElement {
     const [tableData, setTableData] = useState(tableDataDefault)                    // 表格数据
     const [selectRows, setSelectRows] = useState([]);                               // 被选中的行数据对象数组
     const [selectRowKeys, setSelectRowKeys] = useState([]);                         // 被选中行的keys
-    const [reqData, setReqData] = useState({ ...reqDataDefault, ...requestData })   // 请求数据
-    const [loading, setLoading] = useState(true)                                   // loading
+    const [reqData, setReqData] = useState({ ...reqDataDefault, ...requestData });  // 请求数据
+    const [loading, setLoading] = useState(true);                                   // loading
 
 
     /**
@@ -142,11 +142,11 @@ export default memo(function (props: propsType): React.ReactElement {
     /**
      * 分页器事件
      * @param page 
-     * @param page_size 
+     * @param limit 
      */
-    const handlePageChange = (page, page_size) => {
-        console.log(page, page_size);
-        setReqData({ ...reqData, page, page_size });
+    const handlePageChange = (page, limit) => {
+        console.log(page, limit);
+        setReqData({ ...reqData, page, limit });
     }
 
     /**
@@ -156,7 +156,7 @@ export default memo(function (props: propsType): React.ReactElement {
         onChange: handlePageChange,
         onShowSizeChange: handlePageChange,
         total: tableData?.total,
-        page_size: tableData?.page_size,
+        limit: tableData?.limit,
         current: tableData?.page,
         showSizeChanger: true,
         showTotal: (total) => `共${total}条`,

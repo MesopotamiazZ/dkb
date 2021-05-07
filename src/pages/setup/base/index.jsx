@@ -38,16 +38,12 @@ const BaseSet = () => {
       console.log('baseInfo', baseInfo)
       setInitValue({ ...baseInfo });
       setIndSelects(baseInfo?.industry.split(','));
-      // setLogoEnum(baseInfo?.logo.indexOf('http') !== -1 ? [
-      //   {
-      //     path: "图片的路径，没有拼接域名",
-      //     is_cover: 0 //是否为封面图
-      //   }
-      // ] : [
-      //   {
-
-      //   }
-      // ])
+      setLogoEnum([
+        {
+          path: baseInfo?.logo,
+          is_cover: 0 //是否为封面图
+        }
+      ])
     }
   }, [baseInfo])
 

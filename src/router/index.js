@@ -280,6 +280,33 @@ const routers = () => {
                             componentPath: "pages/setup/system/paySet",
                             exact: true,
                         },
+                        {
+                            path: "/setup/system/add-edit-express",
+                            key: "/setup/system/pay",
+                            title: '新建运费模板',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/setup/system/addExpress",
+                            exact: true,
+                            hidden: true,
+                        },
+                        {
+                            path: "/setup/system/add-edit-store",
+                            key: "/setup/system/pay",
+                            title: '新建门店',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/setup/system/addStore",
+                            exact: true,
+                            hidden: true,
+                        },
+                        {
+                            path: "/setup/system/add-edit-address",
+                            key: "/setup/system/pay",
+                            title: '新建地址',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/setup/system/addAddress",
+                            exact: true,
+                            hidden: true,
+                        },
                     ]
                 },
                 {

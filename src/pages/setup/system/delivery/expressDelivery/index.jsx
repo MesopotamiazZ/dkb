@@ -1,12 +1,14 @@
 import React, { memo } from 'react';
+import { useHistory } from 'react-router-dom';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import moment from 'moment';
 
 const ExpressDelivery = memo(() => {
-
+  const history = useHistory();
   const tools = {
     btns: [
       {
@@ -14,7 +16,11 @@ const ExpressDelivery = memo(() => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/setup/system/add-edit-express',
+          })
+        }
       },
       {
         text: '批量操作',
@@ -36,7 +42,14 @@ const ExpressDelivery = memo(() => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/setup/system/add-edit-express',
+            state: {
+              id: record.id
+            }
+          })
+        },
       },
       {
         key: '2',
@@ -50,22 +63,12 @@ const ExpressDelivery = memo(() => {
   const columns = [
     {
       title: '模板名称',
-      dataIndex: '',
+      dataIndex: 'name',
       align: 'left',
     },
     {
       title: '计费方式',
-      dataIndex: '',
-      align: 'center',
-    },
-    {
-      title: '变更前',
-      dataIndex: '',
-      render: (text) => {
-        if (text) {
-          return <span>￥{text}</span>
-        }
-      },
+      dataIndex: 'type',
       align: 'center',
     },
     {
@@ -79,23 +82,13 @@ const ExpressDelivery = memo(() => {
       align: 'center',
     },
     {
-      title: '续(重/件)价格',
-      dataIndex: '',
+      title: '更新时间',
+      dataIndex: 'update_at',
       render: (text) => {
         if (text) {
-          return <span>￥{text}</span>
+          return <span>{moment(text * 1000).format('YYYY-MM-DD')}</span>
         }
       },
-      align: 'center',
-    },
-    {
-      title: '状态',
-      render: (record) => (
-        <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
-        />
-      ),
       align: 'center',
     },
     {
@@ -125,7 +118,7 @@ const ExpressDelivery = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url=""
+        url="/Setting/Express/getList"
         row
         // renderCell={renderCell}
         columns={columns}

@@ -4,9 +4,10 @@ import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import { useHistory } from 'react-router-dom';
 
 const StorePickUp = memo(() => {
-
+  const history = useHistory();
   const tools = {
     btns: [
       {
@@ -14,7 +15,11 @@ const StorePickUp = memo(() => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/setup/system/add-edit-store',
+          })
+        }
       },
       {
         text: '批量操作',
@@ -50,22 +55,24 @@ const StorePickUp = memo(() => {
   const columns = [
     {
       title: '门店名称',
-      dataIndex: '',
+      dataIndex: 'name',
       align: 'left',
     },
     {
       title: '联系人',
-      dataIndex: '',
+      dataIndex: 'su_name',
       align: 'center',
     },
     {
       title: '联系电话',
-      dataIndex: '',
+      dataIndex: 'su_tel',
       align: 'center',
     },
     {
       title: '门店地址',
-      dataIndex: '',
+      render: (record) => (
+        <span>{record?.address?.address}</span>
+      ),
       align: 'center',
     },
     {
@@ -106,7 +113,7 @@ const StorePickUp = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url=""
+        url="/Setting/Stores/getList"
         row
         // renderCell={renderCell}
         columns={columns}

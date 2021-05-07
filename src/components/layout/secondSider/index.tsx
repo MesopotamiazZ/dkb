@@ -59,7 +59,7 @@ const SecondSider: React.FC<secondSiderProps> = (props) => {
                     <span>{mItem.title}</span>
                   </div>
                   {
-                    mItem.children.map(smItem => {
+                    mItem.children.filter(child => (!child.hidden)).map(smItem => {
                       return (
                         <div
                           key={smItem.key}

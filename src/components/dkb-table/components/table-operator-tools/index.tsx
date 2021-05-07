@@ -29,6 +29,7 @@ const TableOperatorTools: React.FC<tableToolsProps> = memo((props) => {
                 className="btn-list-style"
                 key={btn.text}
                 {...btn.antdProps}
+                onClick={btn.onClick}
               >
                 {btn.text}
               </Button>

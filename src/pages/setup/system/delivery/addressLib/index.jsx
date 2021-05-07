@@ -1,12 +1,14 @@
 import React, { memo } from 'react';
+import { useHistory } from 'react-router-dom';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import moment from 'moment';
 
 const ExpressDelivery = memo(() => {
-
+  const history = useHistory();
   const tools = {
     btns: [
       {
@@ -14,7 +16,11 @@ const ExpressDelivery = memo(() => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/setup/system/add-edit-address'
+          })
+        }
       },
       {
         text: '批量操作',
@@ -50,27 +56,38 @@ const ExpressDelivery = memo(() => {
   const columns = [
     {
       title: '联系人',
-      dataIndex: '',
+      dataIndex: 'name',
       align: 'left',
     },
     {
       title: '联系电话',
-      dataIndex: '',
+      dataIndex: 'tel',
       align: 'center',
     },
     {
       title: '所在地',
-      dataIndex: '',
+      render: (record) => (
+        <span>
+          {record?.address?.province}, {record?.address?.city}, {record?.address?.district}
+        </span>
+      ),
       align: 'center',
     },
     {
       title: '详细地址',
-      dataIndex: '',
+      render: (record) => (
+        <span>{record?.address?.adress}</span>
+      ),
       align: 'center',
     },
     {
-      title: '备注',
-      dataIndex: '',
+      title: '更新时间',
+      dataIndex: 'update_at',
+      render: (text) => {
+        if (text) {
+          return <span>{moment(text * 1000).format('YYYY-MM-DD')}</span>
+        }
+      },
       align: 'center',
     },
     {
@@ -91,7 +108,7 @@ const ExpressDelivery = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url=""
+        url="/Setting/AddLib/getList"
         row
         // renderCell={renderCell}
         columns={columns}

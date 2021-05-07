@@ -3,7 +3,7 @@ import { ReactElement } from 'react/index'
 export interface tableDataType {
     list: Array<dataType>,
     page?: number,
-    page_size?: number,
+    limit?: number,
     total?: number
 }
 
@@ -12,7 +12,7 @@ export interface tableDataType {
  */
 export interface reqType {
     page: number,
-    page_size: number,
+    limit: number,
     search?: object,
     // 板块id
     section_id?: string | undefined | number,

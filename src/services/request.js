@@ -37,9 +37,9 @@ function request(config) {
       res.headers["token"] = localStorage.getItem("Dense-Diary-Authorization")
     } else {
       //登录校验
-      if (!res.url.includes('login/login')) {
-        // window.location.replace('/#/login/')
-      }
+      // if (!res.url.includes('/login')) {
+      //   window.location.replace('/#/login')
+      // }
     }
     return res
   }, (error) => {

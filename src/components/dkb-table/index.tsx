@@ -35,7 +35,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
   const tableDataDefault = paginationFlag ? { // 默认列表返回格式
     list: [],
     page: 1,
-    page_size: 10,
+    limit: 10,
     total: 0,
   } : {
     list: []
@@ -43,7 +43,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
 
   const reqDataDefault = paginationFlag ? {  // 默认请求参数
     page: 1,
-    page_size: 10,
+    limit: 10,
     search: {},
     sort: {},
   } : {
@@ -66,8 +66,8 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
    */
   const initData = async (data = reqData) => {
     !loading && setLoading(true)
-    const res = await request({ url: props.url, method: 'get', }) // data: { ...data, ...requestData }
-    if (res.code === 0 || res.code === '0') {
+    const res = await request({ url: props.url, method: 'get', params: { ...data, ...requestData } }) // data: { ...data, ...requestData }
+    if (res.code === 200) {
       if (res.data instanceof Object) setTableData({ ...tableData, ...res.data })
       if (res.data instanceof Array) setTableData({ ...tableData, list: res.data })
     } else {
@@ -105,11 +105,11 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
   /**
      * 分页器事件
      * @param page 
-     * @param page_size 
+     * @param limit 
      */
-  const handlePageChange = (page, page_size) => {
-    console.log(page, page_size);
-    setReqData({ ...reqData, page, page_size });
+  const handlePageChange = (page, limit) => {
+    console.log(page, limit);
+    setReqData({ ...reqData, page, limit });
   }
 
   /**
@@ -119,7 +119,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     onChange: handlePageChange,
     onShowSizeChange: handlePageChange,
     total: tableData?.total,
-    page_size: tableData?.page_size,
+    limit: tableData?.limit,
     current: tableData?.page,
     showSizeChanger: true,
     showTotal: (total) => `总共${total}个项目`,

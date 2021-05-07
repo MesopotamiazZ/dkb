@@ -27,7 +27,7 @@ export interface dataType {
 export interface tableDataType {
   list: Array<dataType>,
   page?: number,
-  page_size?: number,
+  limit?: number,
   total?: number
 }
 
