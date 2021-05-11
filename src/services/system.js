@@ -207,3 +207,15 @@ export const updateToogleSameCity = data => request({
   method: 'post',
   data
 })
+
+// =============== common ================
+/**
+ * 行政区域查询
+ * @param {*} data 
+ * @returns 
+ */
+export const getArea = data => request({
+  url: '/Publics/Tools/getArea',
+  method: 'get',
+  params: { ...data }
+})

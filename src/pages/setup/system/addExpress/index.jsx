@@ -1,7 +1,9 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
+import { message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
+import { addExpress, updateExpress } from '@/services/system';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
@@ -13,27 +15,97 @@ const AddExpress = memo(() => {
 
   let {
     expressDetail,
+    provinceList,
   } = useSelector(state => state.system, shallowEqual) //store数据
 
   const {
     getExpressDetailActionAsync,
+    getAreaActionAsync,
   } = actions;
 
+  const [initValue, setInitValue] = useState({
+    type: '1',
+    is_default: false,
+    status: false,
+  })
+  const [defaultTemplate, setDefaultTemplate] = useState([]);
+  const [template, setTemplate] = useState([]);
+
   const initialData = () => {
-    dispatch(getExpressDetailActionAsync());
+    dispatch(getExpressDetailActionAsync({ id: id || localStorage.getItem('express_id') }));
   }
 
+  /**
+   * 初始化
+   */
   useEffect(() => {
     if (id) {
-      localStorage.setItem('id', id);
+      localStorage.setItem('express_id', id);
+    }
+    if (id || localStorage.getItem('express_id')) {
       initialData();
     }
   }, [id])
 
+  /**
+   * 编辑赋值
+   */
+  useEffect(() => {
+    if (Object.keys(expressDetail).length) {
+      setInitValue({
+        is_default: expressDetail.is_default,
+        status: expressDetail.status,
+        name: expressDetail.name,
+        type: `${expressDetail.type}`
+      });
+      setDefaultTemplate(expressDetail.template.map((item, index) => ({
+        ...item,
+        id: index + 1,
+      })));
+    }
+  }, [expressDetail])
+
+  /**
+   * 获取区域
+   */
+  useEffect(() => {
+    dispatch(getAreaActionAsync({ pid: 0, level: 1 }))
+  }, [])
+
+  /**
+   * 可配送区域
+   * @param {*} data 
+   */
+  const onSetDeliveryArea = (data) => {
+    console.log(data);
+    setTemplate(data.map(item => ({
+      frist_unit: item?.first_unit,
+      frist_money: item?.first_money?.toFixed(2),
+      next_unit: item?.next_unit,
+      next_money: item?.next_money?.toFixed(2),
+      area_name: item?.area_name,
+      area_code: item?.area_code,
+    })))
+  }
+
+  // /**
+  //  * 切换
+  //  * @param {*} checked 
+  //  */
+  // const handleDefaultChange = (checked) => {
+  //   const 
+  // }
+
+  // /**
+  //  * 切换
+  //  * @param {*} checked 
+  //  */
+  // const handleStatusChange = (checked) => {
+
+  // }
+
   const formProps = {
-    initValue: {
-      type: '1'
-    },
+    initValue,
     formArr: [
       {
         title: "基础信息", //每一块的标题
@@ -53,7 +125,7 @@ const AddExpress = memo(() => {
             },
             // 放在元素(input)上的属性
             props: {
-              placeholder: '商户名称最长20字',
+              placeholder: '模板名称最长20字',
             }
           },
           {
@@ -75,27 +147,60 @@ const AddExpress = memo(() => {
           },
           {
             wrap: {
-              key: 'twelve',
-              name: 'twelve',
-              label: 'proformlist',
-              type: 'proformlist', // 类似表格的form 比如添加规格
+              key: 'template',
+              name: 'template',
+              label: '可配送区域',
+              type: 'adddeliveryarea', // 与antd对应 
               labelCol: {
                 span: 2,
               },
               wrapperCol: {
-                span: 18,
+                span: 18
               }
             },
             props: {
-              filedName: "twelve", // 这个是最终获取数据的key值
-              // 设置表格的 name:是数据的key  title:表格的标题 rules是input的规则
-              filedTitle: [{ name: "one", title: "标题11", rules: [{ required: true, message: 'one1' }] },
-              { name: "two", title: "标题2", rules: [{ required: true, message: 'one2' }] },
-              { name: "there", title: "标题3", rules: [{ required: true, message: 'one3' }] },
-              ]
-              // 通过 initValue 设置初始值
-              // 赋初始值的格式
-              // const arr=[{one: "1", two: "1", there: "1"},{one: "2", two: "2", there: "2"}];
+              provinceList,
+              enum: defaultTemplate,
+              onSetDeliveryArea,
+            },
+          },
+        ]
+      },
+      {
+        title: "模板状态", //每一块的标题
+        search: [
+          {
+            wrap: {
+              key: 'is_default',
+              name: 'is_default',
+              label: '设为默认',
+              type: 'switch', // 与antd对应 
+              labelCol: {
+                span: 2,
+              },
+              valuePropName: 'checked'
+            },
+            props: {
+              // onChange: handleDefaultChange,
+              checkedChildren: '开',
+              unCheckedChildren: '关'
+            }
+          },
+          {
+            wrap: {
+              key: 'status',
+              name: 'status',
+              label: '模板状态',
+              type: 'switch', // 与antd对应 
+              labelCol: {
+                span: 2,
+              },
+              valuePropName: 'checked'
+            },
+            props: {
+              // onChange: handleStatusChange,
+              checkedChildren: '开',
+              unCheckedChildren: '关'
             }
           },
         ]
@@ -110,6 +215,31 @@ const AddExpress = memo(() => {
         htype: "submit", // submit || reset
         onBtnClick: async (value) => {
           console.log("按钮点击的事件222", value);
+          if (id || localStorage.getItem('express_id')) {
+            const res = await updateExpress({
+              id: id || localStorage.getItem('express_id'),
+              ...value,
+              template
+            })
+            if (res.code === 200) {
+              message.success('修改成功');
+            } else {
+              message.warning('修改失败');
+            }
+          } else {
+            const res = await addExpress({
+              ...value,
+              template
+            })
+            if (res.code === 200) {
+              message.success('新增成功');
+              history.push({
+                pathname: '/setup/system/delivery'
+              })
+            } else {
+              message.warning('新增失败');
+            }
+          }
         }
       },
       {
@@ -124,13 +254,16 @@ const AddExpress = memo(() => {
           // type=reset  重置表单
           // 其余的不用传type值
           console.log("按钮点击的事件111", value);
+          history.push({
+            pathname: '/setup/system/delivery'
+          })
         }
       }
     ]
   }
 
   return (
-    <div className="add-express">
+    <div className="add-express outer-area">
       <SelfForm
         formProps={formProps}
       />

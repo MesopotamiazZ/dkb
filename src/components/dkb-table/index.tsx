@@ -68,8 +68,8 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     !loading && setLoading(true)
     const res = await request({ url: props.url, method: 'get', params: { ...data, ...requestData } }) // data: { ...data, ...requestData }
     if (res.code === 200) {
-      if (res.data instanceof Object) setTableData({ ...tableData, ...res.data })
-      if (res.data instanceof Array) setTableData({ ...tableData, list: res.data })
+      if (res.result instanceof Object) setTableData({ ...tableData, ...res.result })
+      if (res.result instanceof Array) setTableData({ ...tableData, list: res.result })
     } else {
       message.warning(res.msg || '请求超时')
     }
@@ -149,10 +149,10 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
         <TableOperatorTools {...tools} />
       </div>
       <Table
-        columns={props.columns}
+        columns={props?.columns}
         dataSource={tableData.list}
-        rowKey={props.rowKey}
-        rowSelection={props.row && rowSelection}
+        rowKey={props?.rowKey}
+        rowSelection={props?.row && rowSelection}
         size="middle"
         onChange={onTableChange}
         loading={loading}

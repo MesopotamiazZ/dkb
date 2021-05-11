@@ -1,10 +1,18 @@
 import React, { memo, useEffect } from 'react'
-import { Form, Input, Button, Select, Checkbox, Space, Col, DatePicker, TimePicker, Radio } from 'antd';
+import {
+    Form, Input, Button, Select, Checkbox,
+    Space, Col, DatePicker, TimePicker, Radio,
+    Switch,
+} from 'antd';
 import ProCheckbox from "@/components/pro-checkbox"
 import ProUpload from "@/components/pro-upload"
 import ProFormList from "./child/pro-form-list"
 import ProSelects from '@/components/pro-selects'
+import ProSelects3 from '@/components/pro-selects3'
+import MapLocation from '@/components/map-location'
+import AddDeliveryArea from '@/components/add-delivery-area'
 import './index.less'
+
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -62,6 +70,9 @@ export default memo(function ({ formProps = {} }) {
                     // className="textarea-height"
                     ele = <TextArea allowClear  {...searchProps} />
                     break;
+                case 'switch':
+                    ele = <Switch allowClear {...searchProps} />
+                    break;
                 case 'procheckbox':
                     ele = <ProCheckbox   {...searchProps} checkbox_group={searchProps.enum} />
                     break;
@@ -73,6 +84,25 @@ export default memo(function ({ formProps = {} }) {
                     break;
                 case 'proselects':
                     ele = <ProSelects {...searchProps} form={form} />
+                    break;
+                case 'proselects3':
+                    ele = <ProSelects3 {...searchProps} form={form} />
+                    break;
+                case 'maplocation':
+                    ele = <MapLocation
+                        {...searchProps}
+                        form={form}
+                        onSetLatLng={searchProps.onSetLatLng}
+                        editAddress={searchProps.editAddress}
+                    />
+                    break;
+                case 'adddeliveryarea':
+                    ele = <AddDeliveryArea
+                        {...searchProps}
+                        onSetDeliveryArea={searchProps.onSetDeliveryArea}
+                        provinceList={searchProps.provinceList}
+                        defaultData={searchProps.enum}
+                    />
                     break;
                 default:
                     ele = <Input allowClear   {...searchProps} className="input-height input-width" />

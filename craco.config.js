@@ -10,6 +10,9 @@ module.exports = {
         alias: {
             '@': resolve('src')
         },
+        externals: {
+            TMap: 'TMap',
+        },
         plugins: [
             new SimpleProgressWebpackPlugin(),
         ]

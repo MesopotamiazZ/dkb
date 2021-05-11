@@ -1,13 +1,36 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../../store/slice';
+import { updateToogleStore } from '@/services/system';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
-import { useHistory } from 'react-router-dom';
+import './style.less';
 
 const StorePickUp = memo(() => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const {
+    toogleStoreActionAsync,
+  } = actions;
+
+  const initialData = () => {
+    dispatch((toogleStoreActionAsync()))
+  }
+
+  useEffect(() => {
+    initialData()
+  }, [])
+
+  let {
+    toogleStore,
+  } = useSelector(state => state.system, shallowEqual) //store数据
+  console.log(toogleStore)
+
   const tools = {
     btns: [
       {
@@ -41,7 +64,12 @@ const StorePickUp = memo(() => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/setup/system/add-edit-store',
+            state: { id: record.id }
+          })
+        },
       },
       {
         key: '2',
@@ -79,8 +107,9 @@ const StorePickUp = memo(() => {
       title: '状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
       align: 'center',
@@ -98,13 +127,17 @@ const StorePickUp = memo(() => {
     },
   ]
 
-  const onStorePickUp = (checked) => {
+  const onStorePickUp = async (checked) => {
     console.log(checked)
+    const res = await updateToogleStore({ is_express: checked });
+    if (res.code === 200) {
+      dispatch(toogleStoreActionAsync());
+    }
   }
   return (
-    <>
+    <div className="store-pick-up">
       <ToogleTipWrap
-        isOpen={true}
+        isOpen={toogleStore?.is_express}
         title="门店自提"
         content="启用上门自提后，买家可以就近选择商品自提门店，
         买家下单后，您需要确保买家指定的自提门店商品库存充足。"
@@ -117,11 +150,11 @@ const StorePickUp = memo(() => {
         row
         // renderCell={renderCell}
         columns={columns}
-        rowKey="product_id"
+        rowKey="id"
         expandIconAsCell={false}
         expandIconColumnIndex={-1}
       />
-    </>
+    </div>
   )
 })
 

@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { message } from 'antd';
+import request from '@/services/request';
 
 const geocoder = new qq.maps.Geocoder();
 
@@ -43,4 +44,24 @@ const getAddress = async (lat, lng) => {
   });
 };
 
-export { getLal, getAddress };
+const getIpLocation = () => {
+  const res = request({
+    url: 'https://apis.map.qq.com/ws/location/v1/ip',
+    method: 'get',
+    params: {
+      key: '7W3BZ-H3WWJ-ZV7FE-KMYWE-4A44Q-CSBZ2'
+    }
+  })
+  if (res.status === 0) {
+    return {
+      ...res.result.location
+    }
+  } else {
+    return {
+      lat: 39.90469,
+      lng: 116.40717,
+    }
+  }
+}
+
+export { getLal, getAddress, getIpLocation };

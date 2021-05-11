@@ -62,7 +62,6 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
             return;
         }
         if (typeof onChange === "function") {
-            console.log("图片地址11", proPics);
             setLock(true);
             onChange(proPics);
         }
@@ -148,7 +147,7 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
                         onSuccess((ret, xhr) => {
                             console.log('success', ret, xhr);
                         })
-                        uploadPic()(file, (err, data) => {
+                        uploadPic()(file, uploadCount, (err, data) => {
                             console.log(err || data?.url?.split('.com')[1]);
                             if (is_only === 1) {
                                 setProPics([{ path: data?.url?.split('.com')[1], is_cover: 0 }]);

@@ -159,7 +159,7 @@ const BaseSet = () => {
               //请求的参数
               imageParams: {
 
-              }, //阿里云的密钥 后端返回的
+              },
               //请求地址
               actionUrl: baseUrl,
               //图片拼接的域名

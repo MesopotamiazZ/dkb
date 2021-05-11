@@ -31,7 +31,8 @@ export const handleOnPreview = async (file) => {
   imgWindow.document.write(image.outerHTML);
 };
 
-export const baseUrl = 'https://dangkoubao-1303016503.cos.ap-shanghai.myqcloud.com';
+export const baseUrl = 'https://file.dangkoubao.com';
+// export const baseUrl = 'https://dangkoubao-1303016503.cos.ap-shanghai.myqcloud.com';
 
 
 export const uploadPic = () => {
@@ -91,9 +92,9 @@ export const uploadPic = () => {
     xhr.send();
   };
   // 上传文件
-  return (file, callback) => {
+  return (file, uploadCount, callback) => {
     // 这里指定上传目录和文件名 取自 result[].path
-    var Key = `${dkbId}/${date}/${MD5(file.name)}${Date.now()}.png`;
+    var Key = `${dkbId}/${date}/${MD5(file.name)}${uploadCount}${Date.now()}.png`;
     console.log('key', Key);
     getAuthorization({ Method: 'PUT', Pathname: '/' + Key }, function (err, info) {
       if (err) {

@@ -172,6 +172,7 @@ const Shop = () => {
         className="create-shop-modal"
         title="创建店铺"
         visible={createShopModal}
+        destroyOnClose
         width={840}
         okText="创建店铺"
         cancelText="取消"

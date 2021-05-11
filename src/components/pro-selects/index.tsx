@@ -18,8 +18,7 @@ const Level2Select = (props) => {
       form.setFieldsValue({ baseIndustry: selects[0] });
     } else if (selects.length === 2) {
       handleSelectIndustry({ value: selects[0], index: 1 });
-      form.setFieldsValue({ baseIndustry: selects[0] });
-      form.setFieldsValue({ thinIndustry: selects[1] });
+      form.setFieldsValue({ baseIndustry: selects[0], thinIndustry: selects[1] });
     }
   }, [selects])
 
