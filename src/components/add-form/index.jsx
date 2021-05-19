@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react'
 import {
     Form, Input, Button, Select, Checkbox,
     Space, Col, DatePicker, TimePicker, Radio,
-    Switch,
+    Switch
 } from 'antd';
 import ProCheckbox from "@/components/pro-checkbox"
 import ProUpload from "@/components/pro-upload"
@@ -11,6 +11,10 @@ import ProSelects from '@/components/pro-selects'
 import ProSelects3 from '@/components/pro-selects3'
 import MapLocation from '@/components/map-location'
 import AddDeliveryArea from '@/components/add-delivery-area'
+import CheckTree from '@/components/check-tree'
+import SelectColor from '@/components/select-color'
+import UpValue from '@/components/upValue';
+import Benefit from '@/components/benefit';
 import './index.less'
 
 const { Option } = Select;
@@ -55,7 +59,7 @@ export default memo(function ({ formProps = {} }) {
                 case 'radio':
                     ele = (<Radio.Group {...searchProps}>
                         {
-                            searchProps.enum.map(item => <Radio value={item.value} key={item.value}>{item.label}</Radio>)
+                            searchProps.enum.map(item => <Radio value={item.value} key={item.value} onChange={searchProps.onChange}>{item.label}</Radio>)
                         }
                     </Radio.Group>)
                     break;
@@ -72,6 +76,9 @@ export default memo(function ({ formProps = {} }) {
                     break;
                 case 'switch':
                     ele = <Switch allowClear {...searchProps} />
+                    break;
+                case 'checktree':
+                    ele = <CheckTree {...searchProps} />
                     break;
                 case 'procheckbox':
                     ele = <ProCheckbox   {...searchProps} checkbox_group={searchProps.enum} />
@@ -103,6 +110,15 @@ export default memo(function ({ formProps = {} }) {
                         provinceList={searchProps.provinceList}
                         defaultData={searchProps.enum}
                     />
+                    break;
+                case 'selectcolor':
+                    ele = <SelectColor {...searchProps} />
+                    break;
+                case 'upvalue':
+                    ele = <UpValue {...searchProps} />
+                    break;
+                case 'benefit':
+                    ele = <Benefit {...searchProps} />
                     break;
                 default:
                     ele = <Input allowClear   {...searchProps} className="input-height input-width" />

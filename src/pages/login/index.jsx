@@ -8,14 +8,13 @@ import {
 // import { UserOutlined, LockOutlined, } from '@ant-design/icons';
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-
 // import routers from '@/router'
 import {
   loginApi,
   sendSms,
   registerApi,
 } from '@/services/login'
-import { behaviorVerification } from '@/utils'
+import { behaviorVerification, validatorPhone } from '@/utils'
 // import sha1 from '@/utils/sha1'
 import { actions } from './store/slice'
 import ToogleLoginStyle from './components/toogle-login-style';
@@ -190,7 +189,10 @@ export default memo(function () {
       <Form.Item
         className="user-form-item"
         name="phone"
-        rules={[{ required: true, message: '请填写手机号' }]}
+        rules={[
+          { required: true, message: '请填写手机号' },
+          validatorPhone,
+        ]}
       >
         <Input
           className="input-height"
@@ -245,7 +247,10 @@ export default memo(function () {
       <Form.Item
         className="mobile-form-item"
         name="phone"
-        rules={[{ required: true, message: '请填写手机号' }]}
+        rules={[
+          { required: true, message: '请填写手机号' },
+          validatorPhone,
+        ]}
       >
         <Input
           className="input-height"
@@ -312,7 +317,7 @@ export default memo(function () {
         <Form.Item
           className="mobile-form-item"
           name="phone"
-          rules={[{ required: true, message: '请填写手机号' }]}
+          rules={[{ required: true, message: '请填写手机号' }, validatorPhone,]}
         >
           <Input
             className="input-height"
@@ -387,7 +392,7 @@ export default memo(function () {
         <Form.Item
           className="mobile-form-item"
           name="phone"
-          rules={[{ required: true, message: '请填写手机号' }]}
+          rules={[{ required: true, message: '请填写手机号' }, validatorPhone,]}
         >
           <Input
             className="input-height"

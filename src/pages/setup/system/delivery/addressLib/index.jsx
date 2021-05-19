@@ -97,7 +97,7 @@ const ExpressDelivery = memo(() => {
   }
 
   /**
-   * 创建地址/更新地址
+   * 新建地址/更新地址
    */
   const createAddressHandle = async () => {
     const values = await form.validateFields();
@@ -153,6 +153,9 @@ const ExpressDelivery = memo(() => {
         onClick: () => {
           setCurId('');
           setCreateAddressModal(true);
+          setTimeout(() => {
+            form.resetFields()
+          }, 100);
         }
       },
       {
@@ -176,7 +179,7 @@ const ExpressDelivery = memo(() => {
         text: '编辑',
         type: 'link',
         onActionClick: () => {
-          dispatch(getAddressDetailActionAsync({ id: record.id }))
+          dispatch(getAddressDetailActionAsync({ id: record.id }));
           setCurId(record.id);
           setCreateAddressModal(true);
         },
@@ -256,11 +259,11 @@ const ExpressDelivery = memo(() => {
       />
       <Modal
         className="create-address-modal"
-        title={!curId ? '创建地址' : '更新地址'}
+        title={!curId ? '新建地址' : '更新地址'}
         visible={createAddressModal}
         destroyOnClose
         width={620}
-        okText={!curId ? '创建地址' : '更新地址'}
+        okText={!curId ? '新建地址' : '更新地址'}
         cancelText="取消"
         onOk={() => createAddressHandle()}
         onCancel={() => {
@@ -360,7 +363,6 @@ const ExpressDelivery = memo(() => {
           </Form.Item>
         </Form>
       </Modal>
-      {/* end 创建店铺 */}
     </div>
   )
 })

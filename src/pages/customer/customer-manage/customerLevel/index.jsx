@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
@@ -7,6 +8,8 @@ import RenderAction from '@/components/renderAction';
 import './style.less';
 
 const CustomerLevel = () => {
+  const history = useHistory();
+
   const tools = {
     btns: [
       {
@@ -14,7 +17,11 @@ const CustomerLevel = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/customer/customer-manage/add-level'
+          })
+        }
       },
       {
         text: '批量删除',
@@ -55,27 +62,39 @@ const CustomerLevel = () => {
 
   const columns = [
     {
+      title: '会员等级',
+      dataIndex: 'level',
+      render: (text) => (
+        <span style={{ color: '#FF4949' }}>{text}</span>
+      ),
+      align: 'center',
+    },
+    {
       title: '等级名称',
-      dataIndex: '',
+      dataIndex: 'name',
       width: '30%',
       align: 'center',
     },
     {
       title: '升级条件',
-      dataIndex: '',
+      dataIndex: 'upvalue',
+      render: (text) => (
+        <span>{text ? text : 0}成长值</span>
+      ),
       align: 'center',
     },
     {
-      title: '等级人数',
-      dataIndex: '',
+      title: '会员人数',
+      dataIndex: 'csrCount',
       align: 'center',
     },
     {
       title: '等级状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
       align: 'center',
@@ -100,11 +119,11 @@ const CustomerLevel = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Scrm/CsrLevel/getList"
           row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

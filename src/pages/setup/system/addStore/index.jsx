@@ -26,6 +26,7 @@ const AddStore = memo(() => {
     getAreaActionAsync,
     clearCityList,
     clearAreaList,
+    clearStoreDetail,
   } = actions;
 
   const [initValue, setInitValue] = useState({
@@ -47,6 +48,9 @@ const AddStore = memo(() => {
     }
     if (id || localStorage.getItem('store_id')) {
       initialData();
+    }
+    return () => {
+      dispatch(clearStoreDetail({}));
     }
   }, [id])
 

@@ -1,14 +1,101 @@
-import React from 'react';
-import { Button, Checkbox } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  Modal,
+  Input,
+  Select,
+  Switch,
+  Form,
+  message,
+} from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../store/slice';
+import { addStaff, updateStaff } from '@/services/permissions';
 import NP from 'number-precision';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
-
 import './style.less';
 
 const StaffManage = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+
+  const {
+    getRoleListActionAsync,
+    getStaffDetailActionAsync,
+    clearStaffDetail,
+  } = actions;
+
+  let {
+    staffDetail,
+    roleList,
+  } = useSelector(state => state.permissions, shallowEqual) //store数据
+
+  const [curId, setCurId] = useState('');
+  const [createStaffModal, setCreateStaffModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  /**
+   * 获取角色列表
+   */
+  useEffect(() => {
+    dispatch(getRoleListActionAsync({ page: 1, limit: 20 }));
+  }, [])
+
+  /**
+  * 编辑地址赋值
+  */
+  useEffect(() => {
+    if (Object.keys(staffDetail).length) {
+      form.setFieldsValue({
+        userphone: staffDetail?.userInfo?.phone,
+        name: staffDetail.name,
+        tel: staffDetail?.tel,
+        roleid: Number(staffDetail?.roleid),
+        is_check: staffDetail?.is_check,
+        status: staffDetail?.status,
+      })
+    } else {
+      form.resetFields()
+    }
+  }, [staffDetail])
+
+  /**
+   * 新建地址/更新地址
+   */
+  const createAndEditStaffHandle = async () => {
+    const values = await form.validateFields();
+    if (!curId) {
+      const res = await addStaff({
+        ...values,
+
+      })
+      if (res.code === 200) {
+        message.success('新建成功');
+        setRefresh(!refresh);
+        setCreateStaffModal(false);
+        dispatch(clearStaffDetail({}));
+      } else {
+        message.warning('新建失败');
+      }
+    } else {
+      const res = await updateStaff({
+        id: curId,
+        ...values,
+
+      })
+      if (res.code === 200) {
+        message.success('更新成功');
+        setRefresh(!refresh);
+        setCreateStaffModal(false);
+      } else {
+        message.warning('更新失败');
+      }
+    }
+
+  }
 
   const tools = {
     btns: [
@@ -17,7 +104,13 @@ const StaffManage = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          setCurId('');
+          setCreateStaffModal(true);
+          setTimeout(() => {
+            form.resetFields()
+          }, 100)
+        }
       },
       {
         text: '批量操作',
@@ -39,7 +132,11 @@ const StaffManage = () => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          dispatch(getStaffDetailActionAsync({ id: record.id }))
+          setCurId(record.id);
+          setCreateStaffModal(true);
+        },
       },
       {
         key: '2',
@@ -53,40 +150,45 @@ const StaffManage = () => {
   const columns = [
     {
       title: '员工账号',
-      dataIndex: '',
+      dataIndex: 'userInfo',
+      render: (text) => (
+        <span>{text?.phone}</span>
+      ),
       align: 'left',
     },
     {
       title: '员工姓名',
-      dataIndex: '',
+      dataIndex: 'name',
       align: 'center',
     },
     {
       title: '联系方式',
-      dataIndex: '',
+      dataIndex: 'tel',
       align: 'center',
     },
     {
       title: '员工角色',
-      dataIndex: '',
+      dataIndex: 'roleInfo',
+      render: (text) => (
+        <span>{text?.name}</span>
+      ),
       align: 'center',
     },
     {
       title: '二次验证',
-      dataIndex: '',
-      align: 'center',
-    },
-    {
-      title: '最后操作时间',
-      dataIndex: '',
+      dataIndex: 'is_check',
+      render: (text) => (
+        <span>{text ? '是' : '否'}</span>
+      ),
       align: 'center',
     },
     {
       title: '状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
       align: 'center',
@@ -111,15 +213,116 @@ const StaffManage = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Setting/Staff/getList"
           row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />
       </div>
+      <>
+        <Modal
+          className="create-staff-modal"
+          title={!curId ? '新建员工' : '更新员工'}
+          visible={createStaffModal}
+          destroyOnClose={true}
+          width={570}
+          okText={!curId ? '新建员工' : '更新员工'}
+          cancelText="取消"
+          onOk={() => {
+            // createAddressHandle()
+            createAndEditStaffHandle();
+          }}
+          onCancel={() => {
+            setCreateStaffModal(false);
+            // dispatch(clearAddressDetail({}));
+          }}
+        >
+          <Form
+            form={form}
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 18 }}
+            labelAlign="right"
+            requiredMark={false}
+            initialValues={{
+              is_check: true,
+              status: true,
+            }}
+          // colon={false}
+          >
+            <Form.Item
+              label="员工账号"
+              name="userphone"
+              rules={[
+                { required: true, message: '请填写员工账号' },
+              ]}
+            >
+              <Input type="text" placeholder="请填写员工账号" className="input-height" />
+            </Form.Item>
+            <Form.Item
+              label="员工姓名"
+              name="name"
+              rules={[
+                { required: true, message: '请填写员工姓名' },
+              ]}
+            >
+              <Input type="text" placeholder="请填写员工姓名" className="input-height" />
+            </Form.Item>
+            <Form.Item
+              label="联系方式"
+              name="tel"
+              rules={[
+                { required: true, message: '请填写员工联系方式' },
+              ]}
+            >
+              <Input type="text" placeholder="请填写员工联系方式" className="input-height" />
+            </Form.Item>
+            <Form.Item
+              label="员工角色"
+              name="roleid"
+              rules={[
+                { required: true, message: '请填写联系方式' },
+              ]}
+            >
+              <Select
+                allowClear
+                placeholder='请选择员工角色'
+              // className="input-height input-width"
+              >
+                {roleList?.list?.map(item => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="双重验证"
+              name="status"
+              // rules={[
+              //   { required: true, message: '请选择发货地址' },
+              // ]}
+              valuePropName="checked"
+            >
+              <Switch
+                checkedChildren="开启"
+                unCheckedChildren="关闭"
+              />
+            </Form.Item>
+            <Form.Item
+              label="员工状态"
+              name="is_check"
+              // rules={[
+              //   { required: true, message: '请选择发货地址' },
+              // ]}
+              valuePropName="checked"
+            >
+              <Switch
+                checkedChildren="开启"
+                unCheckedChildren="禁用"
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </>
     </div>
   )
 }

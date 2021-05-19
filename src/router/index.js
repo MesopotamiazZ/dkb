@@ -53,6 +53,14 @@ const routers = () => {
                             componentPath: "pages/order/order-manage/batchShip",
                             exact: true,
                         },
+                        {
+                            path: "/order/order-manage/instead-order",
+                            key: "/order/order-manage/instead-order",
+                            title: '代客下单',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/order/order-manage/insteadOrder",
+                            exact: true,
+                        },
                     ]
                 },
                 {
@@ -140,6 +148,22 @@ const routers = () => {
                             componentPath: "pages/product/product-manage/specTemplate",
                             exact: true,
                         },
+                        {
+                            path: "/product/product-manage/publish-product",
+                            key: "/product/product-manage/publish-product",
+                            title: '发布商品',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/product/product-manage/publishProduct",
+                            exact: true,
+                        },
+                        {
+                            path: "/product/product-manage/add-spec-template",
+                            key: "/product/product-manage/add-spec-template",
+                            title: '新建规格模板',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/product/product-manage/addSpecTemplate",
+                            exact: true,
+                        },
                     ]
                 },
                 {
@@ -210,6 +234,15 @@ const routers = () => {
                             componentPath: "pages/customer/customer-manage/tagManage",
                             exact: true,
                         },
+                        {
+                            path: "/customer/customer-manage/add-level",
+                            key: "/customer/customer-manage/add-level",
+                            title: '新建等级',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/customer/customer-manage/addLevel",
+                            exact: true,
+                            hidden: true,
+                        },
                     ]
                 },
                 {
@@ -223,7 +256,7 @@ const routers = () => {
                         {
                             path: "/customer/customer-storage/rule",
                             key: "/customer/customer-storage/rule",
-                            title: '客户规则',
+                            title: '储值规则',
                             icon: 'HomeOutlined',
                             componentPath: "pages/customer/customer-storage/storageRule",
                             exact: true,
@@ -298,15 +331,15 @@ const routers = () => {
                             exact: true,
                             hidden: true,
                         },
-                        {
-                            path: "/setup/system/add-edit-address",
-                            key: "/setup/system/pay",
-                            title: '新建地址',
-                            icon: 'HomeOutlined',
-                            componentPath: "pages/setup/system/addAddress",
-                            exact: true,
-                            hidden: true,
-                        },
+                        // {
+                        //     path: "/setup/system/add-edit-address",
+                        //     key: "/setup/system/pay",
+                        //     title: '新建地址',
+                        //     icon: 'HomeOutlined',
+                        //     componentPath: "pages/setup/system/addAddress",
+                        //     exact: true,
+                        //     hidden: true,
+                        // },
                     ]
                 },
                 {
@@ -319,7 +352,7 @@ const routers = () => {
                     children: [
                         {
                             path: "/setup/permissions/staffManage",
-                            key: "/setup/permissions/staff",
+                            key: "/setup/permissions/staffManage",
                             title: '员工管理',
                             icon: 'HomeOutlined',
                             componentPath: "pages/setup/permissions/staffManage",
@@ -327,11 +360,20 @@ const routers = () => {
                         },
                         {
                             path: "/setup/permissions/staffRole",
-                            key: "/setup/permissions/staff",
+                            key: "/setup/permissions/staffRole",
                             title: '员工角色',
                             icon: 'HomeOutlined',
                             componentPath: "pages/setup/permissions/staffRole",
                             exact: true,
+                        },
+                        {
+                            path: "/setup/permissions/addRole",
+                            key: "/setup/permissions/addRole",
+                            title: '新建角色',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/setup/permissions/addRole",
+                            exact: true,
+                            hidden: true,
                         },
                         {
                             path: "/setup/permissions/operatorLog",

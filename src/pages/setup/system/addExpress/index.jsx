@@ -21,6 +21,7 @@ const AddExpress = memo(() => {
   const {
     getExpressDetailActionAsync,
     getAreaActionAsync,
+    clearExpressDetail,
   } = actions;
 
   const [initValue, setInitValue] = useState({
@@ -44,6 +45,9 @@ const AddExpress = memo(() => {
     }
     if (id || localStorage.getItem('express_id')) {
       initialData();
+    }
+    return () => {
+      dispatch(clearExpressDetail({}));
     }
   }, [id])
 

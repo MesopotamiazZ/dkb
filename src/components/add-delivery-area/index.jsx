@@ -5,21 +5,6 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 import './style.less';
 
-// const originData = [];
-
-// for (let i = 0; i < 10; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     areas: `Edrward ${i}`,
-//     first_unit: 1,
-//     frist_money: 100,
-//     next_unit: 1,
-//     next_money: 100,
-//   });
-// }
-// const plainOptions = ['Apple', 'Pear', 'Orange', 'bnana', 'haha'];
-// const defaultCheckedList = ['Apple', 'Orange'];
-
 const CheckboxGroup = Checkbox.Group;
 
 const AddDeliveryArea = memo((props) => {

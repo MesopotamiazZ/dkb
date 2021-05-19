@@ -6,7 +6,6 @@ import { actions } from '../../store/slice';
 import { updateToogleExpress } from '@/services/system';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
 import moment from 'moment';
@@ -40,6 +39,7 @@ const ExpressDelivery = memo(() => {
           type: 'primary',
         },
         onClick: () => {
+          localStorage.removeItem('express_id');
           history.push({
             pathname: '/setup/system/add-edit-express',
           })

@@ -24,7 +24,7 @@ const initialState = {
   cityList: [],
   areaList: [],
   toogleExpress: { is_express: false },
-  toogleStore: { is_express: false },
+  toogleStore: { is_stores: false },
   toogleCity: { is_localexp: false },
 }
 
@@ -40,6 +40,12 @@ const reducers = {
   },
   clearAddressDetail: (state, action) => {
     state.addressDetail = action.payload
+  },
+  clearExpressDetail: (state, action) => {
+    state.expressDetail = action.payload
+  },
+  clearStoreDetail: (state, action) => {
+    state.storeDetail = action.payload
   }
 }
 

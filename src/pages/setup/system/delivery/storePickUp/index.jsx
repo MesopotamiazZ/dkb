@@ -39,6 +39,7 @@ const StorePickUp = memo(() => {
           type: 'primary',
         },
         onClick: () => {
+          localStorage.removeItem('store_id');
           history.push({
             pathname: '/setup/system/add-edit-store',
           })
@@ -129,7 +130,7 @@ const StorePickUp = memo(() => {
 
   const onStorePickUp = async (checked) => {
     console.log(checked)
-    const res = await updateToogleStore({ is_express: checked });
+    const res = await updateToogleStore({ is_stores: checked });
     if (res.code === 200) {
       dispatch(toogleStoreActionAsync());
     }
@@ -137,7 +138,7 @@ const StorePickUp = memo(() => {
   return (
     <div className="store-pick-up">
       <ToogleTipWrap
-        isOpen={toogleStore?.is_express}
+        isOpen={toogleStore?.is_stores}
         title="门店自提"
         content="启用上门自提后，买家可以就近选择商品自提门店，
         买家下单后，您需要确保买家指定的自提门店商品库存充足。"

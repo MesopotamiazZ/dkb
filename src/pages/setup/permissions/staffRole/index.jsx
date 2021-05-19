@@ -1,14 +1,17 @@
 import React from 'react';
 import { Button, Checkbox } from 'antd';
-import NP from 'number-precision';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../store/slice';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
-import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import moment from 'moment';
 
 import './style.less';
 
 const StaffRole = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const tools = {
     btns: [
@@ -17,7 +20,14 @@ const StaffRole = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          localStorage.removeItem('role_id');
+          setTimeout(() => {
+            history.push({
+              pathname: '/setup/permissions/addRole'
+            })
+          }, 100)
+        }
       },
       {
         text: '批量操作',
@@ -39,7 +49,14 @@ const StaffRole = () => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/setup/permissions/addRole',
+            state: {
+              id: record.id
+            }
+          })
+        },
       },
       {
         key: '2',
@@ -53,28 +70,39 @@ const StaffRole = () => {
   const columns = [
     {
       title: '角色名称',
-      dataIndex: '',
+      dataIndex: 'name',
       align: 'left',
     },
     {
       title: '角色描述',
-      dataIndex: '',
+      dataIndex: 'description',
       align: 'left',
       width: '30%'
     },
     {
       title: '员工数量',
-      dataIndex: '',
+      dataIndex: 'staffCount',
       align: 'center',
     },
+    // {
+    //   title: '状态',
+    //   render: (record) => (
+    //     <RenderStatus
+    //       type="circle"
+    //       badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+    //       badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
+    //     />
+    //   ),
+    //   align: 'center',
+    // },
     {
-      title: '状态',
-      render: (record) => (
-        <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
-        />
-      ),
+      title: '更新时间',
+      dataIndex: 'update_at',
+      render: (text) => {
+        if (text) {
+          return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
+        }
+      },
       align: 'center',
     },
     {
@@ -97,11 +125,11 @@ const StaffRole = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Setting/Role/getList"
           row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

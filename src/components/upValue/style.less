@@ -1,0 +1,41 @@
+@import '@/assets/css/global.less';
+
+.up-value {
+  line-height: 32px;
+  // position: relative;
+  // top: 5px;
+  .up-value-main {
+    display: flex;
+    & > span {
+      margin-right: 10px;
+    }
+    .ant-input-number {
+      width: 200px;
+    }
+    .ant-btn {
+      padding: 4px 10px;
+    }
+    .ant-input-number-input {
+      height: 36px;
+    }
+  }
+  .up-value-foot {
+    color: @sub-text-color;
+  }
+}
+
+.rule-modal {
+  .ant-alert {
+    margin-bottom: 20px;
+  }
+  .ant-table-thead .ant-table-cell {
+    font-weight: 700;
+  }
+  .rule-detail {
+    display: flex;
+    .ant-input-number {
+      width: 140px;
+      margin: 0 10px;
+    }
+  }
+}

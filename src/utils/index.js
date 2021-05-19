@@ -158,11 +158,20 @@ export function validatorPhone() {
   };
 }
 
+// 验证邮箱
 export function validatorEmail() {
   return {
     pattern: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/,
     message: '邮箱格式不正确',
   };
+}
+
+// 验证正数
+export function validatorPositiveNumber() {
+  return {
+    pattern: /^[0-9]+.?[0-9]*$/,
+    message: '请填写正确的数值'
+  }
 }
 
 /**
