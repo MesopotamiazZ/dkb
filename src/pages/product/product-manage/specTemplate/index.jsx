@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Checkbox, Alert } from 'antd';
+import { Button, Checkbox, Alert, Tag } from 'antd';
 import NP from 'number-precision';
+import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
@@ -59,26 +60,38 @@ const SpecTemplate = () => {
   const columns = [
     {
       title: '模板名称',
-      dataIndex: '',
-      width: '50%',
-      align: 'center',
+      // dataIndex: 'name',
+      render: (record) => (
+        <div>
+          <span>{record.name}</span>
+          {
+            record.is_system
+            && <Tag color="#007bff">系统模板</Tag>
+          }
+        </div>
+      ),
+      width: '25%',
+      align: 'left',
     },
     {
       title: '规格值',
-      dataIndex: '',
-      align: 'center',
+      dataIndex: 'values',
+      width: '25%',
+      align: 'left',
     },
     {
-      title: '排序',
-      dataIndex: '',
+      title: '创建时间',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
       align: 'center',
     },
     {
       title: '状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
       align: 'center',
@@ -110,11 +123,11 @@ const SpecTemplate = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Goods/MdseSpec/getList"
           row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

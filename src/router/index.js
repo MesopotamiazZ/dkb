@@ -155,6 +155,7 @@ const routers = () => {
                             icon: 'HomeOutlined',
                             componentPath: "pages/product/product-manage/publishProduct",
                             exact: true,
+                            hidden: true,
                         },
                         {
                             path: "/product/product-manage/add-spec-template",
@@ -163,6 +164,7 @@ const routers = () => {
                             icon: 'HomeOutlined',
                             componentPath: "pages/product/product-manage/addSpecTemplate",
                             exact: true,
+                            hidden: true,
                         },
                     ]
                 },

@@ -11,6 +11,7 @@ interface statusProps {
   status?: string | number;
   badge_status?: badgeStatus;
   badge_text?: Array<any>;
+  color?: string;
 }
 
 const RenderStatus: React.FC<statusProps> = (props) => {
@@ -20,6 +21,7 @@ const RenderStatus: React.FC<statusProps> = (props) => {
     status,
     badge_status,
     badge_text,
+    color,
   } = props;
   return (
     <div className="render-status">
@@ -27,7 +29,9 @@ const RenderStatus: React.FC<statusProps> = (props) => {
         type === 'default' ? <>
           <div className="render-status-msg">{status_msg}</div>
           <div className=""><Button type="link">[发货]</Button></div>
-        </> : <Badge status={badge_status} text={badge_text} />
+        </> : badge_status
+          ? <Badge status={badge_status} text={badge_text} />
+          : <Badge color={color} text={badge_text} />
       }
 
     </div>

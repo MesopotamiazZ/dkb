@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Checkbox } from 'antd';
+// import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import NP from 'number-precision';
+import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
@@ -53,26 +55,33 @@ const Classification = () => {
   const columns = [
     {
       title: '分类名称',
-      dataIndex: '',
+      // dataIndex: 'name',
+      render: (record) => (
+        <div>
+          {record.name}
+          <span className="sub-color">({record.childCount})</span>
+        </div>
+      ),
       width: '50%',
+      align: 'left',
+    },
+    {
+      title: '商品数',
+      dataIndex: 'goodsCount',
       align: 'center',
     },
     {
-      title: '商品',
-      dataIndex: '',
-      align: 'center',
-    },
-    {
-      title: '排序',
-      dataIndex: '',
-      align: 'center',
+      title: '创建时间',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
       align: 'center',
@@ -97,11 +106,12 @@ const Classification = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Goods/MdseClass/getList"
           row
+          requestData={{ pid: 0 }}
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

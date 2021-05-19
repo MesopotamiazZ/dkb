@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Checkbox, Alert } from 'antd';
-import NP from 'number-precision';
+import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderAction from '@/components/renderAction';
@@ -37,46 +37,52 @@ const BatchReplace = () => {
   const columns = [
     {
       title: '流水号',
-      dataIndex: '',
+      dataIndex: 'id',
       width: '20%',
       align: 'left',
     },
     {
       title: '总替换商品数',
-      dataIndex: '',
+      dataIndex: 'total',
       align: 'center',
     },
     {
       title: '替换前关键词',
-      dataIndex: '',
+      dataIndex: 'oldKeyword',
       align: 'center',
     },
     {
       title: '替换后关键词',
-      dataIndex: '',
+      dataIndex: 'newKeyword',
       align: 'center',
     },
     {
       title: '替换时间',
-      dataIndex: '',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
       align: 'center',
     },
     {
       title: '操作人',
-      dataIndex: '',
-      align: 'center',
-    },
-    {
-      title: '操作',
       render: (record) => (
-        <RenderAction
-          record={record}
-          getBtns={() => getBtns(record)}
+        <RenderTitle
+          mainTitle={record?.opUserInfo?.phone}
+          subTitle={record?.opUserInfo?.name}
         />
       ),
       align: 'center',
-      fixed: 'right'
-    }
+    },
+    // {
+    //   title: '操作',
+    //   render: (record) => (
+    //     <RenderAction
+    //       record={record}
+    //       getBtns={() => getBtns(record)}
+    //     />
+    //   ),
+    //   align: 'center',
+    //   fixed: 'right'
+    // }
   ]
 
   return (
@@ -85,11 +91,11 @@ const BatchReplace = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Goods/MdseBatch/getToKeywordList"
           // row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

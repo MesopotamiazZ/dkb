@@ -1,18 +1,41 @@
 import React from 'react';
 import { Button, Checkbox } from 'antd';
-import NP from 'number-precision';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
-
+import moment from 'moment';
 import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
+import Avatar from 'antd/lib/avatar/avatar';
+
+const statusEnum = {
+  '1': {
+    name: '出售中',
+    color: '#52c41a',
+  },
+  '2': {
+    name: '已售罄',
+    color: '#ff4d4f',
+  },
+  '3': {
+    name: '已下架',
+    color: '#ff4d4f',
+  },
+  '4': {
+    name: '回收站',
+    color: '#d9d9d9',
+  },
+  '100': {
+    name: '库存预警',
+    color: '#fff000',
+  },
+}
 
 const ProductManageList = () => {
 
   const tabs = {
-    defaultKey: 1,
+    defaultKey: 0,
     name: 'status',
     onChange: (key, value, reqValue) => {
       return ''
@@ -20,27 +43,27 @@ const ProductManageList = () => {
     data: [
       {
         label: "全部商品",
-        key: 1,
+        key: 0,
       },
       {
         label: "出售中",
-        key: 2,
+        key: 1,
       },
       {
         label: "已售罄",
-        key: 3,
+        key: 2,
       },
       {
         label: "已下架",
-        key: 4,
+        key: 3,
       },
       {
         label: "库存预警",
-        key: 5,
+        key: 100,
       },
       {
         label: "回收站",
-        key: 6,
+        key: 4,
       },
     ]
   }
@@ -84,7 +107,7 @@ const ProductManageList = () => {
       },
       {
         key: '2',
-        text: '删除',
+        text: '下架',
         type: 'link',
         onActionClick: () => { },
       },
@@ -94,13 +117,21 @@ const ProductManageList = () => {
         type: 'link',
         onActionClick: () => { },
       },
+      {
+        key: '4',
+        text: '更多',
+        type: 'link',
+        onActionClick: () => { },
+      },
     ]
   }
 
   const columns = [
     {
       title: '缩略图',
-      render: (record) => (''),
+      render: (record) => (
+        <Avatar src={record.thumb} size={80} />
+      ),
       align: 'center',
     },
     {
@@ -108,44 +139,52 @@ const ProductManageList = () => {
       render: (record) => (
         <RenderTitle
           mainTitle={record?.product_name}
-          subTitle={`颜色：${record?.spec?.color}/尺寸：${record?.spec?.size}`}
-          avatar={avatarPic}
+          subTitle={[
+            `${record.id}`,
+            `${record.classInfo.map((item) => (item.name)).join('/')}`
+          ]}
         />
       ),
-      width: '30%',
-      align: 'center',
+      width: '25%',
+      align: 'left',
     },
     {
       title: '价格(元)',
-      dataIndex: '',
-      render: (text, record) => {
-        if (text) {
-          return <span>￥{text}</span>
+      // dataIndex: '',
+      render: (record) => {
+        if (record.price_low !== record.price_high) {
+          return <div>
+            <div>最低价：￥{record.price_low}</div>
+            <div>最高价：￥{record.price_high}</div>
+          </div>
+        } else {
+          return <span>￥{record.price_low}</span>
         }
       },
       align: 'center',
     },
     {
       title: '库存',
-      dataIndex: '',
+      dataIndex: 'stock',
       align: 'center',
     },
     {
       title: '销量',
-      dataIndex: '',
+      dataIndex: 'salenum',
       align: 'center',
     },
     {
       title: '创建时间',
-      dataIndex: '',
-      align: 'center',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '状态',
       render: (record) => (
         <RenderStatus
-          status_msg={record.status_msg}
-          status={record.status}
+          type="circle"
+          color={statusEnum[record.status]?.color}
+          badge_text={statusEnum[record.status]?.name}
         />
       ),
       align: 'center',
@@ -170,11 +209,11 @@ const ProductManageList = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url=""
+          url="/Goods/MdseManage/getList"
           row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />

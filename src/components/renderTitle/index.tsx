@@ -5,7 +5,7 @@ type modeType = 'column' | 'row';
 
 interface RenderTitleProps {
   mainTitle: string;
-  subTitle: string;
+  subTitle: string | Array<string>;
   mode: modeType;
   avatar: any;
 }
@@ -27,12 +27,22 @@ const RenderTitle: React.FC<RenderTitleProps> = ({ mainTitle, subTitle, mode, av
         >
           {mainTitle}
         </div>
-        <div
-          className={['render-sub-title', mode === 'row' ? 'row-margin' : 'column-text'].join(' ')}
-          style={{ color: mode === 'column' ? 'rgba(146, 146, 146, 100)' : 'rgba(16, 16, 16, 100)' }}
-        >
-          {subTitle}
-        </div>
+        {
+          subTitle instanceof Array
+            ? subTitle.map((text) => (
+              <div
+                className={['render-sub-title', mode === 'row' ? 'row-margin' : 'column-text'].join(' ')}
+                style={{ color: mode === 'column' ? 'rgba(146, 146, 146, 100)' : 'rgba(16, 16, 16, 100)' }}
+              >
+                {text}
+              </div>
+            )) : <div
+              className={['render-sub-title', mode === 'row' ? 'row-margin' : 'column-text'].join(' ')}
+              style={{ color: mode === 'column' ? 'rgba(146, 146, 146, 100)' : 'rgba(16, 16, 16, 100)' }}
+            >
+              {subTitle}
+            </div>
+        }
       </div>
     </div>
   )

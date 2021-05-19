@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Checkbox, Alert } from 'antd';
-import NP from 'number-precision';
+import { Progress } from 'antd';
+import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderAction from '@/components/renderAction';
@@ -23,55 +23,68 @@ const BatchModifyPrice = () => {
     searchBtnText: '搜索',
   }
 
-  const getBtns = (record) => {
-    return [
-      {
-        key: '1',
-        text: '查看详情',
-        type: 'link',
-        onActionClick: () => { },
-      },
-    ]
-  }
+  // const getBtns = (record) => {
+  //   return [
+  //     {
+  //       key: '1',
+  //       text: '查看详情',
+  //       type: 'link',
+  //       onActionClick: () => { },
+  //     },
+  //   ]
+  // }
 
   const columns = [
     {
       title: '流水号',
-      dataIndex: '',
+      dataIndex: 'id',
       width: '20%',
       align: 'left',
     },
     {
       title: '总改价商品数',
-      dataIndex: '',
+      dataIndex: 'total',
       align: 'center',
     },
     {
       title: '改价金额',
-      dataIndex: '',
+      dataIndex: 'money',
       align: 'center',
     },
     {
       title: '改价时间',
-      dataIndex: '',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      align: 'center',
+    },
+    {
+      title: '操作进度',
+      render: (record) => (
+        <Progress percent={record.progress} size="small" />
+      ),
       align: 'center',
     },
     {
       title: '操作人',
-      dataIndex: '',
-      align: 'center',
-    },
-    {
-      title: '操作',
       render: (record) => (
-        <RenderAction
-          record={record}
-          getBtns={() => getBtns(record)}
+        <RenderTitle
+          mainTitle={record?.opUserInfo?.phone}
+          subTitle={record?.opUserInfo?.name}
         />
       ),
       align: 'center',
-      fixed: 'right'
-    }
+    },
+    // {
+    //   title: '操作',
+    //   render: (record) => (
+    //     <RenderAction
+    //       record={record}
+    //       getBtns={() => getBtns(record)}
+    //     />
+    //   ),
+    //   align: 'center',
+    //   fixed: 'right'
+    // }
   ]
 
   return (
@@ -80,11 +93,11 @@ const BatchModifyPrice = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url="/Goods/MdseBatch/getToPriceList"
           // row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
         />
