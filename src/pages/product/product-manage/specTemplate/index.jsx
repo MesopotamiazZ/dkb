@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Button, Checkbox, Alert, Tag } from 'antd';
-import NP from 'number-precision';
+import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
 
-import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
 
-const SpecTemplate = () => {
+const SpecTemplate = memo(() => {
+  const history = useHistory();
+
   const tools = {
     btns: [
       {
@@ -18,7 +18,11 @@ const SpecTemplate = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/product/product-manage/add-spec-template'
+          })
+        }
       },
       {
         text: '批量删除',
@@ -46,7 +50,14 @@ const SpecTemplate = () => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/product/product-manage/add-spec-template',
+            state: {
+              id: record.id
+            }
+          })
+        },
       },
       {
         key: '2',
@@ -134,6 +145,6 @@ const SpecTemplate = () => {
       </div>
     </div>
   )
-}
+})
 
 export default SpecTemplate;

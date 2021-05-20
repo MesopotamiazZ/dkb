@@ -133,7 +133,7 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
                     ? <InputNumber
                       value={rule.value}
                       onChange={(value) => {
-                        const dataClone = JSON.parse(JSON.stringify(dataSource));
+                        let dataClone = JSON.parse(JSON.stringify(dataSource));
                         dataClone[ind].ruleDetail.forEach((rule, i) => {
                           // console.log(rule, i, index)
                           if (i === index && i === 0) {
@@ -152,7 +152,7 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
                       placeholder="仅支持整数"
                       value={rule.value}
                       onChange={(value) => {
-                        const dataClone = JSON.parse(JSON.stringify(dataSource));
+                        let dataClone = JSON.parse(JSON.stringify(dataSource));
                         dataClone[ind].ruleDetail.forEach((rule, i) => {
                           // console.log(rule, i, index)
                           if (i === index && i === 0) {
@@ -190,7 +190,7 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
     onChange: (key, records) => {
       console.log(key, records);
       setSelectedRowKeys(key);
-      const dataClone = JSON.parse(JSON.stringify(dataSource));
+      let dataClone = JSON.parse(JSON.stringify(dataSource));
       if (key.length === 0) {
         dataClone[0].status = false;
         dataClone[1].status = false;

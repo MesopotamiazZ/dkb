@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react'
 import {
     Form, Input, Button, Select, Checkbox,
     Space, Col, DatePicker, TimePicker, Radio,
-    Switch
+    Switch, InputNumber
 } from 'antd';
 import ProCheckbox from "@/components/pro-checkbox"
 import ProUpload from "@/components/pro-upload"
@@ -15,6 +15,7 @@ import CheckTree from '@/components/check-tree'
 import SelectColor from '@/components/select-color'
 import UpValue from '@/components/upValue';
 import Benefit from '@/components/benefit';
+import AddSpecDetails from '@/components/add-spec-details';
 import './index.less'
 
 const { Option } = Select;
@@ -41,7 +42,9 @@ export default memo(function ({ formProps = {} }) {
                     ele = <Input allowClear {...searchProps} className="input-height input-width" />;
                     // ele = <div allowClear {...searchProps}>11111</div>;
                     break;
-
+                case 'inputnumber':
+                    ele = <InputNumber allowClear {...searchProps} className="input-height input-width" />
+                    break;
                 case 'select':
                     ele = <Select allowClear {...searchProps} className="input-height input-width">
                         {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}
@@ -119,6 +122,9 @@ export default memo(function ({ formProps = {} }) {
                     break;
                 case 'benefit':
                     ele = <Benefit {...searchProps} />
+                    break;
+                case 'addspecdetails':
+                    ele = <AddSpecDetails {...searchProps} dataSource={searchProps.enum} />
                     break;
                 default:
                     ele = <Input allowClear   {...searchProps} className="input-height input-width" />

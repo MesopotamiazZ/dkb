@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Checkbox } from 'antd';
+import { useHistory } from 'react-router-dom';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
 import moment from 'moment';
-import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
 import Avatar from 'antd/lib/avatar/avatar';
 
@@ -33,6 +33,7 @@ const statusEnum = {
 }
 
 const ProductManageList = () => {
+  const history = useHistory();
 
   const tabs = {
     defaultKey: 0,
@@ -75,7 +76,11 @@ const ProductManageList = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          history.push({
+            pathname: '/product/product-manage/publish-product'
+          })
+        }
       },
       {
         text: '批量删除',

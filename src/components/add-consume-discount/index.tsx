@@ -33,7 +33,7 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
             message.warning('超过最大添加数量');
             return
           }
-          const dataClone = JSON.parse(JSON.stringify(data));
+          let dataClone = JSON.parse(JSON.stringify(data));
           dataClone.push({
             id: Date.now(),
             meet: '',
@@ -57,7 +57,7 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
           <Input
             value={record.meet}
             onChange={(e) => {
-              const dataClone = JSON.parse(JSON.stringify(data));
+              let dataClone = JSON.parse(JSON.stringify(data));
               dataClone.forEach((item, i) => {
                 if (index === i) {
                   item.meet = e.target.value
@@ -73,7 +73,7 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
           <Input
             value={record.discount}
             onChange={(e) => {
-              const dataClone = JSON.parse(JSON.stringify(data));
+              let dataClone = JSON.parse(JSON.stringify(data));
               dataClone.forEach((item, i) => {
                 if (index === i) {
                   item.discount = e.target.value
@@ -95,7 +95,7 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
         <Button
           type="link"
           onClick={() => {
-            const dataClone = JSON.parse(JSON.stringify(data));
+            let dataClone = JSON.parse(JSON.stringify(data));
             dataClone.forEach((item, i) => {
               if (index === i) {
                 dataClone.splice(i, 1);

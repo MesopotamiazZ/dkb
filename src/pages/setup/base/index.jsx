@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Form, message } from 'antd';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from './store/slice';
@@ -7,7 +7,7 @@ import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
-const BaseSet = () => {
+const BaseSet = memo(() => {
   const dispatch = useDispatch();
 
   // const [form] = Form.useForm();
@@ -332,6 +332,6 @@ const BaseSet = () => {
       </div>
     </div >
   )
-}
+})
 
 export default BaseSet;

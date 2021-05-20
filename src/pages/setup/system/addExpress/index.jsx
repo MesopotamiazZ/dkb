@@ -227,6 +227,9 @@ const AddExpress = memo(() => {
             })
             if (res.code === 200) {
               message.success('修改成功');
+              history.push({
+                pathname: '/setup/system/delivery'
+              })
             } else {
               message.warning('修改失败');
             }
