@@ -11,6 +11,8 @@ import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
+const properties = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id'];
+
 const PublishProduct = memo(() => {
   const history = useHistory();
   const location = useLocation();
@@ -153,7 +155,7 @@ const PublishProduct = memo(() => {
     for (let i = 0; i < dataClone.length; i++) {
       let { price, stock, weight, skuCode, barCode, reveal, id, ...restProps } = dataClone[i];
       for (let key in restProps) {
-        if (obj[`${key}`]) {
+        if (obj[`${key}`] && obj[`${key}`].indexOf(restProps[`${key}`]) === -1) {
           obj[`${key}`].push(restProps[`${key}`]);
         } else {
           obj[`${key}`] = [restProps[`${key}`]];
@@ -164,6 +166,29 @@ const PublishProduct = memo(() => {
     console.log('newObj', newObj)
     setSpecsInfo(newObj);
   }, [])
+
+  /**
+   * 格式化muchData
+   * @param {*} data 
+   */
+  const parseData = useCallback((datas) => {
+    return datas.map((data, index) => {
+      let obj = {};
+      for (let key in datas[index]) {
+        if (properties.indexOf(key) === -1) {
+          obj[`${key}`] = data[`${key}`];
+        }
+      }
+      return {
+        price: data.price,
+        stock: data.stock,
+        weight: data.weight,
+        skuCode: data.skuCode,
+        barCode: data.barCode,
+        value: obj,
+      }
+    })
+  }, [muchData])
 
   const formProps = {
     initValue,
@@ -516,13 +541,13 @@ const PublishProduct = memo(() => {
             id: id || localStorage.getItem('product_id'),
             ...value,
             catId: `${value.catId}`,
-            skuData: specType === '1' ? singleData : muchData,
+            skuData: specType === '1' ? singleData : parseData(muchData),
             images: value.images.map((img) => (baseUrl + img.path)),
             thumb: thumb || 0,
             delivery: unParseDelivery(value.delivery),
             specsType: Number(specType),
-            specsId: '',
-            specsInfo: '',
+            specsId: specType === '1' ? '' : value.specsId,
+            specsInfo: specType === '1' ? '' : specsInfo,
           })
           if (res.code === 200) {
             message.success('修改成功');
@@ -536,7 +561,8 @@ const PublishProduct = memo(() => {
           const res = await addProduct({
             ...value,
             catId: `${value.catId}`,
-            skuData: specType === '1' ? singleData : muchData,
+            skuData: specType === '1' ? singleData : parseData(muchData),
+            // skuData: specType === '1' ? singleData : muchData,
             images: value.images.map((img) => (baseUrl + img.path)),
             thumb: thumb || 0,
             delivery: unParseDelivery(value.delivery),

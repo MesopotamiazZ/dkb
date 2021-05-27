@@ -69,6 +69,17 @@ export const checkChild = data => request({
 
 // ====================商品列表====================
 /**
+ * 商品列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getProductList = data => request({
+  url: '/Goods/MdseManage/getList',
+  method: 'get',
+  params: { ...data }
+})
+
+/**
  * 新建商品
  * @param {*} data 
  * @returns 

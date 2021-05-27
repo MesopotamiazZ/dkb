@@ -75,14 +75,13 @@ const Classification = memo(() => {
       console.log(values)
       const res = await addCategory({
         ...values,
-        pid: values.pid[values?.pid?.length - 1],
         img: baseUrl + values?.img[0]?.path,
       });
       if (res.code === 200) {
         message.success('新建成功');
         setRefresh(!refresh);
         setCreateCateModal(false);
-        dispatch(getCategoryTreeActionAsync());
+        dispatch(getCategoryTreeActionAsync({ pid: 0 }));
         dispatch(clearCategoryDetail({}));
       } else {
         message.warning('新建失败');
@@ -91,7 +90,6 @@ const Classification = memo(() => {
       const res = await updateCategory({
         id: curId,
         ...values,
-        pid: values.pid[values?.pid?.length - 1],
         img: values?.img[0]?.path.indexOf('http') === -1
           ? baseUrl + values?.img[0]?.path
           : values?.img[0]?.path,

@@ -56,7 +56,7 @@ const SelectColor: React.FC<selectColorProps> = memo(({ color, onGetBgColor }) =
 })
 
 SelectColor.defaultProps = {
-  color: 'rgba(217, 0, 27, 1)'
+  color: '#d9001b'
 }
 
 export default SelectColor;

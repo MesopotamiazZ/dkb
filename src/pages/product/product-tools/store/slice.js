@@ -1,14 +1,16 @@
 // import * as actionType from './contants'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
-
+  getCategoryTree,
+  getProductList,
 } from '@/services/product';
 
 /**
  * 初始化数据
  */
 const initialState = {
-
+  categoryTrees: [],
+  productList: {},
 }
 
 /**
@@ -30,24 +32,38 @@ const reducers = {
 
 
 /**
- * 分类详情
+ * 获取分类树形结构
  */
-// const getCategoryDetailActionAsync = createAsyncThunk(
-//   'product-tools/getCategoryDetailActionAsync',
-//   async (data, thunkAPI) => {
-//     const res = await getCategoryDetail(data);
-//     return res.result;
-//   }
-// )
+const getCategoryTreeActionAsync = createAsyncThunk(
+  'product-tools/getCategoryTreeActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getCategoryTree(data);
+    return res.result;
+  }
+)
+
+/**
+ * 获取分类树形结构
+ */
+const getProductListActionAsync = createAsyncThunk(
+  'product-tools/getProductListActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getProductList(data);
+    return res.result;
+  }
+)
 
 /**
  * 其它reducers，异步及其公共recuders
  * @param {Object} builder 
  */
 const extraReducers = builder => {
-  // builder.addCase(getCategoryDetailActionAsync.fulfilled, (state, action) => {
-  //   state.categoryDetail = action.payload
-  // })
+  builder.addCase(getCategoryTreeActionAsync.fulfilled, (state, action) => {
+    state.categoryTrees = action.payload
+  })
+  builder.addCase(getProductListActionAsync.fulfilled, (state, action) => {
+    state.productList = action.payload
+  })
 }
 
 const customerSlice = createSlice({
@@ -60,5 +76,7 @@ const customerSlice = createSlice({
 
 export const actions = {
   ...customerSlice.actions,
+  getCategoryTreeActionAsync,
+  getProductListActionAsync,
 };
 export default customerSlice.reducer;

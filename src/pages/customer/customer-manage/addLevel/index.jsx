@@ -291,10 +291,12 @@ const AddLevel = memo(() => {
                 discount: {
                   status: newBenefitDefaultValues.consumeDiscount,
                   disType: newBenefitDefaultValues.discountType,
-                  condition: newBenefitDefaultValues.segmentDiscount.map((item) => ({
-                    meet: Number(item.meet).toFixed(2),
-                    discount: Number(item.discount),
-                  }))
+                  condition: newBenefitDefaultValues?.discountType === '1'
+                    ? Number(newBenefitDefaultValues.unifiedDiscount * 10).toFixed()
+                    : newBenefitDefaultValues.segmentDiscount.map((item) => ({
+                      meet: Number(item.meet).toFixed(2),
+                      discount: Number(item.discount * 10).toFixed(),
+                    }))
                 }
               }
             });
@@ -318,10 +320,12 @@ const AddLevel = memo(() => {
                 discount: {
                   status: newBenefitDefaultValues.consumeDiscount,
                   disType: newBenefitDefaultValues.discountType,
-                  condition: newBenefitDefaultValues.segmentDiscount.map((item) => ({
-                    meet: Number(item.meet).toFixed(2),
-                    discount: Number(item.discount),
-                  }))
+                  condition: newBenefitDefaultValues?.discountType === '1'
+                    ? Number(newBenefitDefaultValues.unifiedDiscount * 10).toFixed()
+                    : newBenefitDefaultValues.segmentDiscount.map((item) => ({
+                      meet: Number(item.meet).toFixed(2),
+                      discount: Number(item.discount * 10).toFixed(),
+                    }))
                 }
               }
             });
