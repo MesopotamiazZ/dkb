@@ -1,13 +1,14 @@
-import React from 'react';
-import { Progress } from 'antd';
+import React, { memo, useState } from 'react';
+import { Modal, Progress } from 'antd';
 import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
-import RenderAction from '@/components/renderAction';
 
 import './style.less';
 
-const BatchModifyPrice = () => {
+const BatchModifyPrice = memo(() => {
+  const [modifyPriceTaskModal, setModifyPriceTaskModal] = useState(false);
+
   const tools = {
     btns: [
       {
@@ -15,7 +16,9 @@ const BatchModifyPrice = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+          setModifyPriceTaskModal(true);
+        }
       },
     ],
     onSearch: () => { },
@@ -102,8 +105,34 @@ const BatchModifyPrice = () => {
           expandIconColumnIndex={-1}
         />
       </div>
+      {/* 新建改价任务 */}
+      <Modal
+        className="modify-price-modal"
+        title="添加改价商品"
+        visible={modifyPriceTaskModal}
+        width={980}
+        okText="下一步"
+        cancelText="取消"
+        destroyOnClose
+        onOk={() => {
+          // setData(data.concat({ areas: checkedList.join(','), id: `${Date.now()}` }));
+          // setCheckedList([]);
+          // setIndeterminate(false);
+          setModifyPriceTaskModal(false);
+        }}
+        onCancel={() => setModifyPriceTaskModal(false)}
+      >
+        <div className="modify-price-modal-wrap">
+          <div className="wrap-left">
+            123
+          </div>
+          <div className="wrap-right">
+            456
+          </div>
+        </div>
+      </Modal>
     </div>
   )
-}
+})
 
 export default BatchModifyPrice;

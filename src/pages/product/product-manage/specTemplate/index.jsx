@@ -89,6 +89,9 @@ const SpecTemplate = memo(() => {
       dataIndex: 'values',
       width: '25%',
       align: 'left',
+      render: (value) => (
+        <span>{value.map((item) => (item.name)).join(',')}</span>
+      ),
     },
     {
       title: '创建时间',

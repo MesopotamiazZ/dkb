@@ -23,7 +23,11 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
     const [lock, setLock] = useState(false);
     const uploadButton = (
         <div>
-            {loading ? <LoadingOutlined style={{ fontSize: "46px", color: "#1890FF", opacity: "0.31" }} /> : <PlusOutlined style={{ fontSize: "46px", color: "#1890FF", opacity: "0.31" }} />}
+            {
+                loading
+                    ? <LoadingOutlined style={{ fontSize: "46px", color: "#1890FF", opacity: "0.31" }} />
+                    : <PlusOutlined style={{ fontSize: "46px", color: "#1890FF", opacity: "0.31" }} />
+            }
         </div>
     );
     //获取初始值
@@ -100,6 +104,25 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
     return (
         <>
             <div className="upload-wrapper">
+                {
+                    is_only > 1 && proArr.map((item, index) => {
+                        return (
+                            <div className="img-list" key={item.path}>
+                                <div className="pic-item">
+                                    <img src={item.path} alt="" />
+                                    <div onClick={(e) => {
+                                        handleDel(index, e);
+                                    }}><DeleteOutlined style={{ color: "#fff", fontSize: "16px" }} /></div>
+                                </div>
+                                <div className={item.is_cover ? "content-item" : "content-item active"}
+                                    onClick={() => {
+                                        handleCover(index)
+                                    }}
+                                >{item.is_cover ? "当前封面" : "设为封面"}</div>
+                            </div>
+                        )
+                    })
+                }
                 <Upload
                     // style={{ overflow: 'hidden', width: '104px', height: '104px',border:"1px solid #000" }}
                     // name="file"
@@ -139,16 +162,16 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
                         // 更新 imgList
                         // end：进度条相关
                         onProgress((data) => {
-                            console.log('onPress', data)
+                            // console.log('onPress', data)
                         })
                         onError((err, ret) => {
-                            console.log('error', err, ret);
+                            // console.log('error', err, ret);
                         })
                         onSuccess((ret, xhr) => {
-                            console.log('success', ret, xhr);
+                            // console.log('success', ret, xhr);
                         })
                         uploadPic()(file, uploadCount, (err, data) => {
-                            console.log(err || data?.url?.split('.com')[1]);
+                            // console.log(err || data?.url?.split('.com')[1]);
                             if (is_only === 1) {
                                 setProPics([{ path: data?.url?.split('.com')[1], is_cover: 0 }]);
                                 setProArr([{ path: data?.url, is_cover: 0 }]);
@@ -162,8 +185,8 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
                     }}
                     onChange={({ file, fileList: newFileList }) => {
                         setLock(true);
-                        console.log('smyhvae handleChange file:', file);
-                        console.log('smyhvae handleChange fileList:', newFileList);
+                        // console.log('smyhvae handleChange file:', file);
+                        // console.log('smyhvae handleChange fileList:', newFileList);
 
                         if (file.status === 'removed') {
                             setProPicList([])
@@ -203,41 +226,22 @@ export default memo(function ({ imageParams = {}, accept = ".jpg", defaultList =
                 //     handleOnPreview(file);
                 // }}
                 >
-                    {!is_only ? uploadButton : ""}
+                    {/* {!is_only ? uploadButton : ""} */}
                     {
                         is_only
-                            ? (proArr.length > 0
+                            ? ((proArr.length > 0 && is_only === 1)
                                 ? <div className="pic-item">
                                     <img
                                         src={proArr[0].path}
                                         alt="avatar"
-                                    // style={{ width: '80px', height: '80px' }}
                                     />
                                     <div onClick={(e) => {
                                         handleDel(0, e)
                                     }}><DeleteOutlined style={{ color: "#fff", fontSize: "16px" }} /></div>
-                                </div> : uploadButton) : ""
+                                </div> : proArr.length >= is_only
+                                    ? null : uploadButton) : uploadButton
                     }
                 </Upload>
-                {
-                    is_only !== 1 && proArr.map((item, index) => {
-                        return (
-                            <div className="img-list" key={item.path}>
-                                <div className="pic-item">
-                                    <img src={item.path} alt="" />
-                                    <div onClick={() => {
-                                        handleDel(index)
-                                    }}><DeleteOutlined style={{ color: "#fff", fontSize: "16px" }} /></div>
-                                </div>
-                                <div className={item.is_cover ? "content-item" : "content-item active"}
-                                    onClick={() => {
-                                        handleCover(index)
-                                    }}
-                                >{item.is_cover ? "当前封面" : "设为封面"}</div>
-                            </div>
-                        )
-                    })
-                }
             </div>
         </>
     );

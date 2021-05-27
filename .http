@@ -1,11 +1,12 @@
-POST https://b.api.dangkoubao.com/Core/User/login HTTP/1.1
+POST https://b.api.dangkoubao.com/Goods/MdseSpec/add HTTP/1.1
 content-type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNjQ1MTA5NDc5Iiwic3ViIjoiZGtiX2IiLCJuYmYiOjE2MjE4MjYyNDgsImF1ZCI6ImRhbmdrb3ViYW8iLCJpYXQiOjE2MjE4MjYyNDgsImp0aSI6ImExZmYzMGJjYTI3OTRlODRkM2EyMTBmZjliNzg3Y2JjIiwiaXNzIjoiZGFuZ2tvdWJhbyIsInN0YXR1cyI6MSwiZGF0YSI6eyJ1aWQiOjEsInVuYW1lIjoi5Y-W5ZCN5a2X55yf6Zq-IiwidXBob25lIjoxODUxMDk3NDcyMSwidWZhY2UiOiJodHRwczovL2ZpbGUuZGFuZ2tvdWJhby5jb20vcHVibGljL2RlZmF1bHRoZWFkLnBuZyIsInVzdGF0dXMiOjF9fQ.PYB2aStJ6ciVyKNt6sP14Fm04q_91A4PowRS4Peiz-4
+dkbid: 50019
 
 {
-  "phone":"18510974721",
-  "type":"1",
-  "password":"a123456",
-  "smscode":"",
-  "ticket":"t03BdFiyHGgHz3ATxsoRJMJmVETuT_orfxEzl1PXZaO968GlFz3eiim7yydj46m2V6X_jqBiUgjNYSlQ4WDxUUDeu58FsxZ9LZac0NZwcVLPkdQqkRzN_K-jg**",
-  "randstr":"@E8I"
+  "name":"123",
+  "sort":1,
+  "status":true,
+  "is_system":true,
+  "spec":[{"name":"111","reveal":"1","value":"111,222","search":true,"sort":100}]
 }

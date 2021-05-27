@@ -135,7 +135,7 @@ const ProductManageList = () => {
     {
       title: '缩略图',
       render: (record) => (
-        <Avatar src={record.thumb} size={80} />
+        <Avatar src={record.thumb} size={80} shape="square" />
       ),
       align: 'center',
     },
@@ -143,11 +143,12 @@ const ProductManageList = () => {
       title: '商品名称/编号/分类',
       render: (record) => (
         <RenderTitle
-          mainTitle={record?.product_name}
+          mainTitle={record?.title}
           subTitle={[
             `${record.id}`,
-            `${record.classInfo.map((item) => (item.name)).join('/')}`
+            `${record.classInfo[0].map((item) => (item.name)).join('/')}`
           ]}
+          titleStyle={{ alignItems: 'left' }}
         />
       ),
       width: '25%',

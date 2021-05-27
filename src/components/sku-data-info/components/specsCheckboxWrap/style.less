@@ -1,0 +1,42 @@
+.specs-checkbox-wrap {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  border-radius: 2px;
+  padding: 5px 20px;
+  margin-bottom: 15px;
+  & > .spec-item {
+    display: flex;
+    padding: 12px 0 0 0;
+    .spec-item-title {
+
+    }
+    .spec-item-checkbox {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+  }
+  .spec-item + .spec-item {
+    border-top: 1px solid #f4f4f4;
+  }
+
+  .spec-item-checkbox {
+    .ant-btn {
+      position: relative;
+      top: -7px;
+      padding: 0 8px;
+    }
+  }
+
+  .spec-item > .ant-btn {
+    padding: 0;
+    position: relative;
+    top: -7px;
+  }
+
+  .ant-checkbox-wrapper.ant-checkbox-group-item {
+    min-width: 50px;
+  }
+}

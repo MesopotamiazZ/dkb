@@ -95,7 +95,7 @@ export const uploadPic = () => {
   return (file, uploadCount, callback) => {
     // 这里指定上传目录和文件名 取自 result[].path
     var Key = `${dkbId}/${date}/${MD5(file.name)}${uploadCount}${Date.now()}.png`;
-    console.log('key', Key);
+    // console.log('key', Key);
     getAuthorization({ Method: 'PUT', Pathname: '/' + Key }, function (err, info) {
       if (err) {
         alert(err);
@@ -109,7 +109,7 @@ export const uploadPic = () => {
       xhr.setRequestHeader('Authorization', auth);
       XCosSecurityToken && xhr.setRequestHeader('x-cos-security-token', XCosSecurityToken);
       xhr.upload.onprogress = function (e) {
-        console.log('上传进度 ' + (Math.round(e.loaded / e.total * 10000) / 100) + '%');
+        // console.log('上传进度 ' + (Math.round(e.loaded / e.total * 10000) / 100) + '%');
       };
       xhr.onload = function () {
         if (/^2\d\d$/.test('' + xhr.status)) {

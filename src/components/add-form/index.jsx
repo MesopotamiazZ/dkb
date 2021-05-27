@@ -1,8 +1,18 @@
 import React, { memo, useEffect } from 'react'
 import {
-    Form, Input, Button, Select, Checkbox,
-    Space, Col, DatePicker, TimePicker, Radio,
-    Switch, InputNumber
+    Form,
+    Input,
+    Button,
+    Select,
+    Checkbox,
+    Space,
+    Col,
+    DatePicker,
+    TimePicker,
+    Radio,
+    Switch,
+    InputNumber,
+    TreeSelect,
 } from 'antd';
 import ProCheckbox from "@/components/pro-checkbox"
 import ProUpload from "@/components/pro-upload"
@@ -16,6 +26,8 @@ import SelectColor from '@/components/select-color'
 import UpValue from '@/components/upValue';
 import Benefit from '@/components/benefit';
 import AddSpecDetails from '@/components/add-spec-details';
+import FormTipText from '@/components/form-tip-text';
+import SkuDataInfo from '@/components/sku-data-info';
 import './index.less'
 
 const { Option } = Select;
@@ -27,6 +39,21 @@ export default memo(function ({ formProps = {} }) {
         console.log("inint", formProps?.initValue)
         form.setFieldsValue(formProps?.initValue);
     }, [formProps?.initValue])
+
+    /**
+       * 格式化树形分类
+       * @param {*} categoryTrees 
+       */
+    const parseTree = (categoryTrees) => {
+        const options = categoryTrees?.map((item) => (
+            <TreeSelect.TreeNode value={item.id} title={item.name}>
+                {
+                    parseTree(item.child)
+                }
+            </TreeSelect.TreeNode>
+        ))
+        return options;
+    }
 
     const renderForm = (search) => {
         /**
@@ -46,9 +73,43 @@ export default memo(function ({ formProps = {} }) {
                     ele = <InputNumber allowClear {...searchProps} className="input-height input-width" />
                     break;
                 case 'select':
-                    ele = <Select allowClear {...searchProps} className="input-height input-width">
-                        {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}
-                    </Select>
+                    ele = <>
+                        {
+                            searchProps.btns
+                                ? <>
+                                    <Form.Item
+                                        key={searchProps?.wrap?.key}
+                                        name={searchProps?.wrap?.name}
+                                        rules={searchProps?.wrap?.rules}
+                                        style={{ display: 'inline-block' }}
+                                    >
+                                        <Select allowClear {...searchProps} className="input-height input-width">
+                                            {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                        style={{ display: 'inline-block' }}
+                                    >
+                                        {
+                                            searchProps.btns
+                                            && searchProps.btns.map((btn) => (
+                                                <Button
+                                                    key={btn.id}
+                                                    type="link"
+                                                    style={{ padding: '0 5px' }}
+                                                    onClick={btn.onClick}
+                                                >
+                                                    {btn.text}
+                                                </Button>
+                                            ))
+                                        }
+                                    </Form.Item>
+                                </> : <Select allowClear {...searchProps} className="input-height input-width">
+                                    {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}
+                                </Select>
+                        }
+
+                    </>
                     break;
                 case 'rangepicker':
                     ele = <RangePicker allowClear  {...searchProps} className="input-height input-width" />
@@ -79,6 +140,39 @@ export default memo(function ({ formProps = {} }) {
                     break;
                 case 'switch':
                     ele = <Switch allowClear {...searchProps} />
+                    break;
+                case 'treeselect':
+                    ele = <>
+                        <Form.Item
+                            key={searchProps?.wrap?.key}
+                            name={searchProps?.wrap?.name}
+                            rules={searchProps?.wrap?.rules}
+                            style={{ display: 'inline-block' }}
+                        >
+                            <TreeSelect {...searchProps}>
+                                {
+                                    parseTree(searchProps.trees)
+                                }
+                            </TreeSelect>
+                        </Form.Item>
+                        <Form.Item
+                            style={{ display: 'inline-block' }}
+                        >
+                            {
+                                searchProps.btns
+                                && searchProps.btns.map((btn) => (
+                                    <Button
+                                        key={btn.id}
+                                        type="link"
+                                        style={{ padding: '0 5px' }}
+                                        onClick={btn.onClick}
+                                    >
+                                        {btn.text}
+                                    </Button>
+                                ))
+                            }
+                        </Form.Item>
+                    </>
                     break;
                 case 'checktree':
                     ele = <CheckTree {...searchProps} />
@@ -125,6 +219,12 @@ export default memo(function ({ formProps = {} }) {
                     break;
                 case 'addspecdetails':
                     ele = <AddSpecDetails {...searchProps} dataSource={searchProps.enum} />
+                    break;
+                case 'formtiptext':
+                    ele = <FormTipText {...searchProps} />
+                    break;
+                case 'skudatainfo':
+                    ele = <SkuDataInfo {...searchProps} />
                     break;
                 default:
                     ele = <Input allowClear   {...searchProps} className="input-height input-width" />

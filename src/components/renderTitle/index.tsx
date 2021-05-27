@@ -3,14 +3,16 @@ import './style.less';
 
 type modeType = 'column' | 'row';
 
+type alignType = 'left' | 'center' | 'right';
 interface RenderTitleProps {
   mainTitle: string;
   subTitle: string | Array<string>;
   mode: modeType;
+  titleStyle: any;
   avatar: any;
 }
 
-const RenderTitle: React.FC<RenderTitleProps> = ({ mainTitle, subTitle, mode, avatar }) => {
+const RenderTitle: React.FC<RenderTitleProps> = ({ mainTitle, subTitle, mode, avatar, titleStyle }) => {
   return (
     <div className="render-wrap">
       {
@@ -18,7 +20,7 @@ const RenderTitle: React.FC<RenderTitleProps> = ({ mainTitle, subTitle, mode, av
           <img src={avatar} alt="" />
         </div>
       }
-      <div className="render-title" style={{ flexDirection: mode }}>
+      <div className="render-title" style={{ ...titleStyle, flexDirection: mode }}>
         <div
           className={['render-main-title', mode === 'column' ? 'column-text' : ''].join(' ')}
           style={{
@@ -49,7 +51,8 @@ const RenderTitle: React.FC<RenderTitleProps> = ({ mainTitle, subTitle, mode, av
 }
 
 RenderTitle.defaultProps = {
-  mode: 'column'
+  mode: 'column',
+  titleStyle: {}
 }
 
 export default RenderTitle

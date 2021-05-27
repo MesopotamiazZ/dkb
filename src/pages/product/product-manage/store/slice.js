@@ -5,6 +5,8 @@ import {
   getCategoryTree,
   getProductDetail,
   getSpecTemplateDetail,
+  getSpecTemplateList,
+  getDeliveryTemplateList,
 } from '@/services/product';
 
 /**
@@ -16,6 +18,8 @@ const initialState = {
   categoryTrees: [],
   productDetail: {},
   specTemplateDetail: {},
+  specTemplateList: [],
+  deliveryTemplateList: [],
 }
 
 /**
@@ -88,6 +92,28 @@ const getSpecTemplateDetailActionAsync = createAsyncThunk(
   }
 )
 
+/**
+ * 规格模板列表
+ */
+const getSpecTemplateListActionAsync = createAsyncThunk(
+  'product-manage/getSpecTemplateListActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getSpecTemplateList(data);
+    return res.result?.list;
+  }
+)
+
+/**
+ * 获取运费模板列表
+ */
+const getDeliveryTemplateListActionAsync = createAsyncThunk(
+  'product-manage/getDeliveryTemplateListActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getDeliveryTemplateList(data);
+    return res.result?.list;
+  }
+)
+
 
 /**
  * 其它reducers，异步及其公共recuders
@@ -107,6 +133,12 @@ const extraReducers = builder => {
   builder.addCase(getSpecTemplateDetailActionAsync.fulfilled, (state, action) => {
     state.specTemplateDetail = action.payload
   })
+  builder.addCase(getSpecTemplateListActionAsync.fulfilled, (state, action) => {
+    state.specTemplateList = action.payload
+  })
+  builder.addCase(getDeliveryTemplateListActionAsync.fulfilled, (state, action) => {
+    state.deliveryTemplateList = action.payload
+  })
 }
 
 const customerSlice = createSlice({
@@ -123,5 +155,7 @@ export const actions = {
   getCategoryTreeActionAsync,
   getProductDetailActionAsync,
   getSpecTemplateDetailActionAsync,
+  getSpecTemplateListActionAsync,
+  getDeliveryTemplateListActionAsync,
 };
 export default customerSlice.reducer;

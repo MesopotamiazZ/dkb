@@ -1,0 +1,127 @@
+.specs-table {
+  border-radius: 2px;
+  & .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 32px!important;
+  }
+  & .ant-select-selector .ant-select-selection-item {
+    line-height: 30px!important;
+  }
+  & .ant-select-selection-placeholder {
+    line-height: 30px!important;
+  }
+  .ant-input-number {
+    height: 32px!important;
+    width: 100%;
+  }
+
+  .ant-upload {
+    background: rgba(24, 144, 255, 0.08);
+    height: 34px;
+    width: 34px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+    width: 34px;
+    height: 34px;
+}
+
+  .upload-wrapper {
+    // border: 3px solid pink;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 34px;
+
+    svg {
+      position: relative;
+      top: -3px;
+      font-size: 14px;
+    }
+
+    .avatar-uploader {
+        // border: 1px solid #f40;
+        width: 34px;
+        height: 34px;
+        // margin-right: 16px;
+        margin-right: 0;
+        margin: 0 auto;
+    }
+
+    .img-list {
+        width: 34px;
+        height: 114px;
+        // border: 1px solid #f40;
+        // margin-right: 16px;
+        margin-right: 0;
+        margin-bottom: 16px;
+
+        // display: flex;
+
+        
+
+        .content-item {
+            margin: 0 auto;
+            margin-top: 4px;
+            margin-bottom: 16px;
+            width: 72px;
+            height: 22px;
+            font-size: 12px;
+            text-align: center;
+            line-height: 22px;
+            border-radius: 2px;
+            color: #fff;
+            background: #1890FF;
+
+        }
+
+        .content-item.active {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+
+    }
+    .pic-item {
+        width: 34px;
+        height: 34px;
+        box-sizing: content-box;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: nowrap;
+        border: 1px dashed #d9d9d9;
+
+        img {
+            height: 32px;
+            width: 32px;
+        }
+
+        div {
+            display: none;
+        }
+    }
+    .pic-item:hover {
+        width: 34px;
+        height: 34px;
+        overflow: hidden;
+        position: relative;
+        img {
+            height: 32px;
+            width: 32px;
+        }
+
+        div {
+            display:block;
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            right: 2px;
+            bottom: 2px;
+            background-color: rgba(0, 0, 0, .5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+  }
+}

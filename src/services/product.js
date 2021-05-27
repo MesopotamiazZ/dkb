@@ -157,6 +157,17 @@ export const getSpecTemplateDetail = data => request({
   params: { ...data }
 })
 
+/**
+ * 获取规格模板列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getSpecTemplateList = data => request({
+  url: '/Goods/MdseSpec/getList',
+  method: 'get',
+  params: { ...data }
+})
+
 // ====================批量改价====================
 /**
  * 新建批量改价
@@ -179,4 +190,16 @@ export const addBatchReplace = data => request({
   url: '/Goods/MdseBatch/toKeyword',
   method: 'post',
   data
+})
+
+// ====================运费模板====================
+/**
+ * 获取运费模板列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getDeliveryTemplateList = data => request({
+  url: '/Setting/Express/getList',
+  method: 'get',
+  params: { ...data }
 })

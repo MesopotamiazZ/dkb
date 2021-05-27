@@ -154,7 +154,7 @@ const AddExpress = memo(() => {
               key: 'template',
               name: 'template',
               label: '可配送区域',
-              type: 'adddeliveryarea', // 与antd对应 
+              type: 'adddeliveryarea',
               labelCol: {
                 span: 2,
               },

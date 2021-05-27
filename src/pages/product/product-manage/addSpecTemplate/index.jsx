@@ -46,6 +46,7 @@ const AddSpecTemplate = memo(() => {
     }
     return () => {
       dispatch(clearSpecTemplateDetail({}));
+      localStorage.removeItem('template_id');
     }
   }, [id])
 
@@ -197,6 +198,7 @@ const AddSpecTemplate = memo(() => {
             })
             if (res.code === 200) {
               message.success('修改成功');
+              localStorage.removeItem('template_id');
               history.push({
                 pathname: '/product/product-manage/specTemplate'
               })
@@ -210,6 +212,7 @@ const AddSpecTemplate = memo(() => {
             })
             if (res.code === 200) {
               message.success('新增成功');
+              localStorage.removeItem('template_id');
               history.push({
                 pathname: '/product/product-manage/specTemplate'
               })
@@ -231,6 +234,7 @@ const AddSpecTemplate = memo(() => {
           // type=reset  重置表单
           // 其余的不用传type值
           console.log("按钮点击的事件111", value);
+          localStorage.removeItem('template_id');
           history.push({
             pathname: '/setup/system/delivery'
           })
