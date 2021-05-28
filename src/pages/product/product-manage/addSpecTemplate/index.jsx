@@ -139,22 +139,22 @@ const AddSpecTemplate = memo(() => {
               unCheckedChildren: '关闭'
             }
           },
-          {
-            wrap: {
-              key: 'is_system',
-              name: 'is_system',
-              label: '系统模板',
-              type: 'switch',
-              labelCol: {
-                span: 2,
-              },
-              valuePropName: 'checked'
-            },
-            props: {
-              checkedChildren: '开启',
-              unCheckedChildren: '关闭'
-            }
-          },
+          // {
+          //   wrap: {
+          //     key: 'is_system',
+          //     name: 'is_system',
+          //     label: '系统模板',
+          //     type: 'switch',
+          //     labelCol: {
+          //       span: 2,
+          //     },
+          //     valuePropName: 'checked'
+          //   },
+          //   props: {
+          //     checkedChildren: '开启',
+          //     unCheckedChildren: '关闭'
+          //   }
+          // },
         ]
       },
       {

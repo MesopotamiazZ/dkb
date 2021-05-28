@@ -43,13 +43,14 @@ const BatchModifyPrice = memo(() => {
   const [selectRows, setSelectRows] = useState([]);
   const [drawerVisible, setDrawerVisible] = useState(false);
 
+  const [refresh, setRefesh] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [curPage, setCurPage] = useState(1);
+
   const initialData = () => {
     dispatch(getCategoryTreeActionAsync({ pid: 0 })); // 获取商品分类树结构
     dispatch(getProductListActionAsync({ page: 1, limit: 10 }));
   }
-
-  const [tableData, setTableData] = useState([]);
-  const [curPage, setCurPage] = useState(1);
 
   useEffect(() => {
     initialData();
@@ -258,6 +259,7 @@ const BatchModifyPrice = memo(() => {
           rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
       {/* 新建改价任务 */}
@@ -327,9 +329,19 @@ const BatchModifyPrice = memo(() => {
                     message.warning('请先选择商品');
                     return;
                   }
-                  await addBatchModifyPrice({
-                    goods: selectRowKeys.join(',')
+                  const res = await addBatchModifyPrice({
+                    goods: selectRowKeys.join(','),
+                    type: Number(values.type),
+                    money: Number(values.price).toFixed(2),
                   })
+                  if (res.code === 200) {
+                    message.success('改价成功');
+                    setRefesh(!refresh);
+                    setDrawerVisible(false);
+                    setModifyPriceTaskModal(false);
+                  } else {
+                    message.warning('改价失败');
+                  }
                 }}
                 style={{ marginRight: "5px" }}
               >
