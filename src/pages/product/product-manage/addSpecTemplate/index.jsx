@@ -38,6 +38,7 @@ const AddSpecTemplate = memo(() => {
    * 初始化
    */
   useEffect(() => {
+    console.log(1212121, "id", id, 'local', localStorage.getItem('template_id'))
     if (id) {
       localStorage.setItem('template_id', id);
     }

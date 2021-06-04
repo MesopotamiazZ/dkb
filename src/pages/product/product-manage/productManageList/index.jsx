@@ -108,7 +108,14 @@ const ProductManageList = () => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/product/product-manage/publish-product',
+            state: {
+              id: record.id
+            }
+          });
+        },
       },
       {
         key: '2',

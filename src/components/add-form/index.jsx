@@ -36,7 +36,7 @@ const { TextArea } = Input;
 export default memo(function ({ formProps = {} }) {
     const [form] = Form.useForm();
     useEffect(() => {
-        console.log("inint", formProps?.initValue)
+        // console.log("inint", formProps?.initValue)
         form.setFieldsValue(formProps?.initValue);
     }, [formProps?.initValue])
 
@@ -46,7 +46,11 @@ export default memo(function ({ formProps = {} }) {
        */
     const parseTree = (categoryTrees) => {
         const options = categoryTrees?.map((item) => (
-            <TreeSelect.TreeNode value={item.id} title={item.name}>
+            <TreeSelect.TreeNode
+                value={item.id}
+                title={item.name}
+                selectable={item.child?.length === 0}
+            >
                 {
                     parseTree(item.child)
                 }

@@ -17,7 +17,7 @@ export default memo(function ({ formProps = {} }) {
   // const [form] = Form.useForm();
 
   useEffect(() => {
-    console.log("inint", formProps?.initValue)
+    // console.log("inint", formProps?.initValue)
     formProps?.form.setFieldsValue(formProps?.initValue);
   }, [formProps?.initValue])
 

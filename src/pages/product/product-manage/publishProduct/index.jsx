@@ -41,13 +41,16 @@ const PublishProduct = memo(() => {
   const [initValue, setInitValue] = useState({
     sort: 100,
     specsType: '1',
-    status: '1'
+    status: '1',
   }); // 表单默认值
   const [productPicEnum, setProductPicEnum] = useState([]); // 商品组图
   const [specType, setSpecType] = useState(''); // 规格设置
   const [defaultSingleData, setDefaultSingleData] = useState([]); // 单规格默认数据
   const [singleData, setSingleData] = useState([]); // 单规格实时数据
   const [defaultMuchData, setDefaultMuchData] = useState([]); // 多规格默认数据
+  const [selectCheck, setSelectCheck] = useState([]); // 多规格选择声明
+  // const [hasSelects, setHasSelects] = useState([]); // 可选设置项
+  const [specImgs, setSpecImgs] = useState({}); // 多规格图片
   const [muchData, setMuchData] = useState([]); // 多规格实时数据
   const [specsInfo, setSpecsInfo] = useState({});
 
@@ -62,7 +65,20 @@ const PublishProduct = memo(() => {
    */
   useEffect(() => {
     initialData();
+    return () => {
+      dispatch(clearSpecTemplateDetail({}));
+    }
   }, [])
+
+  /**
+   * 设置默认规格模板
+   */
+  useEffect(() => {
+    if (specTemplateList.length) {
+      dispatch(getSpecTemplateDetailActionAsync({ id: specTemplateList[0].id }));
+      setInitValue({ ...initValue, specsId: specTemplateList[0].id })
+    }
+  }, [specTemplateList])
 
   useEffect(() => {
     setSpecType(initValue.specsType);
@@ -110,22 +126,98 @@ const PublishProduct = memo(() => {
   }
 
   /**
+   * 编辑赋值规格申明
+   * @param {*} skuData 
+   * @returns 
+   */
+  const parseSkuDataValue = (skuData) => {
+    const obj = {};
+    skuData.forEach((data) => {
+      for (let key in data.value) {
+        if (!obj[key]) {
+          obj[key] = [data.value[key]];
+        }
+        if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
+          obj[key].push(data.value[key]);
+        }
+      }
+    })
+    return obj;
+  }
+
+  /**
+   * 编辑赋值设置可选项select
+   * @param {*} info 
+   */
+  const parseSpecsInfo = (info) => {
+    let newInfo = {};
+    let arr = [];
+    let specImg = {};
+    // let newSpecImg = {};
+    let keysSorted = Object.keys(info).sort(function (a, b) { return -1 });
+    for (let i = 0; i < keysSorted.length; i++) {
+      newInfo[keysSorted[i]] = info[keysSorted[i]];
+    }
+    for (let key in newInfo) {
+      if (newInfo[key] instanceof Array) {
+        arr.push({
+          id: Date.now(),
+          name: key,
+          reveal: 1,
+          selects: Array.from(new Set(newInfo[key]))
+        });
+      } else {
+        let temp = [];
+        specImg = newInfo[key];
+        for (let k in newInfo[key]) {
+          temp.push(k);
+        }
+        arr.push({
+          id: Date.now(),
+          name: key,
+          reveal: 2,
+          selects: temp,
+        });
+      }
+    }
+    // let keysSorted1 = Object.keys(specImg).sort(function (a, b) { return -1 });
+    // for (let i = 0; i < keysSorted1.length; i++) {
+    //   newSpecImg[keysSorted1[i]] = info[keysSorted1[i]];
+    // }
+    return { arr, specImg };
+  }
+
+  /**
    * 编辑赋值
    */
   useEffect(() => {
     if (Object.keys(productDetail).length) {
       setInitValue({
         ...productDetail,
-        specsType: `${productDetail.specsType}`,
-        delivery: parseDelivery(productDetail.delivery),
+        // specsType: `${productDetail.specsType}`,
+        delivery: parseDelivery({
+          express: productDetail.express,
+          stores: productDetail.stores,
+          localexp: productDetail.localexp,
+        }),
+        catId: productDetail.cat_id,
+        specsType: `${productDetail.specs_type}`,
+        expId: productDetail.expid,
         status: `${productDetail.status}`,
-        // catId: productDetail.cat_id[0],
-        // expId: 
+        specsId: productDetail.specs_id,
       });
-      // setDefaultTemplate(expressDetail.template.map((item, index) => ({
-      //   ...item,
-      //   id: index + 1,
-      // })));
+      setProductPicEnum(productDetail?.images.map((item, index) => ({
+        path: item.split('.com')[1],
+        is_cover: index === Number(productDetail.thumb) ? 1 : 0,
+      })));
+      if (productDetail.specs_type === 1) {
+        setDefaultSingleData(productDetail.skuData);
+      } else {
+        setSelectCheck(parseSkuDataValue(productDetail.skuData));
+        // setHasSelects(parseSpecsInfo(productDetail.specs_info).arr);
+        setSpecImgs(parseSpecsInfo(productDetail.specs_info).specImg);
+        setDefaultMuchData(productDetail.skuData);
+      }
     }
   }, [productDetail])
 
@@ -148,7 +240,7 @@ const PublishProduct = memo(() => {
    * @param {*} data 
    */
   const onSetSpecsInfo = useCallback((info, data) => {
-    console.log('data', data)
+    console.log('data', data, 'info', info)
     let infoClone = JSON.parse(JSON.stringify(info));
     let dataClone = JSON.parse(JSON.stringify(data));
     let obj = {};
@@ -163,9 +255,16 @@ const PublishProduct = memo(() => {
       }
     }
     const newObj = Object.assign(obj, infoClone);
-    console.log('newObj', newObj)
+    // console.log('newObj', newObj)
     setSpecsInfo(newObj);
   }, [])
+
+  /**
+   * 刷新规格值
+   */
+  const onSpecsRefresh = () => {
+    dispatch(getSpecTemplateListActionAsync({ page: 1, limit: 20 }));
+  }
 
   /**
    * 格式化muchData
@@ -250,7 +349,7 @@ const PublishProduct = memo(() => {
               //图片拼接的域名
               imgUrl: baseUrl,
               // 是否是只上传一张图片 1只上传一张 多张不传这个参数
-              is_only: 2,
+              is_only: 20,
               //图片的文件路径
               // fileUrl: `${beforeKey}merchant-logo`,
               //接受图片的类型
@@ -290,12 +389,15 @@ const PublishProduct = memo(() => {
               labelCol: {
                 span: 2,
               },
-              style: { marginBottom: 0 }
+              style: { marginBottom: 0 },
             },
             props: {
               placeholder: "请选择上级分类",
               dropdownStyle: { maxHeight: 400, overflow: 'auto' },
               allowClear: true,
+              // treeCheckable: true,
+              // treeCheckStrictly: true,
+              multiple: true,
               treeDefaultExpandAll: true,
               trees: categoryTrees,
               wrap: {
@@ -397,7 +499,7 @@ const PublishProduct = memo(() => {
                 }
               ],
               onChange: (val) => {
-                console.log(val)
+                // console.log(val)
                 dispatch(getSpecTemplateDetailActionAsync({ id: val }));
               },
               style: { width: 300, marginRight: '15px' },
@@ -417,11 +519,17 @@ const PublishProduct = memo(() => {
               }
             },
             props: {
-              type: specType,
-              detail: specTemplateDetail,
+              type: specType, // 规格性质
+              detail: specTemplateDetail, // 规格详情
+              selectCheck, // 选中规格值
+              specImgs, // 规格图片
+              // hasSelects, // 可选设置项
+              defaultSingleData, // 默认编辑单规格数据
+              defaultMuchData, // 默认编辑多规格数据
               onSetSingleData,
               onSetSpecsTableData,
               onSetSpecsInfo,
+              onSpecsRefresh,
             }
           }
         ]

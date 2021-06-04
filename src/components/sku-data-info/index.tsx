@@ -9,12 +9,29 @@ import BatChSetWrap from './components/batchSetWrap';
 import SpecsTable from './components/specsTable';
 import './style.less';
 
+interface singleDataProps {
+  price?: number | string;
+  stock?: number;
+  weight?: number;
+  skuCode?: string;
+  barCode?: string;
+  value?: any;
+  sku_code?: string;
+  bar_code?: string;
+}
+
 interface skuDataInfoProps {
-  type: string | number;
+  type: string | number; // 规格性质
   onSetSingleData: (data: any) => void;
   onSetSpecsTableData: (data: any) => void;
   onSetSpecsInfo: (data: any) => void;
-  detail?: any;
+  onSpecsRefresh: () => void;
+  detail?: any; // 规格详情
+  selectCheck?: any; // 选中规格值
+  // hasSelects?: any; // 批量设置可选项
+  specImgs?: any; // 规格图片
+  defaultSingleData?: Array<singleDataProps> | undefined; // 默认编辑单规格数据
+  defaultMuchData?: Array<singleDataProps> | undefined; // 默认编辑多规格数据
 }
 const arr = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id'];
 
@@ -22,13 +39,19 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
   const {
     type,
     detail,
+    defaultSingleData,
+    defaultMuchData,
+    selectCheck,
+    specImgs,
+    // hasSelects,
     onSetSingleData,
     onSetSpecsTableData,
     onSetSpecsInfo,
+    onSpecsRefresh,
   } = props;
-  // console.log('detail', detail)
+  // console.log('specImgs', specImgs)
 
-  const [singleData, setSingleData] = useState([{
+  const [singleData, setSingleData] = useState<Array<singleDataProps>>([{
     price: 0,
     stock: 0,
     weight: 0,
@@ -36,6 +59,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
     barCode: '',
     value: ''
   }])
+
   const [specsSelect, setspecsSelect] = useState(
     // [
     //   {
@@ -60,10 +84,76 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
   ); // specs数据包括selects数据
   const [specsTableData, setSpecsTableData] = useState([]);
 
+  // useEffect(() => {
+  //   console.log('setspecsSelect', hasSelects)
+  //   if (hasSelects.length) {
+  //     setspecsSelect(hasSelects);
+  //   }
+  // }, [hasSelects])
+
+  // useEffect(() => {
+  //   if (specImgs.length) {
+
+  //   }
+  // }, [specImgs])
+
+  useEffect(() => {
+    if (defaultSingleData?.length) {
+      setSingleData(defaultSingleData.map((data) => ({
+        ...data,
+        skuCode: data.sku_code,
+        barCode: data.bar_code
+      })));
+    }
+  }, [defaultSingleData])
+
+  /**
+   * 编辑赋值多规格列表数据
+   */
+  useEffect(() => {
+    if (defaultMuchData?.length) {
+      // console.log(111, defaultMuchData, 2222, specImgs)
+      setSpecsTableData(defaultMuchData.map((data) => {
+        let obj = {};
+        let newObj = {};
+        for (let key in data.value) {
+          // console.log(key, data[key])
+          if (!obj[key]) {
+            obj[key] = [data.value[key]];
+          }
+          if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
+            obj[key].push(data.value[key]);
+          }
+        }
+        let keysSorted = Object.keys(obj).sort(function (a, b) { return -1 });
+        for (let i = 0; i < keysSorted.length; i++) {
+          newObj[keysSorted[i]] = obj[keysSorted[i]];
+        }
+        return ({
+          price: Number(data.price),
+          stock: data.stock,
+          weight: data.weight,
+          skuCode: data.sku_code,
+          barCode: data.bar_code,
+          reveal: Object.keys(specImgs).length ? 2 : 1,
+          // specImgs,
+          ...newObj
+        })
+      }));
+    }
+  }, [defaultMuchData, specImgs])
+
+  // useEffect(() => {
+  //   if (selectCheck && Object.keys(selectCheck).length) {
+
+  //   }
+  // }, [selectCheck])
+  // console.log('selectCheck', selectCheck)
+
   useEffect(() => {
     onSetSingleData(singleData.map((item) => ({
       ...item,
-      price: item.price.toFixed(2),
+      price: Number(item.price).toFixed(2),
     })));
   }, [singleData])
 
@@ -222,16 +312,20 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
               pagination={false}
             /> : <div>
               <SpecsCheckboxWrap
-                specs={detail?.spec}
+                specsDetail={detail}
+                checked={selectCheck}
                 onSetSpecs={onSetSpecs}
+                onRefresh={onSpecsRefresh}
               />
               <BatChSetWrap
                 dataSource={specsSelect}
+                // hasSelects={hasSelects}
                 onSetBatchData={onSetBatchData}
               />
               {
                 !!specsTableData.length && <SpecsTable
                   specsTableData={specsTableData}
+                  // specImgs={specImgs}
                   onSetSpecsTableData={onSetSpecsTableData}
                   onSetSpecsInfo={onSetSpecsInfo}
                 />
