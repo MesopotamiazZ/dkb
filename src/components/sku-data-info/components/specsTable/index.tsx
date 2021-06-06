@@ -10,7 +10,7 @@ interface specsTableProps {
   onSetSpecsInfo: (info: any, data: any) => void;
 }
 
-const arr = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id'];
+const arr = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs'];
 
 const SpecsTable: React.FC<specsTableProps> = memo((props) => {
   const {
@@ -28,12 +28,17 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
     setTableData(specsTableData);
   }, [specsTableData])
 
-  // useEffect(() => {
-  //   console.log('specsInfo', specsInfo, flag);
-  //   onSetSpecsInfo(specsInfo, JSON.parse(JSON.stringify(specsTableData)));
-  // }, [flag, specsInfo])
-
-  const parseDefaultList = useCallback((tableData: any, key: string, index: number) => {
+  const parseDefaultList = useCallback((key: string, index: number) => {
+    // console.log(1111111111, key, tableData[index].specImgs, 222, tableData[index][key])
+    console.log('tableData', tableData)
+    if (tableData[index]?.specImgs && Object.keys(tableData[index].specImgs).length) {
+      return [
+        {
+          path: tableData[index].specImgs[tableData[index][key]].split('.com')[1],
+          is_cover: 0
+        }
+      ]
+    }
     // console.log('specsInfo', specsInfo, tableData);
     if (Object.keys(specsInfo).length && specsInfo[`${key}`] && tableData[index] && specsInfo[`${key}`][`${tableData[index][key]}`]) {
       // console.log(specsInfo[`${key}`][`${tableData[index][key]}`]);
@@ -82,7 +87,7 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
                     imgUrl={baseUrl}
                     is_only={1}
                     accept='.png,.jpg,.jpeg,.svg'
-                    defaultList={parseDefaultList(tableData, key, index)}
+                    defaultList={parseDefaultList(key, index)}
                     // defaultList={[]}
                     onChange={(pics) => {
                       // console.log('result', baseUrl + pics[0]?.path, key, tableData[index][key]);
@@ -98,29 +103,8 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
                       setSpecsInfo(specsInfoClone);
 
                       setTimeout(() => {
-                        // console.log(11111, !flag)
-                        // setFlag(!flag);
-                        // console.log(1112, specsInfo);
-                        // let infoClone = JSON.parse(JSON.stringify(specsInfo));
-                        // let obj = {};
-                        // for (let i = 0; i < specsTableData.length; i++) {
-                        //   let { price, stock, weight, skuCode, barCode, reveal, id, ...restProps } = tableData[i];
-                        //   for (let key in restProps) {
-                        //     if (obj[`${key}`]) {
-                        //       obj[`${key}`].push(restProps[`${key}`]);
-                        //     } else {
-                        //       obj[`${key}`] = [restProps[`${key}`]];
-                        //     }
-                        //   }
-                        // }
-                        // const newObj = Object.assign(obj, infoClone);
-                        // console.log('newObj', newObj, infoClone, obj)
                         onSetSpecsInfo(specsInfo, JSON.parse(JSON.stringify(specsTableData)));
                       }, 100)
-
-                      // let tableDataClone = JSON.parse(JSON.stringify(tableData));
-                      // tableDataClone[index].img = pics[0]?.path;
-                      // setTableData(tableDataClone);
                     }}
                   />
                 )

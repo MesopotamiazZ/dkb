@@ -112,7 +112,6 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
    */
   useEffect(() => {
     if (defaultMuchData?.length) {
-      // console.log(111, defaultMuchData, 2222, specImgs)
       setSpecsTableData(defaultMuchData.map((data) => {
         let obj = {};
         let newObj = {};
@@ -136,7 +135,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
           skuCode: data.sku_code,
           barCode: data.bar_code,
           reveal: Object.keys(specImgs).length ? 2 : 1,
-          // specImgs,
+          specImgs,
           ...newObj
         })
       }));

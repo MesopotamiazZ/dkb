@@ -11,7 +11,7 @@ import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
-const properties = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id'];
+const properties = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs'];
 
 const PublishProduct = memo(() => {
   const history = useHistory();
@@ -67,6 +67,7 @@ const PublishProduct = memo(() => {
     initialData();
     return () => {
       dispatch(clearSpecTemplateDetail({}));
+      localStorage.removeItem('product_id');
     }
   }, [])
 
@@ -245,12 +246,22 @@ const PublishProduct = memo(() => {
     let dataClone = JSON.parse(JSON.stringify(data));
     let obj = {};
     for (let i = 0; i < dataClone.length; i++) {
-      let { price, stock, weight, skuCode, barCode, reveal, id, ...restProps } = dataClone[i];
+      let { price, stock, weight, skuCode, barCode, reveal, id, specImgs, ...restProps } = dataClone[i];
       for (let key in restProps) {
         if (obj[`${key}`] && obj[`${key}`].indexOf(restProps[`${key}`]) === -1) {
-          obj[`${key}`].push(restProps[`${key}`]);
+          if (restProps[key] instanceof Array) {
+            obj[`${key}`] = obj[`${key}`].concat(restProps[`${key}`]);
+          } else {
+            obj[`${key}`].push(restProps[`${key}`]);
+          }
+          // console.log('checek', obj[key])
         } else {
-          obj[`${key}`] = [restProps[`${key}`]];
+          if (restProps[key] instanceof Array) {
+            obj[`${key}`] = restProps[`${key}`];
+          } else {
+            obj[`${key}`] = [restProps[`${key}`]];
+          }
+          // console.log('checked0', obj[key])
         }
       }
     }

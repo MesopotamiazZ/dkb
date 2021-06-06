@@ -114,7 +114,9 @@ const OrderManageList = () => {
         antdProps: {
           type: 'primary',
         },
-        onClick: () => { }
+        onClick: () => {
+
+        }
       },
       {
         text: '批量删除',
