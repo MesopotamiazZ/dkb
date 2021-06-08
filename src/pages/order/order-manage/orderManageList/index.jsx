@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Select, Form } from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../store/slice';
 import NP from 'number-precision';
 import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
@@ -11,8 +14,16 @@ import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
 
 const OrderManageList = () => {
-
+  const history = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
+
+  const {
+  } = actions;
+
+  let {
+  } = useSelector(state => state['order-manage'], shallowEqual) //store数据
 
   // 订单搜索
   const [orderObj, setOrderObj] = useState({
@@ -115,7 +126,9 @@ const OrderManageList = () => {
           type: 'primary',
         },
         onClick: () => {
-
+          history.push({
+            pathname: '/order/order-manage/instead-order'
+          })
         }
       },
       {

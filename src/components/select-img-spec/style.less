@@ -1,0 +1,33 @@
+@import '@/assets/css/global.less';
+.select-img-spec {
+  display: flex;
+  margin-bottom: 15px;
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    height: 97px;
+    margin-bottom: 10px;
+  }
+
+  .spec-item + .spec-item {
+    margin-left: 10px;
+  }
+
+  .spec-item-active {
+    border: 1px solid @primary-color;
+  }
+
+  // .ant-image {
+  //   width: 50px;
+  //   height: 68px;
+  // }
+  .spec-item-name {
+    height: 22px;
+    line-height: 22px;
+    margin-top: 5px;
+    text-align: center;
+    background: rgb(250, 250, 250);
+    cursor: pointer;
+  }
+}

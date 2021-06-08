@@ -10,6 +10,7 @@ import SpecsTable from './components/specsTable';
 import './style.less';
 
 interface singleDataProps {
+  sku_id?: null | number;
   price?: number | string;
   stock?: number;
   weight?: number;
@@ -112,6 +113,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
    */
   useEffect(() => {
     if (defaultMuchData?.length) {
+      console.log('defaultMuchData', defaultMuchData)
       setSpecsTableData(defaultMuchData.map((data) => {
         let obj = {};
         let newObj = {};
@@ -135,6 +137,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
           skuCode: data.sku_code,
           barCode: data.bar_code,
           reveal: Object.keys(specImgs).length ? 2 : 1,
+          sku_id: data.sku_id || null,
           specImgs,
           ...newObj
         })
@@ -191,6 +194,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
       weight: data.weight || 0,
       skuCode: data.skuCode || '',
       barCode: data.barCode || '',
+      sku_id: null,
     };
     let otherObj = {};
     let flag = true;
@@ -201,7 +205,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
       }
     }
     for (let i = 0; i < specsTableData.length; i++) {
-      let { price, stock, weight, skuCode, barCode, reveal, id, ...restProps } = specsTableData[i];
+      let { price, stock, weight, skuCode, barCode, reveal, id, specImgs, sku_id, ...restProps } = specsTableData[i];
       // console.log(JSON.stringify(restProps), JSON.stringify(otherObj))
       if (JSON.stringify(restProps) === JSON.stringify(otherObj)) {
         flag = false

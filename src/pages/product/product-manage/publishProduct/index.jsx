@@ -11,7 +11,7 @@ import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
 import './style.less';
 
-const properties = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs'];
+const properties = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs', 'sku_id'];
 
 const PublishProduct = memo(() => {
   const history = useHistory();
@@ -207,10 +207,12 @@ const PublishProduct = memo(() => {
         status: `${productDetail.status}`,
         specsId: productDetail.specs_id,
       });
+      // 更新赋值默认图片
       setProductPicEnum(productDetail?.images.map((item, index) => ({
         path: item.split('.com')[1],
         is_cover: index === Number(productDetail.thumb) ? 1 : 0,
       })));
+      // 更新赋值规格
       if (productDetail.specs_type === 1) {
         setDefaultSingleData(productDetail.skuData);
       } else {
@@ -231,7 +233,7 @@ const PublishProduct = memo(() => {
   }
 
   const onSetSpecsTableData = useCallback((data) => {
-    // console.log('onSetSpecsTableData', data)
+    console.log('onSetSpecsTableData', data)
     setMuchData(data);
   }, [])
 
@@ -241,12 +243,12 @@ const PublishProduct = memo(() => {
    * @param {*} data 
    */
   const onSetSpecsInfo = useCallback((info, data) => {
-    console.log('data', data, 'info', info)
+    // console.log('data', data, 'info', info)
     let infoClone = JSON.parse(JSON.stringify(info));
     let dataClone = JSON.parse(JSON.stringify(data));
     let obj = {};
     for (let i = 0; i < dataClone.length; i++) {
-      let { price, stock, weight, skuCode, barCode, reveal, id, specImgs, ...restProps } = dataClone[i];
+      let { price, stock, weight, skuCode, barCode, reveal, id, specImgs, sku_id, ...restProps } = dataClone[i];
       for (let key in restProps) {
         if (obj[`${key}`] && obj[`${key}`].indexOf(restProps[`${key}`]) === -1) {
           if (restProps[key] instanceof Array) {
@@ -282,11 +284,16 @@ const PublishProduct = memo(() => {
    * @param {*} data 
    */
   const parseData = useCallback((datas) => {
+    console.log('finish datas', datas)
     return datas.map((data, index) => {
       let obj = {};
       for (let key in datas[index]) {
         if (properties.indexOf(key) === -1) {
-          obj[`${key}`] = data[`${key}`];
+          if (data[`${key}`] instanceof Array) {
+            obj[`${key}`] = data[`${key}`][0];
+          } else {
+            obj[`${key}`] = data[`${key}`];
+          }
         }
       }
       return {
@@ -295,6 +302,7 @@ const PublishProduct = memo(() => {
         weight: data.weight,
         skuCode: data.skuCode,
         barCode: data.barCode,
+        sku_id: data.sku_id || null,
         value: obj,
       }
     })

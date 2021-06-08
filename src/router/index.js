@@ -60,6 +60,7 @@ const routers = () => {
                             icon: 'HomeOutlined',
                             componentPath: "pages/order/order-manage/insteadOrder",
                             exact: true,
+                            hidden: true
                         },
                     ]
                 },

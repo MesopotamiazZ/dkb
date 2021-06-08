@@ -10,7 +10,7 @@ interface specsTableProps {
   onSetSpecsInfo: (info: any, data: any) => void;
 }
 
-const arr = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs'];
+const arr = ['price', 'stock', 'weight', 'skuCode', 'barCode', 'reveal', 'id', 'specImgs', 'sku_id'];
 
 const SpecsTable: React.FC<specsTableProps> = memo((props) => {
   const {

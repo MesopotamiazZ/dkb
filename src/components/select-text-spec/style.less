@@ -1,0 +1,28 @@
+@import '@/assets/css/global.less';
+
+.select-text-spec {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  .spec-item {
+    display: flex;
+    justify-content: center;
+    // align-content: center;
+    align-items: center;
+    min-width: 40px;
+    height: 36px;
+    border: 1px solid rgb(240,240,240);
+    border-radius: 2px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .spec-item + .spec-item {
+    margin-left: 10px;
+  }
+  .spec-item-active {
+    border-color: @primary-color;
+    color: @primary-color;
+  }
+}

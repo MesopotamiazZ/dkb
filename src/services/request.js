@@ -25,7 +25,7 @@ function request(config) {
       message.warning('登录过期，请重新登录')
       window.location.replace('/#/login/')
     }
-    if (res.data.code === 'B_0010105') {
+    if (res.data.code === '') {
       message.warning(res.data.msg);
     }
     return res.data

@@ -1,0 +1,40 @@
+@import '@/assets/css/global.less';
+.add-decrease-comp {
+  display: inline-block;
+  .add {
+    display: inline-block;
+    text-align: center;
+    width: 37px;
+    height: 39px;
+    line-height: 37px;
+    // background: rgba(16,215,183,1);
+    border: 1px solid rgb(239,239,239);
+    border-radius:2px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .decrease {
+    display: inline-block;
+    text-align: center;
+    width: 37px;
+    height: 39px;
+    line-height: 37px;
+    // background:rgba(16,215,183,0.16);
+    border: 1px solid rgb(239,239,239);
+    border-radius:2px;
+    cursor: pointer;
+  }
+  .number {
+    display: inline-block;
+    width: 37px;
+    height: 39px;
+    line-height: 37px;
+    border-top: 1px solid rgb(239,239,239);
+    border-bottom: 1px solid rgb(239,239,239);
+    text-align: center;
+    user-select: none;
+  }
+  .stock-num {
+    color: @sub-text-color;
+  }
+}

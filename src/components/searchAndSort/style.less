@@ -1,0 +1,21 @@
+@import '@/assets/css/global.less';
+
+.search-sort {
+  display: flex;
+  justify-content: space-between;
+  .ant-input-group-wrapper {
+    width: 480px;
+  }
+  .sort {
+    display: flex;
+    text-align: right;
+    .sort-item {
+      width: 50px;
+      line-height: 40px;
+      cursor: pointer;
+    }
+    .sort-item-active {
+      color: @primary-color;
+    }
+  }
+}
