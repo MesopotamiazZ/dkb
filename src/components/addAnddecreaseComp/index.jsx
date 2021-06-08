@@ -20,6 +20,7 @@ const AddAnddecreaseComp = (props) => {
     max,
     min,
     returnNumber,
+    isStock = true,
   } = props;
 
   const [currentNum, setCurrentNum] = useState(num);
@@ -63,7 +64,9 @@ const AddAnddecreaseComp = (props) => {
       >
         <PlusOutlined />
       </span>
-      <span className="stock-num">库存{max}件</span>
+      {
+        isStock ? <span className="stock-num">库存{max}件</span> : ''
+      }
     </div>
   );
 };

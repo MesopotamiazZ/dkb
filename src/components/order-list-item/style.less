@@ -1,9 +1,13 @@
 @import '@/assets/css/global.less';
 
 .order-list-item {
+  position: relative;
   display: flex;
+  margin-bottom: 17px;
   .item-check {
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .item-avatar {}
@@ -11,16 +15,43 @@
   .item-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     .item-content-title {
       width: 190px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      
     }
   }
+  .item-content-price {
+    color: #fe625b;
+  }
+
+  .spec-item {
+    color: @sub-text-color;
+  }
   
-  .item-modify {}
+  .item-modify {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    & .decrease {
+      width: 24px;
+      height: 26px;
+      line-height: 26px;
+    }
+    & .number {
+      width: 30px;
+      height: 26px;
+      line-height: 26px;
+    }
+    & .add {
+      width: 24px;
+      height: 26px;
+      line-height: 26px;
+    }
+  }
 
   .anticon-check-circle {
     font-size: 20px;
@@ -34,5 +65,7 @@
     width: 70px;
     height: 65px;
     margin-right: 15px;
+    padding: 5px;
+    background: #ccc;
   }
 }

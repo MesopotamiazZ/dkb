@@ -3,13 +3,15 @@ import { Image } from 'antd';
 import './style.less';
 
 interface ISelectImgSpec {
+  specKey: string;
   specObj: any;
   value: any;
-  onChangeSpec: (data: any) => void;
+  onChangeSpec: (data1: any, data2: any) => void;
 }
 
 const SelectImgSpec: React.FC<ISelectImgSpec> = memo((props) => {
   const {
+    specKey,
     specObj,
     value,
     onChangeSpec,
@@ -39,7 +41,7 @@ const SelectImgSpec: React.FC<ISelectImgSpec> = memo((props) => {
             />
             <div
               className="spec-item-name"
-              onClick={() => onChangeSpec({ [spec.key]: spec.value })}
+              onClick={() => onChangeSpec({ [spec.key]: spec.value }, { [specKey]: spec.key })}
             >
               {spec.key}
             </div>

@@ -47,29 +47,19 @@
         .title {
           font-size: 16px;
           font-weight: 700;
+          span {
+            font-size: 14px;
+            font-weight: normal;
+            margin-left: 15px;
+          }
         }
         .edit {
           // cursor: pointer;
         }
       }
       & .order-content-list {
-        height: calc(100% - 91px);
-        margin-bottom: 15px;
-      }
-      & .order-content-other {
-        .remark-btn {
-          margin-right: 25px;
-          img {
-            margin-right: 10px;
-          }
-        }
-        .delivery-btn {
-          img {
-            position: relative;
-            top: -2px;
-            margin-right: 10px;
-          }
-        }
+        height: calc(100% - 40px);
+        // margin-bottom: 15px;
       }
     }
     .order-info {
@@ -156,5 +146,20 @@
     .product-number-title {
       margin-bottom: 10px;
     }
+  }
+}
+
+.remark-btn {
+  // margin-right: 25px;
+  img {
+    margin-right: 10px;
+  }
+}
+.delivery-btn {
+  margin-right: 25px;
+  img {
+    position: relative;
+    top: -2px;
+    margin-right: 10px;
   }
 }

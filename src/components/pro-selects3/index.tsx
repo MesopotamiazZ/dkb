@@ -41,7 +41,7 @@ const Level3Select = (props) => {
       <Form.Item
         className="pro-select-form-item"
         name="province"
-        style={{ width: 135, display: 'inline-block', marginRight: 18 }}
+        style={{ display: 'inline-block', marginRight: 18 }}
         rules={[{ required: true, message: '请选择省份' }]}
       >
         <Select
@@ -64,7 +64,7 @@ const Level3Select = (props) => {
       <Form.Item
         className="pro-select-form-item"
         name="city"
-        style={{ width: 135, display: 'inline-block', marginRight: 18 }}
+        style={{ display: 'inline-block', marginRight: 18 }}
         rules={[{ required: true, message: '请选择城市' }]}
       >
         <Select
@@ -87,7 +87,7 @@ const Level3Select = (props) => {
       <Form.Item
         className="pro-select-form-item"
         name="area"
-        style={{ width: 135, display: 'inline-block', marginRight: 18 }}
+        style={{ display: 'inline-block', marginRight: 18 }}
         rules={[{ required: true, message: '请选择区县' }]}
       >
         <Select

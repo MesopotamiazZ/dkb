@@ -40,6 +40,9 @@ export const getProductListText = data => request({
 export const getProductListImg = data => request({
   url: '/Goods/MdseManage/getListText',
   method: 'post',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
   data
 })
 
@@ -52,4 +55,41 @@ export const getProductSkuInfo = data => request({
   url: '/Goods/MdseManage/getSku',
   method: 'get',
   params: { ...data }
+})
+
+/**
+ * 订单费用计算
+ * @param {*} data 
+ * @returns 
+ */
+export const calculateOrder = data => request({
+  url: '/Order/SoManage/add',
+  method: 'post',
+  data
+})
+
+// =============== common ================
+/**
+ * 行政区域查询
+ * @param {*} data 
+ * @returns 
+ */
+export const getArea = data => request({
+  url: '/Publics/Tools/getArea',
+  method: 'get',
+  params: { ...data }
+})
+
+/**
+ * ocr图片识别
+ * @param {*} data 
+ * @returns 
+ */
+export const toOcr = data => request({
+  url: '/Publics/Tools/toOcr',
+  method: 'post',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  data
 })

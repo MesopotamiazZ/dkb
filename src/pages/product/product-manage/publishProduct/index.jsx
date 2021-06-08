@@ -297,7 +297,7 @@ const PublishProduct = memo(() => {
         }
       }
       return {
-        price: data.price,
+        price: Number(data.price).toFixed(2),
         stock: data.stock,
         weight: data.weight,
         skuCode: data.skuCode,
