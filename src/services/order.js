@@ -68,6 +68,17 @@ export const calculateOrder = data => request({
   data
 })
 
+/**
+ * 挂单或提交
+ * @param {*} data 
+ * @returns 
+ */
+export const hangUpAndSubmit = data => request({
+  url: '/Order/SoManage/add',
+  method: 'post',
+  data
+})
+
 // =============== common ================
 /**
  * 行政区域查询

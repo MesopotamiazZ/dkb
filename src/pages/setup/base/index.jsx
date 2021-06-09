@@ -128,7 +128,7 @@ const BaseSet = memo(() => {
             wrap: {
               key: 'industry',
               name: 'industry',
-              label: '商户行业',
+              label: '主营品类',
               type: 'proselects',
               style: {
                 marginBottom: 0

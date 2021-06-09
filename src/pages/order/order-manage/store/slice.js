@@ -123,7 +123,7 @@ const getProductSkuInfoActionAsync = createAsyncThunk(
 )
 
 /**
- * 商品sku列表
+ * 计算
  */
 const calculateOrderActionAsync = createAsyncThunk(
   'order-manage/calculateOrderActionAsync',
@@ -132,6 +132,17 @@ const calculateOrderActionAsync = createAsyncThunk(
     return res.result;
   }
 )
+
+/**
+ * 计算
+ */
+// const hangUpAndSubmitActionAsync = createAsyncThunk(
+//   'order-manage/hangUpAndSubmitActionAsync',
+//   async (data, thunkAPI) => {
+//     const res = await hangUpAndSubmit(data);
+//     return res.result;
+//   }
+// )
 
 /**
  * 获取区域
@@ -190,5 +201,6 @@ export const actions = {
   getProductSkuInfoActionAsync,
   calculateOrderActionAsync,
   getAreaActionAsync,
+  // hangUpAndSubmitActionAsync,
 };
 export default orderSlice.reducer;

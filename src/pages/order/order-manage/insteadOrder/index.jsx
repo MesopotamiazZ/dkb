@@ -6,10 +6,12 @@ import {
   Form,
   Modal,
   Avatar,
+  message,
 } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
+import { hangUpAndSubmit } from '@/services/order';
 import _ from 'lodash';
 import NP from 'number-precision';
 import CategoryItemComp from '@/components/category-item-comp';
@@ -88,6 +90,38 @@ const InsteadOrder = memo(() => {
   }, [])
 
   /**
+   * 
+   * @returns 计算、挂起、下单
+   */
+  const parseCalculateOrder = (payCode = null, toOrder = true) => {
+    return {
+      userPhone: form.getFieldValue('userPhone'),
+      goods: productOrderList.map((product) => ({
+        goodsId: product.id,
+        skuId: product.skuId,
+        goodsNum: product.number
+      })),
+      ...remarkInfo,
+      delivery: customerAddress.delivery,
+      storesId: localStorage.getItem('dkb-id'),
+      orderAlter: null,
+      freight: null,
+      address: {
+        name: customerAddress.name,
+        phone: customerAddress.phone,
+        addCode: [
+          customerAddress.province,
+          customerAddress.city,
+          customerAddress.area
+        ],
+        address: customerAddress.address
+      },
+      payCode,
+      toOrder,
+    }
+  }
+
+  /**
    * 后台计算价格
    */
   useEffect(() => {
@@ -98,35 +132,63 @@ const InsteadOrder = memo(() => {
       && Object.keys(customerAddress).length) {
       dispatch(calculateOrderActionAsync(parseCalculateOrder()));
     }
-
-    function parseCalculateOrder() {
-      return {
-        userPhone: form.getFieldValue('userPhone'),
-        goods: productOrderList.map((product) => ({
-          goodsId: product.id,
-          skuId: product.skuId,
-          goodsNum: product.number
-        })),
-        ...remarkInfo,
-        delivery: customerAddress.delivery,
-        storesId: localStorage.getItem('dkb-id'),
-        orderAlter: null,
-        freight: null,
-        address: {
-          name: customerAddress.name,
-          phone: customerAddress.phone,
-          addCode: [
-            customerAddress.province,
-            customerAddress.city,
-            customerAddress.area
-          ],
-          address: customerAddress.address
-        },
-        payCode: null,
-        toOrder: true
-      }
-    }
   }, [remarkInfo, customerAddress, productOrderList])
+
+  /**
+   * 挂起
+   */
+  const hangUp = async () => {
+    if (!productOrderList.length) {
+      message.warning('请先下单');
+      return
+    }
+    if (!form.getFieldValue('userPhone')) {
+      message.warning('请输入客户手机号');
+      return
+    }
+    if (!Object.keys(remarkInfo).length) {
+      message.warning('请先填写备注信息');
+      return
+    }
+    if (!Object.keys(customerAddress).length) {
+      message.warning('请先填写配送信息');
+      return
+    }
+    const res = await hangUpAndSubmit(parseCalculateOrder(7, false));
+    if (res.code === 200 && res.result.orderId) {
+      message.success('挂单成功');
+    } else {
+      message.warning('挂单失败');
+    }
+  }
+
+  /**
+   * 提交
+   */
+  const submit = async () => {
+    if (!productOrderList.length) {
+      message.warning('请先下单');
+      return
+    }
+    if (!form.getFieldValue('userPhone')) {
+      message.warning('请输入客户手机号');
+      return
+    }
+    if (!Object.keys(remarkInfo).length) {
+      message.warning('请先填写备注信息');
+      return
+    }
+    if (!Object.keys(customerAddress).length) {
+      message.warning('请先填写配送信息');
+      return
+    }
+    const res = await hangUpAndSubmit(parseCalculateOrder(null, false));
+    if (res.code === 200 && res.result.orderId) {
+      message.success('下单成功');
+    } else {
+      message.warning('下单失败');
+    }
+  }
 
   const clearCurSpecs = () => {
     setCurTextSpecs({});
@@ -424,12 +486,14 @@ const InsteadOrder = memo(() => {
         <div className="order-btns">
           <Button
             type="primary"
+            onClick={hangUp}
           >
             挂单
           </Button>
           <Button
             type="primary"
             danger
+            onClick={submit}
           >
             提交
           </Button>
