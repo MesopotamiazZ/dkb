@@ -169,7 +169,7 @@ const AddRole = memo(() => {
           const res = await updateRole({
             id: id || localStorage.getItem('role_id'),
             ...values,
-            auths: checkedList1.join(',')
+            auths: checkedList1
           })
           if (res.code === 200) {
             message.success('更新成功');
@@ -182,7 +182,7 @@ const AddRole = memo(() => {
         } else {
           const res = await addRole({
             ...values,
-            auths: checkedList1.join(',')
+            auths: checkedList1
           })
           if (res.code === 200) {
             message.success('新建成功');

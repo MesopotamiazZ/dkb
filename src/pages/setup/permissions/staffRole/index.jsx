@@ -81,7 +81,7 @@ const StaffRole = () => {
     },
     {
       title: '员工数量',
-      dataIndex: 'staffCount',
+      dataIndex: 'count',
       align: 'center',
     },
     // {

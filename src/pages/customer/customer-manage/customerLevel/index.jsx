@@ -85,7 +85,7 @@ const CustomerLevel = () => {
     },
     {
       title: '会员人数',
-      dataIndex: 'csrCount',
+      dataIndex: 'count',
       align: 'center',
     },
     {

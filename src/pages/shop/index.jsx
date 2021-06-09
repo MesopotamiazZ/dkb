@@ -116,7 +116,7 @@ const Shop = () => {
                   下午好，请选择一个店铺开始您的生意
                 </div>
                 <div className="sub-title">
-                  可创建20个店铺，已创建{shopList?.length || 0}个
+                  可创建20个店铺，已创建{shopList?.list?.length || 0}个
                 </div>
               </div>
               <div className="sort">
@@ -133,10 +133,10 @@ const Shop = () => {
                 onClick={() => setCreateShopModal(true)}
               >
                 <PlusOutlined />
-                <span className="item-text">创建店铺&nbsp;{shopList?.length || 0}/20</span>
+                <span className="item-text">创建店铺&nbsp;{shopList?.list?.length || 0}/20</span>
               </div>
               {
-                shopList?.map((shop) => (
+                shopList?.list?.map((shop) => (
                   <div
                     className="wrap-main-item"
                     key={shop.dkb_id}

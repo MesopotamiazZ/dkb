@@ -5,7 +5,7 @@ import request from './request'
  * @param {Object} data 
  */
 export const loginApi = data => request({
-  url: '/Core/User/login',
+  url: '/Publics/User/login',
   method: 'post',
   data
 })
@@ -16,7 +16,7 @@ export const loginApi = data => request({
  * @returns 
  */
 export const sendSms = data => request({
-  url: '/Publics/Tools/sendsms',
+  url: '/Publics/Tools/sendSms',
   method: 'post',
   data
 })
@@ -27,7 +27,7 @@ export const sendSms = data => request({
  * @returns 
  */
 export const registerApi = data => request({
-  url: '/Core/User/add',
+  url: '/Publics/User/add',
   method: 'post',
   data
 })

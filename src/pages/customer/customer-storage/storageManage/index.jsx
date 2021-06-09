@@ -207,7 +207,7 @@ const StorageManage = () => {
         >
           <Form.Item
             label="客户账号"
-            name="userphone"
+            name="userPhone"
             rules={[
               { required: true, message: '请填写联系客户账号' },
             ]}

@@ -65,7 +65,7 @@ const AddDeliveryArea = memo((props) => {
         })
       })
       return {
-        area_code: code.join(',')
+        area_code: code
       }
     }
     onSetDeliveryArea(data.map((item) => {
@@ -185,7 +185,7 @@ const AddDeliveryArea = memo((props) => {
             rules={[
               {
                 required: true,
-                message: `Please Input ${title}!`,
+                message: `请输入${title}!`,
               },
             ]}
           >

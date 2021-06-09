@@ -28,7 +28,7 @@ export const updateBaseSet = data => request({
  * @returns 
  */
 export const getIndustry = data => request({
-  url: '/Core/Shop/getIndustry',
+  url: '/Publics/Shop/getIndustry',
   method: 'get',
   params: data
 })

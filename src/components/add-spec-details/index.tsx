@@ -57,14 +57,13 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
   const [specData, setSpecData] = useState<Array<specValueData>>([]); // 新增规格modal --》 规格值
   const [specDataTemp, setSpecDataTemp] = useState<Array<specValueData>>([]); // 新增规格modal --》 规格值（临时数据）
 
-  console.log(1111, dataSource);
   // console.log(2222, specs);
 
   useEffect(() => {
     if (dataSource.length) {
       setSpecs(dataSource.map((item) => ({
         ...item,
-        specData: item.value.split(',').map((val, index) => ({
+        specData: item.value.map((val, index) => ({
           id: index,
           specVal: val,
         }))

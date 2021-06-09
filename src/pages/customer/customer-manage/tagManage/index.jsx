@@ -134,7 +134,7 @@ const TagManage = () => {
     },
     {
       title: '标签人数',
-      dataIndex: 'tagCount',
+      dataIndex: 'count',
       align: 'center',
     },
     {

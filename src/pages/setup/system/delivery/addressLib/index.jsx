@@ -63,7 +63,7 @@ const ExpressDelivery = memo(() => {
         description: addressDetail?.description,
         address: addressDetail?.address?.address,
       })
-      setAreas1(addressDetail?.address?.regionid.split(','));
+      setAreas1(addressDetail?.address?.area_code.split(','));
     } else {
       form.setFieldsValue({
         name: '',
@@ -108,7 +108,7 @@ const ExpressDelivery = memo(() => {
           province: provinceList.filter((item) => item.id == values.province)[0].name,
           city: cityList.filter((item) => item.id == values.city)[0].name,
           district: areaList.filter((item) => item.id == values.area)[0].name,
-          regionid: `${values.province},${values.city},${values.area}`,
+          area_code: [values.province, values.city, values.area],
           address: values.address
         }
       })
@@ -128,7 +128,7 @@ const ExpressDelivery = memo(() => {
           province: provinceList.filter((item) => item.id == values.province)[0].name,
           city: cityList.filter((item) => item.id == values.city)[0].name,
           district: areaList.filter((item) => item.id == values.area)[0].name,
-          regionid: `${values.province},${values.city},${values.area}`,
+          area_code: [values.province, values.city, values.area],
           address: values.address
         }
       })

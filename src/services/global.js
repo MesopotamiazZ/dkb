@@ -19,7 +19,7 @@ export const getCurAccountInfo = data => request({ url: '/Publics/Tools/getUser'
  * @returns 
  */
 export const getShopInfo = data => request({
-  url: '/Core/Shop/getConfig',
+  url: '/Publics/Shop/get',
   method: 'get',
   params: { ...data }
 })

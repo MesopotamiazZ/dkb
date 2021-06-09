@@ -50,10 +50,10 @@ const StaffManage = () => {
   useEffect(() => {
     if (Object.keys(staffDetail).length) {
       form.setFieldsValue({
-        userphone: staffDetail?.userInfo?.phone,
+        userPhone: staffDetail?.userInfo?.phone,
         name: staffDetail.name,
         tel: staffDetail?.tel,
-        roleid: Number(staffDetail?.roleid),
+        roleId: Number(staffDetail?.roleId),
         is_check: staffDetail?.is_check,
         status: staffDetail?.status,
       })
@@ -254,12 +254,12 @@ const StaffManage = () => {
           >
             <Form.Item
               label="员工账号"
-              name="userphone"
+              name="userPhone"
               rules={[
                 { required: true, message: '请填写员工账号' },
               ]}
             >
-              <Input type="text" placeholder="请填写员工账号" className="input-height" />
+              <Input type="text" placeholder="请填写员工账号" className="input-height" disabled={curId} />
             </Form.Item>
             <Form.Item
               label="员工姓名"
@@ -281,7 +281,7 @@ const StaffManage = () => {
             </Form.Item>
             <Form.Item
               label="员工角色"
-              name="roleid"
+              name="roleId"
               rules={[
                 { required: true, message: '请填写联系方式' },
               ]}

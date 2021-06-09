@@ -55,9 +55,9 @@ const AllCustomer = memo(() => {
   useEffect(() => {
     if (Object.keys(customerDetail).length) {
       form.setFieldsValue({
-        userphone: customerDetail?.userInfo?.phone,
-        levelid: `${customerDetail?.levelInfo?.id}`,
-        tagids: customerDetail?.tagInfo.map((tag) => (`${tag.id}`)),
+        userPhone: customerDetail?.userInfo?.phone,
+        levelId: `${customerDetail?.levelInfo?.id}`,
+        tagIds: customerDetail?.tagInfo.map((tag) => (`${tag.id}`)),
         description: customerDetail?.description,
         status: customerDetail?.status,
       })
@@ -72,7 +72,7 @@ const AllCustomer = memo(() => {
     if (!curId) {
       const res = await addCustomer({
         ...values,
-        tagids: values.tagids.join(','),
+        tagIds: values.tagIds.join(','),
       });
       if (res.code === 200) {
         message.success('新建成功');
@@ -86,7 +86,7 @@ const AllCustomer = memo(() => {
       const res = await updateCustomer({
         id: curId,
         ...values,
-        tagids: values.tagids.join(','),
+        tagIds: values.tagIds.join(','),
       })
       if (res.code === 200) {
         message.success('更新成功');
@@ -274,16 +274,16 @@ const AllCustomer = memo(() => {
         >
           <Form.Item
             label="客户账号"
-            name="userphone"
+            name="userPhone"
             rules={[
               { required: true, message: '请填写联系客户账号' },
             ]}
           >
-            <Input type="text" placeholder="请填写联系客户账号" className="input-height" />
+            <Input type="text" placeholder="请填写联系客户账号" className="input-height" disabled={curId} />
           </Form.Item>
           <Form.Item
             label="客户等级"
-            name="levelid"
+            name="levelId"
             rules={[
               { required: true, message: '请选择客户等级' },
             ]}
@@ -302,7 +302,7 @@ const AllCustomer = memo(() => {
           </Form.Item>
           <Form.Item
             label="客户标签"
-            name="tagids"
+            name="tagIds"
             rules={[
               { required: true, message: '请选择客户标签' },
             ]}

@@ -37,7 +37,7 @@ const BaseSet = memo(() => {
     if (Object.keys(baseInfo).length) {
       console.log('baseInfo', baseInfo)
       setInitValue({ ...baseInfo });
-      setIndSelects(baseInfo?.industry.split(','));
+      setIndSelects(baseInfo?.industry);
       setLogoEnum([
         {
           path: baseInfo?.logo,
@@ -290,7 +290,8 @@ const BaseSet = memo(() => {
         console.log("按钮点击的事件222", value);
         const res = await updateBaseSet({
           ...value,
-          industry: [value.baseIndustry, value.thinIndustry].join(','),
+          // industry: [value.baseIndustry, value.thinIndustry].join(','),
+          industry: value.thinIndustry,
           logo: (typeof value.logo === 'string') ? value.logo : baseUrl + value.logo[0].path,
         })
         if (res.code === 200) {

@@ -197,7 +197,7 @@ const Classification = memo(() => {
       render: (record) => (
         <div>
           {record.name}
-          <span className="sub-color">({record.childCount})</span>
+          <span className="sub-color">({record.child_count})</span>
         </div>
       ),
       width: '50%',
@@ -205,7 +205,7 @@ const Classification = memo(() => {
     },
     {
       title: '商品数',
-      dataIndex: 'goodsCount',
+      dataIndex: 'goods_count',
       align: 'center',
     },
     {

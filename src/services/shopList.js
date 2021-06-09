@@ -6,7 +6,7 @@ import request from './request';
  * @returns 
  */
 export const getAllShop = data => request({
-  url: 'Core/Shop/getAll',
+  url: '/Publics/Shop/getList',
   method: 'get',
   params: { ...data }
 })
@@ -17,7 +17,7 @@ export const getAllShop = data => request({
  * @returns 
  */
 export const searchPackage = data => request({
-  url: '/Core/Shop/getPlan',
+  url: '/Publics/Shop/getPlan',
   method: 'get',
   params: { ...data }
 })
@@ -28,7 +28,7 @@ export const searchPackage = data => request({
  * @returns 
  */
 export const getCategory = data => request({
-  url: '/Core/Shop/getIndustry',
+  url: '/Publics/Shop/getIndustry',
   method: 'get',
   params: { ...data }
 })
@@ -39,7 +39,7 @@ export const getCategory = data => request({
  * @returns 
  */
 export const getNode = data => request({
-  url: '/Core/Shop/getNode',
+  url: '/Publics/Shop/getNode',
   method: 'get',
   params: { ...data }
 })
@@ -50,7 +50,7 @@ export const getNode = data => request({
  * @returns 
  */
 export const getPackageDiff = data => request({
-  url: '/Core/Shop/getDiff',
+  url: '/Publics/Shop/getDiff',
   method: 'get',
   params: { ...data }
 })
@@ -61,7 +61,7 @@ export const getPackageDiff = data => request({
  * @returns 
  */
 export const createShop = data => request({
-  url: '/Core/Shop/add',
+  url: '/Publics/Shop/add',
   method: 'post',
   data
 })
@@ -72,7 +72,7 @@ export const createShop = data => request({
  * @returns 
  */
 export const getShopInfo = data => request({
-  url: '/Core/Shop/getConfig',
+  url: '/Publics/Shop/get',
   method: 'get',
   params: { ...data }
 })

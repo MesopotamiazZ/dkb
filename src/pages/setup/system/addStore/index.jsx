@@ -74,7 +74,7 @@ const AddStore = memo(() => {
         path: img,
         is_cover: 0
       })))
-      setAreas1(storeDetail?.address?.regionid.split(','));
+      setAreas1(storeDetail?.address?.area_code.split(','));
     }
   }, [storeDetail])
 
@@ -118,10 +118,10 @@ const AddStore = memo(() => {
         su_tel: value.su_tel,
         status: value.status,
         address: {
-          province: provinceList.filter((item) => item.id === value.province)[0].name,
-          city: cityList.filter((item) => item.id === value.province)[0].name,
-          district: areaList.filter((item) => item.id === value.province)[0].name,
-          regionid: `${value.province},${value.city},${value.area}`,
+          // province: provinceList.filter((item) => item.id === value.province)[0].name,
+          // city: cityList.filter((item) => item.id === value.province)[0].name,
+          // district: areaList.filter((item) => item.id === value.province)[0].name,
+          area_code: [value.province, value.city, value.area],
           address: value.address,
           lng: loc.lng,
           lat: loc.lat
@@ -141,10 +141,10 @@ const AddStore = memo(() => {
         su_tel: value.su_tel,
         status: value.status,
         address: {
-          province: provinceList.filter((item) => item.id == value.province)[0].name,
-          city: cityList.filter((item) => item.id == value.city)[0].name,
-          district: areaList.filter((item) => item.id == value.area)[0].name,
-          regionid: `${value.province},${value.city},${value.area}`,
+          // province: provinceList.filter((item) => item.id == value.province)[0].name,
+          // city: cityList.filter((item) => item.id == value.city)[0].name,
+          // district: areaList.filter((item) => item.id == value.area)[0].name,
+          area_code: [value.province, value.city, value.area],
           address: value.address,
           lng: loc.lng,
           lat: loc.lat
@@ -173,7 +173,7 @@ const AddStore = memo(() => {
   //          "province": "福建省",
   //          "city": "福州市",
   //          "district": "鼓楼区",
-  //          "regionid": "350000,350100,350102",
+  //          "area_code": "350000,350100,350102",
   //          "address": "东街街道东街东街口聚春园大酒店(福州店)",
   //          "lng": "119.306353",
   //          "lat": "26.092066"
