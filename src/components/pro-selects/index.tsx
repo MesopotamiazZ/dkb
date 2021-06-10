@@ -13,13 +13,14 @@ const Level2Select = (props) => {
 
   useEffect(() => {
     console.log('selects', selects);
-    if (selects.length === 1) {
-      handleSelectIndustry({ value: selects[0], index: 1 });
-      form.setFieldsValue({ baseIndustry: selects[0] });
-    } else if (selects.length === 2) {
-      handleSelectIndustry({ value: selects[0], index: 1 });
-      form.setFieldsValue({ baseIndustry: selects[0], thinIndustry: selects[1] });
-    }
+    form.setFieldsValue({ baseIndustry: `${selects}` });
+    // if (selects.length === 1) {
+    //   handleSelectIndustry({ value: selects[0], index: 1 });
+    //   form.setFieldsValue({ baseIndustry: selects[0] });
+    // } else if (selects.length === 2) {
+    //   handleSelectIndustry({ value: selects[0], index: 1 });
+    //   form.setFieldsValue({ baseIndustry: selects[0], thinIndustry: selects[1] });
+    // }
   }, [selects])
 
   return (
@@ -45,7 +46,7 @@ const Level2Select = (props) => {
             ))}
         </Select>
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         name="thinIndustry"
         style={{ width: 230, display: 'inline-block', marginRight: 18 }}
       >
@@ -62,7 +63,7 @@ const Level2Select = (props) => {
             )) : ''
           }
         </Select>
-      </Form.Item>
+      </Form.Item> */}
     </div>
   )
 }

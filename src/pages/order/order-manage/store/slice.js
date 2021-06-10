@@ -6,7 +6,7 @@ import {
   getProductSkuInfo,
   calculateOrder,
   getArea,
-  toOcr,
+  getProductListImg,
 } from '@/services/order';
 
 /**
@@ -112,6 +112,17 @@ const getProductListTextActionAsync = createAsyncThunk(
 )
 
 /**
+ * 商品列表 (图片搜索)
+ */
+const getProductListImgActionAsync = createAsyncThunk(
+  'order-manage/getProductListImgActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getProductListImg(data);
+    return res.result;
+  }
+)
+
+/**
  * 商品sku列表
  */
 const getProductSkuInfoActionAsync = createAsyncThunk(
@@ -167,6 +178,9 @@ const extraReducers = builder => {
   builder.addCase(getProductListTextActionAsync.fulfilled, (state, action) => {
     state.productList = action.payload
   })
+  builder.addCase(getProductListImgActionAsync.fulfilled, (state, action) => {
+    state.productList = action.payload
+  })
   builder.addCase(getProductSkuInfoActionAsync.fulfilled, (state, action) => {
     state.productSkuInfo = action.payload
   })
@@ -198,6 +212,7 @@ export const actions = {
   ...orderSlice.actions,
   getCategoryListActionAsync,
   getProductListTextActionAsync,
+  getProductListImgActionAsync,
   getProductSkuInfoActionAsync,
   calculateOrderActionAsync,
   getAreaActionAsync,

@@ -40,9 +40,9 @@ export const getProductListText = data => request({
 export const getProductListImg = data => request({
   url: '/Goods/MdseManage/getListText',
   method: 'post',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
+  // headers: {
+  //   'Content-Type': 'application/x-www-form-urlencoded'
+  // },
   data
 })
 
@@ -99,8 +99,8 @@ export const getArea = data => request({
 export const toOcr = data => request({
   url: '/Publics/Tools/toOcr',
   method: 'post',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
+  // headers: {
+  //   'Content-Type': 'application/x-www-form-urlencoded'
+  // },
   data
 })

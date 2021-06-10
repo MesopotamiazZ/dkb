@@ -30,7 +30,7 @@ interface specDetails {
   id?: string | number;
   name?: string;
   reveal?: string | number;
-  value?: string;
+  value?: Array<string | number>;
   search?: boolean;
   sort?: number;
   specData?: any;
@@ -367,7 +367,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
             id: values.id || Date.now(),
             // reveal: revealEnum[values.reveal],
             specData: specDataTemp,
-            value: specDataTemp.map((item) => (item.specVal)).join(','),
+            value: specDataTemp.map((item) => (item.specVal)),
           });
           setAddSpecModal(false);
         }}

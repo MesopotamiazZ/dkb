@@ -1,12 +1,15 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   Input,
 } from 'antd';
+import { toOcr } from '../../services/order';
+import AddressParse from 'address-parse';
 import './style.less';
 import imgpng from '../../assets/images/imgpng.png';
 
 interface ISearchAndSort {
   sort?: string | null;
+  onGetBase64: (data: string) => void;
 }
 
 const { Search } = Input;
@@ -28,17 +31,41 @@ const { Search } = Input;
 const SearchAndSort: React.FC<ISearchAndSort> = memo((props) => {
 
   const {
-    sort
+    sort,
+    onGetBase64,
   } = props;
 
+  const loadPicRef = useRef(null);
   const [curSort, setCurSort] = useState(sort);
+
+  /**
+   * file转base64
+   * @param blob 
+   * @param cb 
+   */
+  const blobToDataURL = (blob, cb) => {
+    let reader = new FileReader();
+    reader.onload = function (evt) {
+      let base64 = evt.target.result;
+      cb(base64);
+    };
+    reader.readAsDataURL(blob);
+  };
+
+  /**
+   * 图片识别
+   */
+  useEffect(() => {
+    loadPicRef.current.addEventListener('change', (event) => {
+      // console.log(event.currentTarget.files[0])
+      blobToDataURL(event.currentTarget.files[0], async (base64) => {
+        onGetBase64(base64.split('base64,')[1]);
+      })
+    })
+  }, [loadPicRef])
 
   const onSearch = (val, e) => {
     console.log(val, e)
-  }
-
-  const onImgClick = () => {
-    console.log('imgclick')
   }
 
   const onChangeSort = (val) => {
@@ -62,11 +89,18 @@ const SearchAndSort: React.FC<ISearchAndSort> = memo((props) => {
         placeholder="输入关键词搜索或上传图片搜索"
         enterButton="搜索"
         size="large"
-        suffix={(<img
-          src={imgpng}
-          alt=""
-          onClick={onImgClick}
-        />)}
+        suffix={(<div className="load-pic">
+          <img
+            src={imgpng}
+            alt=""
+          />
+          <input
+            ref={loadPicRef}
+            className="upload-pic"
+            type="file"
+            accept="image/gif, image/jpeg, image/jpg, image/png"
+          />
+        </div>)}
         onSearch={onSearch}
       />
       <div className="sort">

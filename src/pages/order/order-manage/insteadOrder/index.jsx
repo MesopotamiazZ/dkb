@@ -39,6 +39,7 @@ const InsteadOrder = memo(() => {
   const {
     getCategoryListActionAsync,
     getProductListTextActionAsync,
+    getProductListImgActionAsync,
     getProductSkuInfoActionAsync,
     addProductOrderList,
     calculateOrderActionAsync, // 费用计算
@@ -59,7 +60,7 @@ const InsteadOrder = memo(() => {
     remarkInfo,
   } = useSelector(state => state['order-manage'], shallowEqual) //store数据
 
-  console.log(customerAddress)
+  // console.log(customerAddress)
   const [cateActive, setCateActive] = useState(1);
   const [productDescModal, setProductDescModal] = useState(false);
   const [curTextSpecs, setCurTextSpecs] = useState({}); // 所有商品文字sku对象
@@ -125,7 +126,7 @@ const InsteadOrder = memo(() => {
    * 后台计算价格
    */
   useEffect(() => {
-    console.log(remarkInfo, customerAddress)
+    // console.log(remarkInfo, customerAddress)
     if (productOrderList.length
       && form.getFieldValue('userPhone')
       && Object.keys(remarkInfo).length
@@ -306,6 +307,18 @@ const InsteadOrder = memo(() => {
     setCurImgSpecs(obj1);
   }
 
+  /**
+   * 图片搜索筛选
+   * @param {*} base64 
+   */
+  const handleGetBase64 = (base64) => {
+    let formData = new FormData();
+    formData.append('image', base64);
+    formData.append('page', 1);
+    formData.append('limit', 10);
+    dispatch(getProductListImgActionAsync(formData));
+  }
+
   return (
     <div className="instead-order outer-area">
       <div className="instead-order-left">
@@ -322,7 +335,10 @@ const InsteadOrder = memo(() => {
           </div>
           <Divider dashed />
           <div className="left-header-filter">
-            <SearchAndSort />
+            <SearchAndSort
+              // onGetAddress={onGetAddress}
+              onGetBase64={handleGetBase64}
+            />
           </div>
         </div>
         <div className="left-content bg-white">
@@ -410,8 +426,9 @@ const InsteadOrder = memo(() => {
                 icon={<img src={boxpng} alt="" />}
                 onClick={() => {
                   setIsShowDeliverInfoModal(true);
+                  console.log('customerAddress', customerAddress, Object.keys(customerAddress).length)
                   if (Object.keys(customerAddress).length) {
-                    setDefaultAddress(customerAddress);
+                    setDefaultAddress({ ...customerAddress, id: Date.now() });
                   }
                 }}
               >
@@ -423,7 +440,7 @@ const InsteadOrder = memo(() => {
                 onClick={() => {
                   setIsOrderRemarkModal(true);
                   if (Object.keys(remarkInfo).length) {
-                    setDefaultRemarkInfo(remarkInfo);
+                    setDefaultRemarkInfo({ ...remarkInfo, id: Date.now() });
                   }
                 }}
               >
@@ -615,12 +632,12 @@ const InsteadOrder = memo(() => {
         defaultValues={defaultAddress}
         onOk={async (form) => {
           const values = await form.validateFields();
-          console.log(values)
+          // console.log(values)
           dispatch(saveCustomerAddress(values));
           setIsShowDeliverInfoModal(false);
         }}
         onCancel={() => {
-          setIsShowDeliverInfoModal(false)
+          setIsShowDeliverInfoModal(false);
         }}
       />
       {/* 订单备注 */}

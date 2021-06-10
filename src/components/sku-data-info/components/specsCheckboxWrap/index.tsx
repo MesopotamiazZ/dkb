@@ -104,9 +104,12 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
   return (
     <div className="specs-checkbox-wrap bg-white">
       {
+        console.log('specsData', specsData)
+      }
+      {
         specsData?.map((spec, index) => ({
           ...spec,
-          values: spec.value.split(',')
+          values: spec.value
         })).map((spec, index) => {
           return (
             <div className="spec-item" key={spec.id}>
@@ -157,7 +160,7 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
         onOk={async () => {
           let dataClone = JSON.parse(JSON.stringify(specsData));
           const values = await form.validateFields();
-          const oldSpecArr = dataClone[curIndex].value.split(',');
+          const oldSpecArr = dataClone[curIndex].value;
           let newSpecArr = values.value.split('\n');
           newSpecArr = newSpecArr.filter((item) => {
             return (oldSpecArr.indexOf(item) === -1);

@@ -155,7 +155,9 @@ const ExpressDelivery = memo(() => {
   const onExpressDilivery = async (checked) => {
     console.log(checked)
     // dispatch(updateToogleExpressActionAsync({ is_express: checked }));
-    const res = await updateToogleExpress({ is_express: checked });
+    let formData = new FormData();
+    formData.append('is_express', checked);
+    const res = await updateToogleExpress(formData);
     if (res.code === 200) {
       dispatch(toogleExpressActionAsync());
     }

@@ -19,7 +19,7 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
     onSetSpecsInfo, // 返回规格类型
   } = props;
 
-  const [flag, setFlag] = useState(false);
+  // const [flag, setFlag] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [specsInfo, setSpecsInfo] = useState({});
   const [columns, setColumns] = useState([]);

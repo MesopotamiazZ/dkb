@@ -20,7 +20,7 @@ function request(config) {
 
   //响应拦截
   instance.interceptors.response.use(res => {
-    if (res.data.code === '403' || res.data.code === '401') {
+    if (res.data.code === 403 || res.data.code === 401) {
       localStorage.removeItem("Dense-Diary-Authorization")
       message.warning('登录过期，请重新登录')
       window.location.replace('/#/login/')

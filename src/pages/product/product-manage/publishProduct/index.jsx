@@ -41,7 +41,7 @@ const PublishProduct = memo(() => {
   const [initValue, setInitValue] = useState({
     sort: 100,
     specsType: '1',
-    status: '1',
+    status: true,
   }); // 表单默认值
   const [productPicEnum, setProductPicEnum] = useState([]); // 商品组图
   const [specType, setSpecType] = useState(''); // 规格设置
@@ -411,7 +411,7 @@ const PublishProduct = memo(() => {
               style: { marginBottom: 0 },
             },
             props: {
-              placeholder: "请选择上级分类",
+              placeholder: "请选择分类",
               dropdownStyle: { maxHeight: 400, overflow: 'auto' },
               allowClear: true,
               // treeCheckable: true,
@@ -426,6 +426,9 @@ const PublishProduct = memo(() => {
                   { required: true, message: '请选择商品分类' },
                 ],
               },
+              // onChange: (val) => {
+              //   console.log(val)
+              // },
               btns: [
                 {
                   id: 1, text: '刷新', onClick: () => {
@@ -528,7 +531,7 @@ const PublishProduct = memo(() => {
             wrap: {
               key: 'skuData',
               name: 'skuData',
-              label: '规格申明',
+              label: '模板规格',
               type: 'skudatainfo',
               labelCol: {
                 span: 2,
@@ -637,8 +640,8 @@ const PublishProduct = memo(() => {
             },
             props: {
               enum: [
-                { value: '1', label: "立即上架" },
-                { value: '3', label: "放入仓库" },
+                { value: true, label: "立即上架" },
+                { value: false, label: "放入仓库" },
               ]
             }
           },
@@ -667,7 +670,7 @@ const PublishProduct = memo(() => {
           const res = await updateProduct({
             id: id || localStorage.getItem('product_id'),
             ...value,
-            catId: `${value.catId}`,
+            catId: value.catId,
             skuData: specType === '1' ? singleData : parseData(muchData),
             images: value.images.map((img) => (baseUrl + img.path)),
             thumb: thumb || 0,
@@ -687,7 +690,7 @@ const PublishProduct = memo(() => {
         } else {
           const res = await addProduct({
             ...value,
-            catId: `${value.catId}`,
+            catId: value.catId,
             skuData: specType === '1' ? singleData : parseData(muchData),
             // skuData: specType === '1' ? singleData : muchData,
             images: value.images.map((img) => (baseUrl + img.path)),

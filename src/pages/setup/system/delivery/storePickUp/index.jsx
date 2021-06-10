@@ -130,7 +130,9 @@ const StorePickUp = memo(() => {
 
   const onStorePickUp = async (checked) => {
     console.log(checked)
-    const res = await updateToogleStore({ is_stores: checked });
+    let formData = new FormData();
+    formData.append('is_stores', checked);
+    const res = await updateToogleStore(formData);
     if (res.code === 200) {
       dispatch(toogleStoreActionAsync());
     }

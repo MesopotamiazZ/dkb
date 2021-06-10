@@ -40,7 +40,7 @@ const BaseSet = memo(() => {
       setIndSelects(baseInfo?.industry);
       setLogoEnum([
         {
-          path: baseInfo?.logo,
+          path: baseInfo?.logo.split('.com')[1],
           is_cover: 0 //是否为封面图
         }
       ])
@@ -92,7 +92,7 @@ const BaseSet = memo(() => {
     if (index === 1) {
       setIndustrys([value]);
       dispatch(clearindustry2([]));
-      dispatch(getIndustryActionAsync({ pid: parseInt(value) }));
+      // dispatch(getIndustryActionAsync({ pid: parseInt(value) }));
     } else {
       setIndustrys([...industrys, value]);
     }
@@ -287,12 +287,12 @@ const BaseSet = memo(() => {
       },
       htype: "submit", // submit || reset
       onBtnClick: async (value) => {
-        console.log("按钮点击的事件222", value);
+        console.log("按钮点击的事件222", value, value.logo);
         const res = await updateBaseSet({
           ...value,
           // industry: [value.baseIndustry, value.thinIndustry].join(','),
-          industry: value.thinIndustry,
-          logo: (typeof value.logo === 'string') ? value.logo : baseUrl + value.logo[0].path,
+          industry: value.baseIndustry,
+          logo: (typeof value.logo === 'string') ? value.logo.split('.com')[1] : baseUrl + value.logo[0].path,
         })
         if (res.code === 200) {
           message.success('修改成功');

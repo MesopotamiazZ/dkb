@@ -3,7 +3,8 @@ import {
   Modal,
   Form,
   Radio,
-  Input
+  Input,
+  message
 } from 'antd';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../../pages/order/order-manage/store/slice';
@@ -51,6 +52,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
   const [areas1, setAreas1] = useState([]); // 存储编辑的area
 
   useEffect(() => {
+    console.log('defaultValues', defaultValues);
     form.setFieldsValue(defaultValues);
   }, [defaultValues])
 
@@ -78,6 +80,43 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
       dispatch(getAreaActionAsync({ pid: parseInt(value), level: 3 }));
     } else {
       setAreas([...areas, value]);
+    }
+  }
+
+  /**
+   * 返回addCode数组
+   * @param addCode 
+   * @returns 
+   */
+  const parseAddCodeArr = (areaCode: any) => {
+    let provinceCode = '';
+    let cityCode = '';
+    let arr1 = areaCode.split('');
+    let arr2 = areaCode.split('');
+    arr1.splice(3, 3, '0', '0', '0');
+    arr2.splice(4, 2, '0', '0');
+    provinceCode = arr1.join('');
+    cityCode = arr2.join('');
+    // console.log('arr1', provinceCode, cityCode)
+    return [provinceCode, cityCode, areaCode]
+  }
+
+  /**
+   * 自动识别
+   * @param data 
+   */
+  const handleGetAddress = (data) => {
+    console.log(data)
+    if (data) {
+      form.setFieldsValue({
+        name: data?.name,
+        phone: data?.mobile,
+        address: data?.details,
+        // addCode: data.code
+      });
+      setAreas1(parseAddCodeArr(data?.code));
+    } else {
+      message.warning('识别有误');
     }
   }
 
@@ -127,6 +166,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
         >
           <IntelIdentification
             form={form}
+            onGetAddress={(data) => handleGetAddress(data)}
           />
         </Form.Item>
         <Form.Item
