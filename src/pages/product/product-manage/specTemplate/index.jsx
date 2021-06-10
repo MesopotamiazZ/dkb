@@ -1,15 +1,20 @@
-import React, { memo } from 'react';
-import { Button, Checkbox, Alert, Tag } from 'antd';
+import React, { memo, useState } from 'react';
+import { Alert, Tag, message } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { delSpecTemplate } from '@/services/product';
 import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 
 import './style.less';
 
 const SpecTemplate = memo(() => {
   const history = useHistory();
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const tools = {
     btns: [
@@ -63,7 +68,12 @@ const SpecTemplate = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -146,6 +156,23 @@ const SpecTemplate = memo(() => {
           expandIconColumnIndex={-1}
         />
       </div>
+      <DelTipModal
+        title="删除规格模板"
+        width={282}
+        text={`确认删除【${curRecord?.name}】规格模板？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delSpecTemplate({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 })

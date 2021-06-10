@@ -1,10 +1,12 @@
-import React from 'react';
-import { Button, Checkbox } from 'antd';
+import React, { useState } from 'react';
+import { message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
+import { removeRole } from '@/services/permissions';
 import DkbTable from '@/components/dkb-table';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 
 import './style.less';
@@ -12,6 +14,9 @@ import './style.less';
 const StaffRole = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const tools = {
     btns: [
@@ -62,7 +67,12 @@ const StaffRole = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -134,6 +144,23 @@ const StaffRole = () => {
           expandIconColumnIndex={-1}
         />
       </div>
+      <DelTipModal
+        title="删除角色"
+        width={282}
+        text={`确认删除【${curRecord?.name}】角色？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await removeRole({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 }

@@ -1,19 +1,23 @@
-import React, { memo, useEffect } from 'react';
-import { Tag } from 'antd';
+import React, { memo, useEffect, useState } from 'react';
+import { Tag, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../../store/slice';
-import { updateToogleExpress } from '@/services/system';
+import { updateToogleExpress, delExpress } from '@/services/system';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 import './style.less';
 
 const ExpressDelivery = memo(() => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const {
     toogleExpressActionAsync,
@@ -78,7 +82,12 @@ const ExpressDelivery = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -88,7 +97,17 @@ const ExpressDelivery = memo(() => {
       key: 'name',
       title: '模板名称',
       dataIndex: 'name',
-      align: 'left',
+      align: 'center',
+      render: (text, record) => {
+        if (record.is_default) {
+          return (
+            <div className="template-name">
+              <span>{text}</span>
+              <Tag>默认</Tag>
+            </div >
+          )
+        }
+      }
     },
     {
       key: 'type',
@@ -181,8 +200,26 @@ const ExpressDelivery = memo(() => {
         rowKey="id"
         expandIconAsCell={false}
         expandIconColumnIndex={-1}
+        refresh={refresh}
       />
       {/* <Table dataSource={dataSource} columns={columns} /> */}
+      <DelTipModal
+        title="删除模板"
+        width={282}
+        text={`确认删除【${curRecord?.name}】模板？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delExpress({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 })

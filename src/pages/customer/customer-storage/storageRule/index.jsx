@@ -3,11 +3,12 @@ import { Modal, Form, Input, Switch, message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
-import { addVcRule, updateVcRule } from '@/services/customer';
+import { addVcRule, updateVcRule, removeVcRule } from '@/services/customer';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
 import { validatorPositiveNumber } from '@/utils';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 
 import './style.less';
@@ -29,6 +30,8 @@ const StorageRule = () => {
   const [refresh, setRefresh] = useState(false);
   const [createRuleModal, setCreateRuleModal] = useState(false);
   const [curId, setCurId] = useState('');
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
 
   /**
    * 编辑赋值
@@ -128,7 +131,12 @@ const StorageRule = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -284,6 +292,24 @@ const StorageRule = () => {
           </Form.Item>
         </Form>
       </Modal>
+      {/* 确认删除 */}
+      <DelTipModal
+        title="删除规则"
+        width={282}
+        text={`确认删除【${curRecord?.name}】规则？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await removeVcRule({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 }

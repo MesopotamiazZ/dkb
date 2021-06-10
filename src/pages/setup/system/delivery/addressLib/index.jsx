@@ -9,11 +9,11 @@ import {
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../../store/slice';
-import { addAddress, updateAddress } from '@/services/system';
+import { addAddress, updateAddress, delAddress } from '@/services/system';
 import DkbTable from '@/components/dkb-table';
-
 import RenderAction from '@/components/renderAction';
 import ProSelects3 from '@/components/pro-selects3';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 import './style.less';
 
@@ -42,6 +42,8 @@ const ExpressDelivery = memo(() => {
   const [areas1, setAreas1] = useState([]);
   const [refresh, setRefresh] = useState(false); // 刷新table
   const [curId, setCurId] = useState(''); // 当前是否是编辑，curId有数据就是更新
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
 
   /**
    * 获取区域列表
@@ -188,7 +190,12 @@ const ExpressDelivery = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -363,6 +370,24 @@ const ExpressDelivery = memo(() => {
           </Form.Item>
         </Form>
       </Modal>
+      {/* 删除 */}
+      <DelTipModal
+        title="删除地址"
+        width={282}
+        text={`确认删除【${curRecord?.address?.address}】地址？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delAddress({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 })

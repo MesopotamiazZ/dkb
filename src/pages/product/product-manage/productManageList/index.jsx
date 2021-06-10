@@ -5,6 +5,7 @@ import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 import './style.less';
 import Avatar from 'antd/lib/avatar/avatar';

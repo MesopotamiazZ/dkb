@@ -12,12 +12,13 @@ import {
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
-import { addCategory, updateCategory } from '@/services/product';
+import { addCategory, updateCategory, delCategory } from '@/services/product';
 import moment from 'moment';
 import ProUpload from '@/components/pro-upload';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import { baseUrl } from '@/utils/upload';
 
 import './style.less';
@@ -41,6 +42,8 @@ const Classification = memo(() => {
   const [refresh, setRefresh] = useState(false);
   const [createCateModal, setCreateCateModal] = useState(false);
   const [curId, setCurId] = useState('');
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
 
   const initialData = () => {
     dispatch(getCategoryTreeActionAsync({ pid: 0 })); // 获取商品分类树结构
@@ -185,7 +188,12 @@ const Classification = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       }
     ]
   }
@@ -364,6 +372,24 @@ const Classification = memo(() => {
           </Form.Item>
         </Form>
       </Modal>
+      {/* 确认删除 */}
+      <DelTipModal
+        title="删除分类"
+        width={282}
+        text={`确认删除【${curRecord?.name}】分类？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delCategory({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 })

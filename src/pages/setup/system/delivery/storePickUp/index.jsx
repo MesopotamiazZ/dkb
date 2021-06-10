@@ -1,18 +1,23 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
+import { message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../../store/slice';
-import { updateToogleStore } from '@/services/system';
+import { updateToogleStore, delStore } from '@/services/system';
 import ToogleTipWrap from '@/components/toogle-tip-wrap';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
+// import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import './style.less';
 
 const StorePickUp = memo(() => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const {
     toogleStoreActionAsync,
@@ -76,7 +81,12 @@ const StorePickUp = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -156,6 +166,23 @@ const StorePickUp = memo(() => {
         rowKey="id"
         expandIconAsCell={false}
         expandIconColumnIndex={-1}
+      />
+      <DelTipModal
+        title="删除门店"
+        width={282}
+        text={`确认删除【${curRecord?.name}】门店？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delStore({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
       />
     </div>
   )

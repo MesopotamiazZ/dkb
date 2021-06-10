@@ -15,6 +15,7 @@ import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 
 import './style.less';
@@ -40,6 +41,8 @@ const AllCustomer = memo(() => {
   const [refresh, setRefresh] = useState(false);
   const [createCustomerModal, setCreateCustomerModal] = useState(false);
   const [curId, setCurId] = useState('');
+  // const [delTipModal, setDelTipModal] = useState(false);
+  // const [curRecord, setCurRecord] = useState(null);
 
   /**
    * 获取客户等级列表
@@ -149,7 +152,12 @@ const AllCustomer = memo(() => {
       //   key: '2',
       //   text: '删除',
       //   type: 'link',
-      //   onActionClick: () => { },
+      //   onActionClick: () => {
+      //     setCurRecord(record);
+      //     setTimeout(() => {
+      //       setDelTipModal(true);
+      //     }, 0)
+      //   },
       // },
     ]
   }
@@ -346,6 +354,25 @@ const AllCustomer = memo(() => {
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* 确认删除 */}
+      {/* <DelTipModal
+        title="删除客户"
+        width={282}
+        text={`确认删除【${curRecord?.name}】客户？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await removeCustomer({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      /> */}
     </div>
   )
 });

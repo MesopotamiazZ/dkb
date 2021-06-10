@@ -10,11 +10,12 @@ import {
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
-import { addStaff, updateStaff } from '@/services/permissions';
+import { addStaff, updateStaff, removeStaff } from '@/services/permissions';
 import NP from 'number-precision';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 import './style.less';
 
 const StaffManage = () => {
@@ -36,6 +37,8 @@ const StaffManage = () => {
   const [curId, setCurId] = useState('');
   const [createStaffModal, setCreateStaffModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
 
   /**
    * 获取角色列表
@@ -142,7 +145,12 @@ const StaffManage = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -322,6 +330,24 @@ const StaffManage = () => {
             </Form.Item>
           </Form>
         </Modal>
+        {/* 删除 */}
+        <DelTipModal
+          title="删除员工"
+          width={282}
+          text={`确认删除【${curRecord?.name}】员工？`}
+          visible={delTipModal}
+          onCancel={() => setDelTipModal(false)}
+          onOk={async () => {
+            const res = await removeStaff({ id: curRecord.id });
+            if (res.code === 200) {
+              message.success('删除成功');
+              setDelTipModal(false);
+              setRefresh(!refresh);
+            } else {
+              message.warning('删除失败');
+            }
+          }}
+        />
       </>
     </div>
   )

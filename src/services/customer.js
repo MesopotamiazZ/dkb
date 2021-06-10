@@ -23,6 +23,17 @@ export const updateCustomer = data => request({
 })
 
 /**
+ * 删除客户
+ * @param {*} data 
+ * @returns 
+ */
+// export const removeCustomer = data => request({
+//   url: '/Scrm/CsrManage/delete',
+//   method: 'post',
+//   data
+// })
+
+/**
  * 获取客户详情
  * @param {*} data 
  * @returns 

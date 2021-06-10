@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import DkbTable from '@/components/dkb-table';
-import RenderTitle from '@/components/renderTitle';
+import { delCustomerLevel } from '@/services/customer';
+// import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
+import DelTipModal from '@/components/delete-tip-modal';
 
 import './style.less';
 
 const CustomerLevel = () => {
   const history = useHistory();
+  const [delTipModal, setDelTipModal] = useState(false);
+  const [curRecord, setCurRecord] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const tools = {
     btns: [
@@ -55,7 +61,12 @@ const CustomerLevel = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          setCurRecord(record);
+          setTimeout(() => {
+            setDelTipModal(true);
+          }, 0)
+        },
       },
     ]
   }
@@ -128,6 +139,23 @@ const CustomerLevel = () => {
           expandIconColumnIndex={-1}
         />
       </div>
+      <DelTipModal
+        title="删除等级"
+        width={282}
+        text={`确认删除【${curRecord?.name}】等级？`}
+        visible={delTipModal}
+        onCancel={() => setDelTipModal(false)}
+        onOk={async () => {
+          const res = await delCustomerLevel({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+        }}
+      />
     </div>
   )
 }
