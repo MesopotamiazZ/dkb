@@ -188,7 +188,7 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
     //   console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     // },
     onChange: (key, records) => {
-      console.log(key, records);
+      // console.log(key, records);
       setSelectedRowKeys(key);
       let dataClone = JSON.parse(JSON.stringify(dataSource));
       if (key.length === 0) {

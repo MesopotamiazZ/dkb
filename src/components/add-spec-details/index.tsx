@@ -75,7 +75,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
    * 返回新的打折条件数据
    */
   useEffect(() => {
-    console.log('finally', specs)
+    // console.log('finally', specs)
     onGetDetails(specs);
   }, [specs])
 
@@ -83,7 +83,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
    * 单个规格明细改变
    */
   useEffect(() => {
-    console.log('spec', spec)
+    // console.log('spec', spec)
     if (Object.keys(spec).length) {
       let specsClone = JSON.parse(JSON.stringify(specs));
       const ids = specsClone.map((item) => (item.id));
@@ -298,7 +298,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
       render: (record) => (
         <div className="operactor-link-btn">
           <Button type="link" onClick={() => {
-            console.log('编辑', record)
+            // console.log('编辑', record)
             setAddSpecModal(true);
             setTimeout(() => {
               form.setFieldsValue({
@@ -335,9 +335,6 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
         }}
       >
         {/* <Form form={form} component={false}> */}
-        {
-          console.log('specs', specs)
-        }
         <Table
           rowKey="id"
           bordered

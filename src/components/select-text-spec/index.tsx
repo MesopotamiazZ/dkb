@@ -19,9 +19,9 @@ const SelectTextSpec: React.FC<ISelectTextSpec> = memo((props) => {
     onChangeSpec,
   } = props;
 
-  useEffect(() => {
-    console.log(111, specKey)
-  }, [specKey])
+  // useEffect(() => {
+  //   console.log(111, specKey)
+  // }, [specKey])
 
   return (
     <div className="select-text-spec">

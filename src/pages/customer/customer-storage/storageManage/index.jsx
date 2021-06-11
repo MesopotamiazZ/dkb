@@ -56,7 +56,6 @@ const StorageManage = () => {
    */
   const addAccountModal = async () => {
     const values = await form.validateFields();
-    console.log(values)
     const res = await addVcMoneyDetail({
       ...values,
       amount: parseInt(values.amount).toFixed(2),

@@ -39,7 +39,7 @@ const AddDeliveryArea = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(defaultData).length) {
-      console.log('defaultData', defaultData[0].area_name);
+      // console.log('defaultData', defaultData[0].area_name);
       setData(defaultData.map((item) => ({
         id: item.id,
         areas: item.area_name,

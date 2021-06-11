@@ -130,7 +130,6 @@ const OrderListItem: React.FC<IOrderListItem> = memo((props) => {
           max={productSkuInfo?.stock}
           min={1}
           returnNumber={(num) => {
-            console.log('num:', num)
             // setAddProductNum(num);
             dispatch(modifyProductOrderList({
               id: productSkuInfo?.id,

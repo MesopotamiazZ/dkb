@@ -52,7 +52,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
   const [areas1, setAreas1] = useState([]); // 存储编辑的area
 
   useEffect(() => {
-    console.log('defaultValues', defaultValues);
+    // console.log('defaultValues', defaultValues);
     form.setFieldsValue(defaultValues);
   }, [defaultValues])
 
@@ -68,7 +68,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
    * @param {*} param0 
    */
   const handleSelect = ({ value, index }) => {
-    console.log('value', value)
+    // console.log('value', value)
     if (index === 1) {
       setAreas([value]);
       dispatch(clearCityList([]));
@@ -106,7 +106,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
    * @param data 
    */
   const handleGetAddress = (data) => {
-    console.log(data)
+    // console.log(data)
     if (data) {
       form.setFieldsValue({
         name: data?.name,

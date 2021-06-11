@@ -426,7 +426,7 @@ const InsteadOrder = memo(() => {
                 icon={<img src={boxpng} alt="" />}
                 onClick={() => {
                   setIsShowDeliverInfoModal(true);
-                  console.log('customerAddress', customerAddress, Object.keys(customerAddress).length)
+                  // console.log('customerAddress', customerAddress, Object.keys(customerAddress).length)
                   if (Object.keys(customerAddress).length) {
                     setDefaultAddress({ ...customerAddress, id: Date.now() });
                   }
@@ -526,7 +526,7 @@ const InsteadOrder = memo(() => {
         cancelText="取消"
         destroyOnClose
         onOk={() => {
-          console.log(curTextSpecs, curImgSpecs, addProductNum);
+          // console.log(curTextSpecs, curImgSpecs, addProductNum);
           let skuInfoClone = _.cloneDeep(productSkuInfo);
           let skuId = '';
           if (productSkuInfo?.specs_info) {
@@ -649,7 +649,6 @@ const InsteadOrder = memo(() => {
         defaultValues={defaultRemarkInfo}
         onOk={async (form, flag) => {
           const values = await form.validateFields();
-          console.log(values)
           dispatch(saveRemarkInfo({ ...values, remarkFlag: flag }));
           setIsOrderRemarkModal(false);
         }}

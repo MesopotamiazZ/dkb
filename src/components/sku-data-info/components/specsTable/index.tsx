@@ -29,8 +29,6 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
   }, [specsTableData])
 
   const parseDefaultList = useCallback((key: string, index: number) => {
-    // console.log(1111111111, key, tableData[index].specImgs, 222, tableData[index][key])
-    console.log('tableData', tableData)
     if (tableData[index]?.specImgs && Object.keys(tableData[index].specImgs).length) {
       return [
         {
@@ -90,7 +88,7 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
                     defaultList={parseDefaultList(key, index)}
                     // defaultList={[]}
                     onChange={(pics) => {
-                      // console.log('result', baseUrl + pics[0]?.path, key, tableData[index][key]);
+                      // console.log('result', specsInfo, tableData);
                       let specsInfoClone = Object.assign(specsInfo);
                       if (specsInfoClone[`${key}`] && Object.keys(specsInfoClone[`${key}`]).length > 0) {
                         specsInfoClone[`${key}`][`${tableData[index][key]}`] = baseUrl + pics[0]?.path;
@@ -99,7 +97,7 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
                           [`${tableData[index][key]}`]: baseUrl + pics[0]?.path
                         }
                       }
-                      console.log('specsInfoClone', specsInfoClone)
+                      // console.log('specsInfoClone', specsInfoClone)
                       setSpecsInfo(specsInfoClone);
 
                       setTimeout(() => {
@@ -119,7 +117,7 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
   }, [tableData])
 
   useEffect(() => {
-    console.log(tableData)
+    // console.log(tableData)
     onSetSpecsTableData(tableData);
   }, [tableData])
 
@@ -245,31 +243,3 @@ const SpecsTable: React.FC<specsTableProps> = memo((props) => {
 })
 
 export default SpecsTable;
-
-// render: (value, row, index) => {
-        //   const obj: any = {
-        //     children: value,
-        //     props: {},
-        //   };
-        //   if (objArr.map((item) => (item?.value)).indexOf(value) === -1) {
-        //     // return {
-        //     //   value,
-        //     //   index,
-        //     //   count: 1
-        //     // }
-        //     objArr.concat({
-        //       value,
-        //       indexs: index.push(),
-        //     })
-        //   } else {
-
-        //   }
-        //   // if (index === 0) {
-        //   //   obj.props.rowSpan = 2;
-        //   // }
-        //   // // // These two are merged into above cell
-        //   // if (index === 1) {
-        //   //   obj.props.rowSpan = 0;
-        //   // }
-        //   return obj;
-        // }

@@ -24,7 +24,7 @@ const CheckTree = memo((props) => {
   }, [expandList])
 
   const onExpand = (expandedKeysValue) => {
-    console.log("onExpand", expandedKeysValue); // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // console.log("onExpand", expandedKeysValue); // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
 
     setExpandedKeys(expandedKeysValue);
@@ -32,13 +32,13 @@ const CheckTree = memo((props) => {
   };
 
   const onCheck = (checkedKeysValue) => {
-    console.log("onCheck", checkedKeysValue);
+    // console.log("onCheck", checkedKeysValue);
     setCheckedKeys(checkedKeysValue);
     onChecked(checkedKeysValue);
   };
 
   const onSelect = (selectedKeysValue, info) => {
-    console.log("onSelect", info);
+    // console.log("onSelect", info);
     setSelectedKeys(selectedKeysValue);
   };
 

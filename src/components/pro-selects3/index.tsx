@@ -15,7 +15,7 @@ const Level3Select = (props) => {
   // const [selects] = useState(selects);
 
   useEffect(() => {
-    console.log('selects', selects);
+    // console.log('selects', selects);
     if (selects.length === 1) {
       handleSelect({ value: selects[0], index: 1 });
       form.setFieldsValue({ province: selects[0] });

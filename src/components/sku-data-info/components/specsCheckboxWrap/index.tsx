@@ -104,9 +104,6 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
   return (
     <div className="specs-checkbox-wrap bg-white">
       {
-        console.log('specsData', specsData)
-      }
-      {
         specsData?.map((spec, index) => ({
           ...spec,
           values: spec.value

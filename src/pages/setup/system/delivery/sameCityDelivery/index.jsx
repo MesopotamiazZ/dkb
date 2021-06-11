@@ -24,7 +24,6 @@ const SameCityDelivery = memo(() => {
   }, [])
 
   const onSameCityDelivery = async (checked) => {
-    console.log(checked)
     let formData = new FormData();
     formData.append('is_localexp', checked);
     const res = await updateToogleSameCity(formData);

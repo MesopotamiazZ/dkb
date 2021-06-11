@@ -81,7 +81,6 @@ const AddExpress = memo(() => {
    * @param {*} data 
    */
   const onSetDeliveryArea = (data) => {
-    console.log(data);
     setTemplate(data.map(item => ({
       frist_unit: item?.first_unit,
       frist_money: item?.first_money?.toFixed(2),

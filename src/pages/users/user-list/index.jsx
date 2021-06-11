@@ -57,7 +57,6 @@ export default memo(function () {
      * @param {string} id 
      */
     const handleLook = id => {
-        console.log('id', id);
         history.push({
             pathname: '/orders/jd-list/detail',
             state: { id }

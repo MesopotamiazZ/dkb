@@ -77,7 +77,7 @@ const AddLevel = memo(() => {
    * 返回新的权益数据
    */
   const onGetBenefitHandle = (data) => {
-    console.log(data);
+    // console.log(data);
     setNewBenefitDefaultValues(data);
   }
 
@@ -93,7 +93,6 @@ const AddLevel = memo(() => {
    * @param {*} data 
    */
   const onChangeUpCondition = (data) => {
-    console.log(data)
     setNewUpValue(data.upValue);
     setNewUpRules(data.dataSource.map((item, index) => ({
       status: item.status,
@@ -270,7 +269,6 @@ const AddLevel = memo(() => {
         htype: "submit", // submit || reset
         onBtnClick: async (value) => {
           console.log("按钮点击的事件222", value);
-          console.log(22222, newBenefitDefaultValues)
           if (id || localStorage.getItem('level_id')) {
             const res = await updateCustomerLevel({
               id: id || localStorage.getItem('level_id'),

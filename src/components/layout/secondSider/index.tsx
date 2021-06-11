@@ -24,7 +24,7 @@ const SecondSider: React.FC<secondSiderProps> = (props) => {
     redirectTo,
   } = props;
 
-  console.log(childRoutes);
+  // console.log(childRoutes);
 
   /**
    * 展开二级

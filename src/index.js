@@ -16,7 +16,7 @@ const App = React.lazy(() => import('./App'));
 
 const globalCss = require('./assets/css/global.json')
 
-console.log(globalCss);
+// console.log(globalCss);
 const body = document.body;
 for (let key in globalCss) {
   body.style.setProperty(key, globalCss[key])

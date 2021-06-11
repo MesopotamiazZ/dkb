@@ -143,7 +143,7 @@ const BatchReplace = memo(() => {
     selectedRowKeys: selectRowKeys,
     hideOnSinglePage: true,
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(selectedRowKeys, selectedRows);
+      // console.log(selectedRowKeys, selectedRows);
       setSelectRowKeys(selectedRowKeys);
       setSelectRows(selectedRows);
     },
@@ -156,7 +156,7 @@ const BatchReplace = memo(() => {
      * @param limit 
      */
   const handlePageChange = (page, limit) => {
-    console.log(page, limit);
+    // console.log(page, limit);
     setCurPage(page);
   }
 
@@ -317,7 +317,6 @@ const BatchReplace = memo(() => {
                 type="primary"
                 onClick={async () => {
                   const values = await form.validateFields();
-                  console.log(values)
                   if (!selectRowKeys.length) {
                     message.warning('请先选择商品');
                     return;

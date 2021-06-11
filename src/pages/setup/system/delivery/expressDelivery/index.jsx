@@ -172,7 +172,6 @@ const ExpressDelivery = memo(() => {
    * @param {*} checked 
    */
   const onExpressDilivery = async (checked) => {
-    console.log(checked)
     // dispatch(updateToogleExpressActionAsync({ is_express: checked }));
     let formData = new FormData();
     formData.append('is_express', checked);

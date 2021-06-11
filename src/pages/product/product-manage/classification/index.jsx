@@ -75,7 +75,6 @@ const Classification = memo(() => {
   const addAndEditCate = async () => {
     const values = await form.validateFields();
     if (!curId) {
-      console.log(values)
       const res = await addCategory({
         ...values,
         img: baseUrl + values?.img[0]?.path,

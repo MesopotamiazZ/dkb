@@ -154,7 +154,7 @@ const ProductManageList = () => {
           mainTitle={record?.title}
           subTitle={[
             `${record.id}`,
-            `${record.classInfo[0].map((item) => (item.name)).join('/')}`
+            `${record.classInfo.map((item) => (item.name)).join('/')}`
           ]}
           titleStyle={{ alignItems: 'left' }}
         />
@@ -191,6 +191,7 @@ const ProductManageList = () => {
       title: '创建时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      align: 'center'
     },
     {
       title: '状态',

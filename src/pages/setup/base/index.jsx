@@ -35,7 +35,6 @@ const BaseSet = memo(() => {
 
   useEffect(() => {
     if (Object.keys(baseInfo).length) {
-      console.log('baseInfo', baseInfo)
       setInitValue({ ...baseInfo });
       setIndSelects(baseInfo?.industry);
       setLogoEnum([

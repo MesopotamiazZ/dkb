@@ -41,7 +41,7 @@ const PublishProduct = memo(() => {
   const [initValue, setInitValue] = useState({
     sort: 100,
     specsType: '1',
-    status: true,
+    status: '1',
   }); // 表单默认值
   const [productPicEnum, setProductPicEnum] = useState([]); // 商品组图
   const [specType, setSpecType] = useState(''); // 规格设置
@@ -134,14 +134,28 @@ const PublishProduct = memo(() => {
   const parseSkuDataValue = (skuData) => {
     const obj = {};
     skuData.forEach((data) => {
-      for (let key in data.value) {
-        if (!obj[key]) {
-          obj[key] = [data.value[key]];
-        }
-        if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
-          obj[key].push(data.value[key]);
+      if (data.value instanceof Array) {
+        data.value.forEach((item) => {
+          for (let key in item) {
+            if (!obj[key]) {
+              obj[key] = [item[key]];
+            }
+            if (obj[key] && obj[key].indexOf(item[key]) === -1) {
+              obj[key].push(item[key]);
+            }
+          }
+        })
+      } else {
+        for (let key in data.value) {
+          if (!obj[key]) {
+            obj[key] = [data.value[key]];
+          }
+          if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
+            obj[key].push(data.value[key]);
+          }
         }
       }
+
     })
     return obj;
   }
@@ -233,7 +247,6 @@ const PublishProduct = memo(() => {
   }
 
   const onSetSpecsTableData = useCallback((data) => {
-    console.log('onSetSpecsTableData', data)
     setMuchData(data);
   }, [])
 
@@ -284,15 +297,16 @@ const PublishProduct = memo(() => {
    * @param {*} data 
    */
   const parseData = useCallback((datas) => {
-    console.log('finish datas', datas)
     return datas.map((data, index) => {
-      let obj = {};
+      let arr = [];
       for (let key in datas[index]) {
         if (properties.indexOf(key) === -1) {
           if (data[`${key}`] instanceof Array) {
-            obj[`${key}`] = data[`${key}`][0];
+            arr.push({ [key]: data[key][0] });
+            // obj[`${key}`] = data[`${key}`][0];
           } else {
-            obj[`${key}`] = data[`${key}`];
+            arr.push({ [key]: data[key] });
+            // obj[`${key}`] = data[`${key}`];
           }
         }
       }
@@ -303,7 +317,7 @@ const PublishProduct = memo(() => {
         skuCode: data.skuCode,
         barCode: data.barCode,
         sku_id: data.sku_id || null,
-        value: obj,
+        value: arr,
       }
     })
   }, [muchData])
@@ -496,7 +510,7 @@ const PublishProduct = memo(() => {
             },
             props: {
               placeholder: "请选择规格模板",
-              enum: specTemplateList.map((item) => ({
+              enum: specTemplateList?.map((item) => ({
                 ...item,
                 label: item.name,
                 value: item.id
@@ -531,7 +545,7 @@ const PublishProduct = memo(() => {
             wrap: {
               key: 'skuData',
               name: 'skuData',
-              label: '模板规格',
+              label: '规格明细',
               type: 'skudatainfo',
               labelCol: {
                 span: 2,
@@ -640,8 +654,8 @@ const PublishProduct = memo(() => {
             },
             props: {
               enum: [
-                { value: true, label: "立即上架" },
-                { value: false, label: "放入仓库" },
+                { value: '1', label: "立即上架" },
+                { value: '3', label: "放入仓库" },
               ]
             }
           },
@@ -723,6 +737,7 @@ const PublishProduct = memo(() => {
         // type=reset  重置表单
         // 其余的不用传type值
         console.log("按钮点击的事件111", value);
+        history.go(-1);
       }
     }],
   }

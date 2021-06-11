@@ -113,7 +113,6 @@ const SearchTree: React.FC<IsearchTree> = memo((props) => {
       return tree.name.indexOf(val) !== -1
         || hasKeyVal(val, tree.child)
     })
-    console.log(trees)
     setTreeData(trees);
   }
 
@@ -141,7 +140,6 @@ const SearchTree: React.FC<IsearchTree> = memo((props) => {
    * @param val 
    */
   const onChange = (val) => {
-    console.log(val)
     if (val === '') {
       const options = parseTree(trees);
       setTreeData(options);
@@ -153,7 +151,6 @@ const SearchTree: React.FC<IsearchTree> = memo((props) => {
    * @param val 
    */
   const onSearch = (val) => {
-    console.log(val)
     filterTree(val, treeData);
   }
 

@@ -12,7 +12,6 @@ import './style.less';
 // }
 
 const BaseInfo = ({ detail, helipayDetail }) => {
-  console.log(detail, helipayDetail);
 
   const history = useHistory();
   const onEditClickHandler = () => {

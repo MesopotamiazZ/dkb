@@ -12,7 +12,7 @@ const Level2Select = (props) => {
   } = props;
 
   useEffect(() => {
-    console.log('selects', selects);
+    // console.log('selects', selects);
     form.setFieldsValue({ baseIndustry: `${selects}` });
     // if (selects.length === 1) {
     //   handleSelectIndustry({ value: selects[0], index: 1 });

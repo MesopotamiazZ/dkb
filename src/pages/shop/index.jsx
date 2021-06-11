@@ -52,14 +52,14 @@ const Shop = () => {
 
   useEffect(() => {
     const Authorization = localStorage.getItem('Dense-Diary-Authorization')
-    console.log('Authorization', Authorization);
+    // console.log('Authorization', Authorization);
     !Authorization && history.push('/login')
     initialData()
   }, [])
 
   useEffect(() => {
     if (Object.keys(shopInfo).length) {
-      console.log(shopInfo);
+      // console.log(shopInfo);
     }
   }, [shopInfo])
 

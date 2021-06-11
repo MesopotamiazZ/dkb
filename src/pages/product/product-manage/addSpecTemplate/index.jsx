@@ -38,7 +38,6 @@ const AddSpecTemplate = memo(() => {
    * 初始化
    */
   useEffect(() => {
-    // console.log(1212121, "id", id, 'local', localStorage.getItem('template_id'))
     if (id) {
       localStorage.setItem('template_id', id);
     }
@@ -71,7 +70,6 @@ const AddSpecTemplate = memo(() => {
    * @param {*} data 
    */
   const onGetDetails = (data) => {
-    console.log('result', data);
     setSpecDetails(data.map((item) => ({
       name: item.name,
       reveal: item.reveal,
@@ -165,7 +163,7 @@ const AddSpecTemplate = memo(() => {
             wrap: {
               key: 'spec',
               name: 'spec',
-              label: '规格明细',
+              label: '模板规格',
               type: 'addspecdetails', // 与antd对应 
               labelCol: {
                 span: 2,

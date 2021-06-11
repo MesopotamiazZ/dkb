@@ -55,7 +55,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(initValue).length) {
-      console.log('初始赋值', initValue)
+      // console.log('初始赋值', initValue)
       // setBenefitDefaultValues({
       //   ...initValue,
       //   segmentDiscount: initValue.segmentDiscount.map((item, index) => ({
@@ -67,7 +67,6 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
   }, [initValue])
 
   useEffect(() => {
-    console.log('update')
     onGetBenefit({
       ...benefitDefaultValues
     })

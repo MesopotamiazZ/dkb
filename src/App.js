@@ -17,7 +17,7 @@ function App() {
   const history = useHistory()
   useLayoutEffect(() => {
     const Authorization = localStorage.getItem('Dense-Diary-Authorization')
-    console.log('Authorization', Authorization);
+    // console.log('Authorization', Authorization);
     !Authorization && history.push('/login')
   }, [])
   const [lang] = useState(zhCN)

@@ -71,7 +71,6 @@ export default memo(function () {
       switch (pageStatus) {
         case PageStatus.LOGIN: // 密码登录/验证码登录
           const res = await behaviorVerification();
-          console.log('行为验证');
           if (res.ret === 2) {
             setLoading(false);
             return

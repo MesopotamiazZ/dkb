@@ -132,7 +132,6 @@ const AfterSalesOrder = () => {
                       className="select-before"
                       value={orderObj.default}
                       onChange={(value) => {
-                        console.log(value)
                         const objClone = JSON.parse(JSON.stringify(orderObj))
                         objClone.default = value
                         setOrderObj(objClone)
@@ -178,7 +177,6 @@ const AfterSalesOrder = () => {
                       className="select-before"
                       value={productObj.default}
                       onChange={(value) => {
-                        console.log(value)
                         const objClone = JSON.parse(JSON.stringify(productObj))
                         objClone.default = value
                         setProductObj(objClone)

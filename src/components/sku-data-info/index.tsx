@@ -58,7 +58,7 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
     weight: 0,
     skuCode: '',
     barCode: '',
-    value: ''
+    value: []
   }])
 
   const [specsSelect, setspecsSelect] = useState(
@@ -113,34 +113,60 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
    */
   useEffect(() => {
     if (defaultMuchData?.length) {
-      console.log('defaultMuchData', defaultMuchData)
+      // console.log('defaultMuchData', defaultMuchData)
       setSpecsTableData(defaultMuchData.map((data) => {
-        let obj = {};
-        let newObj = {};
-        for (let key in data.value) {
-          // console.log(key, data[key])
-          if (!obj[key]) {
-            obj[key] = [data.value[key]];
+        // ============== data.value 从{"配色": "黑色","尺码": "36"}改为[{"配色": "黑色"},{"尺码": "35"}]=================
+        if (data.value instanceof Array) {
+          let obj = {};
+          data.value.forEach((item) => {
+            for (let key in item) {
+              if (!obj[key]) {
+                obj[key] = item[key];
+              }
+              // if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
+              //   obj[key].push(data.value[key]);
+              // }
+            }
+          })
+          return ({
+            price: Number(data.price),
+            stock: data.stock,
+            weight: data.weight,
+            skuCode: data.sku_code,
+            barCode: data.bar_code,
+            reveal: Object.keys(specImgs).length ? 2 : 1,
+            sku_id: data.sku_id || null,
+            specImgs,
+            ...obj
+          })
+        } else {
+          let obj = {};
+          // let newObj = {};
+          for (let key in data.value) {
+            // console.log(key, data[key])
+            if (!obj[key]) {
+              obj[key] = [data.value[key]];
+            }
+            if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
+              obj[key].push(data.value[key]);
+            }
           }
-          if (obj[key] && obj[key].indexOf(data.value[key]) === -1) {
-            obj[key].push(data.value[key]);
-          }
+          // let keysSorted = Object.keys(obj).sort(function (a, b) { return -1 });
+          // for (let i = 0; i < keysSorted.length; i++) {
+          //   newObj[keysSorted[i]] = obj[keysSorted[i]];
+          // }
+          return ({
+            price: Number(data.price),
+            stock: data.stock,
+            weight: data.weight,
+            skuCode: data.sku_code,
+            barCode: data.bar_code,
+            reveal: Object.keys(specImgs).length ? 2 : 1,
+            sku_id: data.sku_id || null,
+            specImgs,
+            ...obj
+          })
         }
-        let keysSorted = Object.keys(obj).sort(function (a, b) { return -1 });
-        for (let i = 0; i < keysSorted.length; i++) {
-          newObj[keysSorted[i]] = obj[keysSorted[i]];
-        }
-        return ({
-          price: Number(data.price),
-          stock: data.stock,
-          weight: data.weight,
-          skuCode: data.sku_code,
-          barCode: data.bar_code,
-          reveal: Object.keys(specImgs).length ? 2 : 1,
-          sku_id: data.sku_id || null,
-          specImgs,
-          ...newObj
-        })
       }));
     }
   }, [defaultMuchData, specImgs])

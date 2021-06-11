@@ -30,6 +30,14 @@ function request(config) {
     }
     return res.data
   })
+  // err => {
+  //   console.log('response err', err.response)
+  //   if (err.response.data.code === 403 || err.response.data.code === 401) {
+  //     localStorage.removeItem("Dense-Diary-Authorization")
+  //     message.warning('登录过期，请重新登录')
+  //     window.location.replace('/#/login/')
+  //   }
+  // }
 
   //请求拦截
   instance.interceptors.request.use((res) => {
@@ -52,6 +60,7 @@ function request(config) {
     instance(config).then(res => {
       resolve(res)
     }).catch(err => {
+
       if (err.response) {
         // 错误信息
         console.log(err.response);
