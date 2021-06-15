@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import {
   updateSpecTemplate,
 } from '../../../../services/product';
+import _ from 'lodash';
 import './style.less';
 
 interface detailProps {
@@ -67,8 +68,9 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(checked).length) {
-      // console.log('checked', checked, specsData);
-      let specsDataClone = JSON.parse(JSON.stringify(specsData));
+      console.log('checked', checked, specsData);
+      // let specsDataClone = JSON.parse(JSON.stringify(specsData));
+      let specsDataClone = _.cloneDeep(specsData);
       specsDataClone.forEach((data) => {
         for (let key in checked) {
           // if (key === data.name && data.selects) {
@@ -114,8 +116,11 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
                 {spec.name}：
               </div>
               <div className="spec-item-checkbox">
+                {
+                  console.log(spec?.value)
+                }
                 <Checkbox.Group
-                  options={spec?.values}
+                  options={spec?.values.map((item) => `${item}`)}
                   value={chekedObj ? chekedObj[spec.name] : []}
                   onChange={(selects) => {
                     let dataClone = JSON.parse(JSON.stringify(specsData));

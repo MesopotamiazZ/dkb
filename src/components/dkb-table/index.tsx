@@ -65,11 +65,12 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
    * @param data 请求参数，默认为
    */
   const initData = async (data = reqData) => {
+    console.log('data', data)
     !loading && setLoading(true)
     const res = await request({ url: props.url, method: 'get', params: { ...data, ...requestData } }) // data: { ...data, ...requestData }
     if (res.code === 200) {
-      if (res.result instanceof Object) setTableData({ ...tableData, ...res.result })
-      if (res.result instanceof Array) setTableData({ ...tableData, list: res.result })
+      if (res.result instanceof Object) setTableData({ ...tableData, ...res.result, page: data.page })
+      if (res.result instanceof Array) setTableData({ ...tableData, list: res.result, page: data.page })
     } else {
       message.warning(res.msg || '请求超时')
     }
@@ -123,6 +124,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     current: tableData?.page,
     showSizeChanger: true,
     showTotal: (total) => `总共${total}个项目`,
+    size: 'default'
   }
 
   /**

@@ -194,7 +194,7 @@ const BatchModifyPrice = memo(() => {
           mainTitle={record?.title}
           subTitle={[
             `${record.id}`,
-            `${record.classInfo[0].map((item) => (item.name)).join('/')}`
+            `${record.classInfo.map((item) => (item.name)).join('/')}`
           ]}
           titleStyle={{ alignItems: 'left' }}
         />

@@ -68,12 +68,10 @@ export default memo(function ({ routers, pathname, toggle }) {
                 }
             </div>
             <div className="layout-header-right flex align-center">
-                {
-                    pathname && <div className="right-item version">
-                        <img src={vip} alt="" />
-                        <span>专业版</span>
-                    </div>
-                }
+                <div className="right-item version">
+                    <img src={vip} alt="" />
+                    <span>专业版</span>
+                </div>
                 {/* <div className="right-item home">
                     <img src={home} alt="" />
                     <span>站点主页</span>

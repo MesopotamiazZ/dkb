@@ -319,6 +319,19 @@ const InsteadOrder = memo(() => {
     dispatch(getProductListImgActionAsync(formData));
   }
 
+  /**
+   * 格式化cateList
+   */
+  const parseCateList = useCallback((arr) => {
+    let list = arr;
+    // let parent = {
+    //   id: 0,
+    //   name: '顶级分类',
+    // }
+    // list.unshift(parent);
+    return list
+  }, [getCategoryList])
+
   return (
     <div className="instead-order outer-area">
       <div className="instead-order-left">
@@ -328,7 +341,7 @@ const InsteadOrder = memo(() => {
               title="所属分类"
               isShowOperator={true}
               onChange={handleOnChange}
-              datas={getCategoryList?.list || []}
+              datas={parseCateList(getCategoryList?.list) || []}
               active={cateActive}
               liWidth={58}
             />

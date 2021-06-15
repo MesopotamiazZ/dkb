@@ -56,14 +56,27 @@ const AddDeliveryArea = memo((props) => {
    */
   useEffect(() => {
     const getAreaCode = (obj) => {
+      console.log('obj', obj)
       const code = [];
-      obj?.areas?.forEach((item) => {
-        provinceList.forEach((pro) => {
-          if (item === pro.name) {
-            code.push(pro.id)
-          }
+      if (obj?.areas instanceof Array) {
+        obj?.areas?.forEach((item) => {
+          provinceList.forEach((pro) => {
+            if (item === pro.name) {
+              code.push(pro.id)
+            }
+          })
         })
-      })
+      }
+      if (obj?.areas instanceof String) {
+        obj?.areas?.split(',').forEach((item) => {
+          provinceList.forEach((pro) => {
+            if (item === pro.name) {
+              code.push(pro.id)
+            }
+          })
+        })
+      }
+
       return {
         area_code: code
       }

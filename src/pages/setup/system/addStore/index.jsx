@@ -74,7 +74,7 @@ const AddStore = memo(() => {
         path: img,
         is_cover: 0
       })))
-      setAreas1(storeDetail?.address?.area_code.split(','));
+      setAreas1(storeDetail?.address?.area_code);
     }
   }, [storeDetail])
 

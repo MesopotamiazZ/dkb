@@ -65,7 +65,7 @@ const ExpressDelivery = memo(() => {
         description: addressDetail?.description,
         address: addressDetail?.address?.address,
       })
-      setAreas1(addressDetail?.address?.area_code.split(','));
+      setAreas1(addressDetail?.address?.area_code);
     } else {
       form.setFieldsValue({
         name: '',
@@ -215,7 +215,7 @@ const ExpressDelivery = memo(() => {
       title: '所在地',
       render: (record) => (
         <span>
-          {record?.address?.province}, {record?.address?.city}, {record?.address?.district}
+          {record?.address?.area_name[0]}, {record?.address?.area_name[1]}, {record?.address?.area_name[2]}
         </span>
       ),
       align: 'center',

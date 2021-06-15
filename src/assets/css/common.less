@@ -55,6 +55,13 @@
 .ant-table.ant-table-middle .ant-table-tbody > tr > td {
   padding: 16px 8px;
 }
+.ant-table-thead {
+  & > tr {
+    & > th {
+      border-top: 1px solid #f0f0f0;
+    }
+  }
+}
 
 // textarea
 .ant-form-item textarea.ant-input {
@@ -87,7 +94,7 @@
 }
 
 .input-height {
-  height: 36px;
+  // height: 36px;
 }
 
 .input-width {
@@ -99,6 +106,10 @@
   & > input {
     height: 100%;
   }
+}
+
+.ant-input-number {
+  height: 32px;
 }
 
 

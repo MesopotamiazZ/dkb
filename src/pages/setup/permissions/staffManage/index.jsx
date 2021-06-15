@@ -237,7 +237,7 @@ const StaffManage = () => {
           visible={createStaffModal}
           destroyOnClose={true}
           width={570}
-          okText={!curId ? '新建员工' : '更新员工'}
+          okText="确定"
           cancelText="取消"
           onOk={() => {
             // createAddressHandle()
