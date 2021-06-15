@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 储值规则列表页
+ */
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Switch, message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -28,6 +32,7 @@ const StorageRule = () => {
   } = useSelector(state => state['customer-storage'], shallowEqual) //store数据
 
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [createRuleModal, setCreateRuleModal] = useState(false);
   const [curId, setCurId] = useState('');
   const [delTipModal, setDelTipModal] = useState(false);
@@ -104,7 +109,12 @@ const StorageRule = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入规则名称',
     searchBtnText: '搜索',
     // filterBtn: {
@@ -212,7 +222,14 @@ const StorageRule = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Scrm/VcRule/getList"
+          url={
+            !keywords
+              ? '/Scrm/VcRule/getList'
+              : '/Scrm/VcRule/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           // renderCell={renderCell}
           columns={columns}

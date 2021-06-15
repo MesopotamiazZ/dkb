@@ -15,6 +15,7 @@ const SpecTemplate = memo(() => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const tools = {
     btns: [
@@ -38,7 +39,12 @@ const SpecTemplate = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入模板名称',
     searchBtnText: '搜索',
     // filterBtn: {
@@ -147,8 +153,16 @@ const SpecTemplate = memo(() => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Goods/MdseSpec/getList"
+          url={
+            !keywords
+              ? '/Goods/MdseSpec/getList'
+              : '/Goods/MdseSpec/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
+          refresh={refresh}
           // renderCell={renderCell}
           columns={columns}
           rowKey="id"

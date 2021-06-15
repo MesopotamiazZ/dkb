@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 订单售后列表页面
+ */
 import React, { useState } from 'react';
 import { Button, Checkbox, Form, Select } from 'antd';
 import NP from 'number-precision';
@@ -13,6 +17,8 @@ import './style.less';
 const AfterSalesOrder = () => {
 
   const [form] = Form.useForm();
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   // 订单搜索
   const [orderObj, setOrderObj] = useState({
@@ -50,38 +56,38 @@ const AfterSalesOrder = () => {
         placeholder: '请输入商品编号'
       },
     ]
-  })
+  });
 
   const tabs = {
-    defaultKey: 1,
-    name: 'status',
+    defaultKey: 0,
+    name: 'service_type',
     onChange: (key, value, reqValue) => {
       return ''
     },
     data: [
       {
         label: "全部售后",
-        key: 1,
+        key: 0,
       },
       {
         label: "仅退款(未发货)",
-        key: 2,
+        key: 1,
       },
       {
         label: "仅退款(已发货)",
-        key: 3,
+        key: 2,
       },
       {
         label: "退货(已发货)",
-        key: 4,
+        key: 3,
       },
       {
         label: "换货",
-        key: 5,
+        key: 4,
       },
       {
         label: "已完成",
-        key: 6,
+        key: 5,
       },
     ]
   }
@@ -104,7 +110,12 @@ const AfterSalesOrder = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '支持商品、收件人信息等模糊搜索',
     searchBtnText: '搜索',
     filterBtn: {
@@ -374,13 +385,21 @@ const AfterSalesOrder = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url=""
+          url={
+            !keywords
+              ? ''
+              : '/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
     </div>

@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 快递配送列表页
+ */
 import React, { memo, useEffect, useState } from 'react';
 import { Tag, message } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +22,7 @@ const ExpressDelivery = memo(() => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const {
     toogleExpressActionAsync,
@@ -58,7 +63,12 @@ const ExpressDelivery = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入运费模板名称',
     searchBtnText: '搜索',
   }
@@ -192,7 +202,14 @@ const ExpressDelivery = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url="/Setting/Express/getList"
+        url={
+          !keywords
+            ? '/Setting/Express/getList'
+            : '/Setting/Express/getList/smartSearch'
+        }
+        requestData={
+          !keywords ? {} : { keywords }
+        }
         row
         // renderCell={renderCell}
         columns={columns}

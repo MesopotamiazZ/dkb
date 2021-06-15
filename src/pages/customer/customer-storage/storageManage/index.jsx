@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 储值管理列表页
+ */
 import React, { useState } from 'react';
 import { Modal, Form, Input, Radio, message } from 'antd';
 // import { useHistory, useLocation } from 'react-router-dom';
@@ -27,26 +31,27 @@ const StorageManage = () => {
   // } = useSelector(state => state['customer-manage'], shallowEqual) //store数据
 
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [accountModal, setAccountModal] = useState(false);
 
   const tabs = {
-    defaultKey: 1,
-    name: 'status',
+    defaultKey: 0,
+    name: 'type',
     onChange: (key, value, reqValue) => {
       return ''
     },
     data: [
       {
         label: "全部储值",
-        key: 1,
+        key: 0,
       },
       {
         label: "余额入账",
-        key: 2,
+        key: 1,
       },
       {
         label: "余额支出",
-        key: 3,
+        key: 2,
       },
     ]
   }
@@ -85,7 +90,12 @@ const StorageManage = () => {
         }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入流水号',
     searchBtnText: '搜索',
     filterBtn: {
@@ -169,7 +179,14 @@ const StorageManage = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url="/Scrm/VcMoney/getList"
+          url={
+            !keywords
+              ? '/Scrm/VcMoney/getList'
+              : '/Scrm/VcMoney/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           // renderCell={renderCell}
           columns={columns}

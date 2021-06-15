@@ -43,7 +43,8 @@ const BatchModifyPrice = memo(() => {
   const [selectRows, setSelectRows] = useState([]);
   const [drawerVisible, setDrawerVisible] = useState(false);
 
-  const [refresh, setRefesh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [tableData, setTableData] = useState([]);
   const [curPage, setCurPage] = useState(1);
 
@@ -72,7 +73,12 @@ const BatchModifyPrice = memo(() => {
         }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入流水号',
     searchBtnText: '搜索',
   }
@@ -252,7 +258,14 @@ const BatchModifyPrice = memo(() => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Goods/MdseBatch/getToPriceList"
+          url={
+            !keywords
+              ? '/Goods/MdseBatch/getToPriceList'
+              : '/Goods/MdseBatch/getToPriceList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           // renderCell={renderCell}
           columns={columns}
@@ -335,7 +348,7 @@ const BatchModifyPrice = memo(() => {
                   })
                   if (res.code === 200) {
                     message.success('改价成功');
-                    setRefesh(!refresh);
+                    setRefresh(!refresh);
                     setDrawerVisible(false);
                     setModifyPriceTaskModal(false);
                   } else {

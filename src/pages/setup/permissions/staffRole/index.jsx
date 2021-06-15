@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 员工角色列表页
+ */
 import React, { useState } from 'react';
 import { message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -17,6 +21,7 @@ const StaffRole = () => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const tools = {
     btns: [
@@ -43,7 +48,12 @@ const StaffRole = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入角色名称',
     searchBtnText: '搜索',
   }
@@ -135,13 +145,21 @@ const StaffRole = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Setting/Role/getList"
+          url={
+            !keywords
+              ? '/Setting/Role/getList'
+              : '/Setting/Role/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           // renderCell={renderCell}
           columns={columns}
           rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
       <DelTipModal

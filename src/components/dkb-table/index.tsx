@@ -65,7 +65,6 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
    * @param data 请求参数，默认为
    */
   const initData = async (data = reqData) => {
-    console.log('data', data)
     !loading && setLoading(true)
     const res = await request({ url: props.url, method: 'get', params: { ...data, ...requestData } }) // data: { ...data, ...requestData }
     if (res.code === 200) {
@@ -100,7 +99,12 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
    * @param value 
    */
   const onStatusChangeHandler = (name, value) => {
-    console.log(name, value)
+    console.log(name, value);
+    if (value) {
+      setReqData({ ...reqData, ...{ [name]: value } });
+    } else {
+      setReqData({ ...reqData, ...{ [name]: null } });
+    }
   }
 
   /**

@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 门店自提列表页
+ */
 import React, { memo, useEffect, useState } from 'react';
 import { message } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +22,7 @@ const StorePickUp = memo(() => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const {
     toogleStoreActionAsync,
@@ -59,7 +64,12 @@ const StorePickUp = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入门店名称',
     searchBtnText: '搜索',
   }
@@ -159,13 +169,21 @@ const StorePickUp = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url="/Setting/Stores/getList"
+        url={
+          !keywords
+            ? '/Setting/Stores/getList'
+            : '/Setting/Stores/getList/smartSearch'
+        }
+        requestData={
+          !keywords ? {} : { keywords }
+        }
         row
         // renderCell={renderCell}
         columns={columns}
         rowKey="id"
         expandIconAsCell={false}
         expandIconColumnIndex={-1}
+        refresh={refresh}
       />
       <DelTipModal
         title="删除门店"

@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 客户等级列表页
+ */
 import React, { useState } from 'react';
 import { message } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -15,6 +19,7 @@ const CustomerLevel = () => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const tools = {
     btns: [
@@ -38,7 +43,12 @@ const CustomerLevel = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入客户信息',
     searchBtnText: '搜索',
     filterBtn: {
@@ -130,7 +140,15 @@ const CustomerLevel = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Scrm/CsrLevel/getList"
+          url={
+            !keywords
+              ? '/Scrm/CsrLevel/getList'
+              : '/Scrm/CsrLevel/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
+          refresh={refresh}
           row
           // renderCell={renderCell}
           columns={columns}

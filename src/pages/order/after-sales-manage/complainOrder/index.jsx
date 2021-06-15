@@ -1,4 +1,8 @@
-import React from 'react';
+/**
+ * @author tigris
+ * @description 订单投诉列表页面
+ */
+import React, { useState } from 'react';
 import { Button, Checkbox } from 'antd';
 import NP from 'number-precision';
 import DkbTable from '@/components/dkb-table';
@@ -10,9 +14,11 @@ import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
 
 const ComplainOrder = () => {
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const tabs = {
-    defaultKey: 1,
+    defaultKey: 0,
     name: 'status',
     onChange: (key, value, reqValue) => {
       return ''
@@ -20,19 +26,19 @@ const ComplainOrder = () => {
     data: [
       {
         label: "全部投诉",
-        key: 1,
+        key: 0,
       },
       {
         label: "待处理",
-        key: 2,
+        key: 1,
       },
       {
         label: "已处理",
-        key: 3,
+        key: 2,
       },
       {
         label: "已完成",
-        key: 4,
+        key: 3,
       },
     ]
   }
@@ -55,7 +61,12 @@ const ComplainOrder = () => {
     //     onClick: () => { }
     //   },
     // ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '支持商品、收件人信息等模糊搜索',
     searchBtnText: '搜索',
     // filterBtn: {
@@ -174,13 +185,21 @@ const ComplainOrder = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url=""
+          url={
+            !keywords
+              ? ''
+              : '/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
     </div>

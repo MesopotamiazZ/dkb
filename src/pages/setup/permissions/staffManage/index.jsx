@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 员工管理列表页
+ */
 import React, { useEffect, useState } from 'react';
 import {
   Modal,
@@ -37,6 +41,7 @@ const StaffManage = () => {
   const [curId, setCurId] = useState('');
   const [createStaffModal, setCreateStaffModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
 
@@ -124,7 +129,12 @@ const StaffManage = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入员工信息',
     searchBtnText: '搜索',
   }
@@ -221,13 +231,21 @@ const StaffManage = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Setting/Staff/getList"
+          url={
+            !keywords
+              ? '/Setting/Staff/getList'
+              : '/Setting/Staff/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           // renderCell={renderCell}
           columns={columns}
           rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
       <>

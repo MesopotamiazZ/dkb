@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 标签管理里列表页
+ */
 import React, { useEffect, useState } from 'react';
 import { Form, Modal, Input, Select, message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -26,6 +30,7 @@ const TagManage = () => {
   } = useSelector(state => state['customer-manage'], shallowEqual) //store数据
 
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [curId, setCurId] = useState('');
   const [createTagModal, setCreateTagModal] = useState(false);
   const [delTipModal, setDelTipModal] = useState(false);
@@ -97,7 +102,12 @@ const TagManage = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入标签名称',
     searchBtnText: '搜索',
     filterBtn: {
@@ -171,7 +181,14 @@ const TagManage = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Scrm/CsrTag/getList"
+          url={
+            !keywords
+              ? '/Scrm/CsrTag/getList'
+              : '/Scrm/CsrTag/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           // renderCell={renderCell}
           columns={columns}

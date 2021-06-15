@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 订单列表页面
+ */
 import React, { useState } from 'react';
 import { Button, Checkbox, Select, Form } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,6 +22,8 @@ const OrderManageList = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const {
   } = actions;
@@ -77,43 +83,43 @@ const OrderManageList = () => {
   })
 
   const tabs = {
-    defaultKey: 1,
-    name: 'status',
+    defaultKey: 0,
+    name: 'order_status',
     onChange: (key, value, reqValue) => {
       return ''
     },
     data: [
       {
         label: "全部订单",
-        key: 1,
+        key: 0,
       },
       {
         label: "待付款",
-        key: 2,
+        key: 1,
       },
       {
         label: "待发货",
-        key: 3,
+        key: 2,
       },
       {
         label: "待收货",
-        key: 4,
+        key: 3,
       },
       {
         label: "待评价",
-        key: 5,
+        key: 4,
       },
       {
         label: "已完成",
-        key: 6,
+        key: 5,
       },
       {
         label: "退款中",
-        key: 7,
+        key: 6,
       },
       {
         label: "已关闭",
-        key: 8,
+        key: 7,
       },
     ]
   }
@@ -140,7 +146,12 @@ const OrderManageList = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '支持商品、收件人信息等模糊搜索',
     searchBtnText: '搜索',
     filterBtn: {
@@ -515,13 +526,21 @@ const OrderManageList = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url=""
+          url={
+            !keywords
+              ? ''
+              : '/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           renderCell={renderCell}
           columns={columns}
           rowKey="product_id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
     </div>

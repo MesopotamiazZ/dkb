@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 操作日志列表页
+ */
 import React, { useState } from 'react';
 import { Form, message } from 'antd';
 import { clearAllLog } from '@/services/permissions';
@@ -11,6 +15,7 @@ const OperactorLog = () => {
 
   const [form] = Form.useForm();
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [delTipModal, setDelTipModal] = useState(false);
 
   const tools = {
@@ -26,7 +31,12 @@ const OperactorLog = () => {
         }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入日志信息',
     searchBtnText: '搜索',
     filterBtn: {
@@ -203,7 +213,14 @@ const OperactorLog = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Setting/Log/getList"
+          url={
+            !keywords
+              ? '/Setting/Log/getList'
+              : '/Setting/Log/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           // renderCell={renderCell}
           columns={columns}

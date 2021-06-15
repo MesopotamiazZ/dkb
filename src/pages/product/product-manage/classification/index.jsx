@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 商品分类页面
+ */
 import React, { memo, useEffect, useState } from 'react';
 import {
   Modal,
@@ -44,6 +48,7 @@ const Classification = memo(() => {
   const [curId, setCurId] = useState('');
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
+  const [keywords, setKeywords] = useState('');
 
   const initialData = () => {
     dispatch(getCategoryTreeActionAsync({ pid: 0 })); // 获取商品分类树结构
@@ -166,7 +171,12 @@ const Classification = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入分类名称',
     searchBtnText: '搜索',
   }
@@ -251,9 +261,15 @@ const Classification = memo(() => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Goods/MdseClass/getList"
+          url={
+            !keywords
+              ? '/Goods/MdseClass/getList'
+              : '/Goods/MdseClass/getList/smartSearch'
+          }
           row
-          requestData={{ pid: 0 }}
+          requestData={
+            !keywords ? { pid: 0 } : { pid: 0, keywords }
+          }
           // renderCell={renderCell}
           columns={columns}
           rowKey="id"

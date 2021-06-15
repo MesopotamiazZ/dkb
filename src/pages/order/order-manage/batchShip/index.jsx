@@ -1,6 +1,5 @@
-import React from 'react';
-import { Button, Checkbox, Alert } from 'antd';
-import NP from 'number-precision';
+import React, { useState } from 'react';
+import { Alert } from 'antd';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderAction from '@/components/renderAction';
@@ -9,6 +8,9 @@ import avatarPic from '@/assets/images/avatar.jpg';
 import './style.less';
 
 const BatchShip = () => {
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
+
   const tools = {
     btns: [
       {
@@ -25,7 +27,12 @@ const BatchShip = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入流水号',
     searchBtnText: '搜索',
     // filterBtn: {
@@ -111,13 +118,21 @@ const BatchShip = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url={
+            !keywords
+              ? ''
+              : '/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           // renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
     </div>

@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 地址库列表页
+ */
 import React, { memo, useEffect, useState } from 'react';
 import {
   Modal,
@@ -41,6 +45,7 @@ const ExpressDelivery = memo(() => {
   const [areas, setAreas] = useState([]);
   const [areas1, setAreas1] = useState([]);
   const [refresh, setRefresh] = useState(false); // 刷新table
+  const [keywords, setKeywords] = useState('');
   const [curId, setCurId] = useState(''); // 当前是否是编辑，curId有数据就是更新
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
@@ -169,7 +174,12 @@ const ExpressDelivery = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入地址信息',
     searchBtnText: '搜索',
   }
@@ -255,7 +265,14 @@ const ExpressDelivery = memo(() => {
       <DkbTable
         // tabs={tabs}
         tools={tools}
-        url="/Setting/AddLib/getList"
+        url={
+          !keywords
+            ? '/Setting/AddLib/getList'
+            : '/Setting/AddLib/getList/smartSearch'
+        }
+        requestData={
+          !keywords ? {} : { keywords }
+        }
         row
         // renderCell={renderCell}
         columns={columns}

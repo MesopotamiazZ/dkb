@@ -28,8 +28,6 @@ import editpen from '@/assets/images/edit_small.png';
 import flagpng from '@/assets/images/flag.png';
 import boxpng from '@/assets/images/box.png';
 
-const { TextArea } = Input;
-
 const InsteadOrder = memo(() => {
   const history = useHistory();
   const location = useLocation();

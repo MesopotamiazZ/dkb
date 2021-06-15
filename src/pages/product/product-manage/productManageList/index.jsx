@@ -1,5 +1,9 @@
-import React from 'react';
-import { Button, Checkbox } from 'antd';
+/**
+ * @author tigris
+ * @description 商品类表页面
+ */
+import React, { useState } from 'react';
+// import { Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
@@ -35,10 +39,12 @@ const statusEnum = {
 
 const ProductManageList = () => {
   const history = useHistory();
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   const tabs = {
     defaultKey: 0,
-    name: 'status',
+    name: 'goods_status',
     onChange: (key, value, reqValue) => {
       return ''
     },
@@ -92,7 +98,12 @@ const ProductManageList = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '支持商品、收件人信息等模糊搜索',
     searchBtnText: '搜索',
     filterBtn: {
@@ -224,9 +235,17 @@ const ProductManageList = () => {
         <DkbTable
           tabs={tabs}
           tools={tools}
-          url="/Goods/MdseManage/getList"
+          refresh={refresh}
+          url={
+            !keywords
+              ? '/Goods/MdseManage/getList'
+              : '/Goods/MdseManage/getList/smartSearch'
+          }
           row
           // renderCell={renderCell}
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           columns={columns}
           rowKey="id"
           expandIconAsCell={false}

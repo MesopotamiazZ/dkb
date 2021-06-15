@@ -12,6 +12,8 @@ import './style.less';
 const OrderEvaluation = () => {
 
   const [form] = Form.useForm();
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
 
   // 订单搜索
   const [orderObj, setOrderObj] = useState({
@@ -69,7 +71,12 @@ const OrderEvaluation = () => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '支持商品、收件人信息等模糊搜索',
     searchBtnText: '搜索',
     filterBtn: {
@@ -328,13 +335,21 @@ const OrderEvaluation = () => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url=""
+          url={
+            !keywords
+              ? ''
+              : '/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          refresh={refresh}
         />
       </div>
     </div>

@@ -43,7 +43,8 @@ const BatchReplace = memo(() => {
   const [selectRows, setSelectRows] = useState([]);
   const [drawerVisible, setDrawerVisible] = useState(false);
 
-  const [refresh, setRefesh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [tableData, setTableData] = useState([]);
   const [curPage, setCurPage] = useState(1);
 
@@ -68,7 +69,12 @@ const BatchReplace = memo(() => {
         }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入流水号',
     searchBtnText: '搜索',
   }
@@ -245,7 +251,14 @@ const BatchReplace = memo(() => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Goods/MdseBatch/getToKeywordList"
+          url={
+            !keywords
+              ? '/Goods/MdseBatch/getToKeywordList'
+              : '/Goods/MdseBatch/getToKeywordList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           // row
           // renderCell={renderCell}
           columns={columns}
@@ -327,7 +340,7 @@ const BatchReplace = memo(() => {
                   })
                   if (res.code === 200) {
                     message.success('替换成功');
-                    setRefesh(!refresh);
+                    setRefresh(!refresh);
                     setDrawerVisible(false);
                     setBatchReplaceModal(false);
                   } else {

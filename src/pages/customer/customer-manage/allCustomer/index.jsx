@@ -1,3 +1,7 @@
+/**
+ * @author tigris
+ * @description 全部客户列表页
+ */
 import React, { memo, useEffect, useState } from 'react';
 import {
   Modal,
@@ -15,7 +19,6 @@ import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
-import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 
 import './style.less';
@@ -39,6 +42,7 @@ const AllCustomer = memo(() => {
   } = useSelector(state => state['customer-manage'], shallowEqual) //store数据
 
   const [refresh, setRefresh] = useState(false);
+  const [keywords, setKeywords] = useState('');
   const [createCustomerModal, setCreateCustomerModal] = useState(false);
   const [curId, setCurId] = useState('');
   // const [delTipModal, setDelTipModal] = useState(false);
@@ -125,7 +129,12 @@ const AllCustomer = memo(() => {
         onClick: () => { }
       },
     ],
-    onSearch: () => { },
+    onSearch: (val) => {
+      setKeywords(val);
+      setTimeout(() => {
+        setRefresh(!refresh);
+      }, 0)
+    },
     placeholder: '请输入客户信息',
     searchBtnText: '搜索',
     filterBtn: {
@@ -244,7 +253,14 @@ const AllCustomer = memo(() => {
         <DkbTable
           // tabs={tabs}
           tools={tools}
-          url="/Scrm/CsrManage/getList"
+          url={
+            !keywords
+              ? '/Scrm/CsrManage/getList'
+              : '/Scrm/CsrManage/getList/smartSearch'
+          }
+          requestData={
+            !keywords ? {} : { keywords }
+          }
           row
           // renderCell={renderCell}
           columns={columns}
