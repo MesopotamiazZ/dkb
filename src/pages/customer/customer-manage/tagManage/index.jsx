@@ -134,11 +134,20 @@ const TagManage = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '标签',
+        onActionClick: async () => {
+          const res = await removeCustomerTag({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -154,12 +163,12 @@ const TagManage = () => {
     {
       title: '标签人数',
       dataIndex: 'count',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '标签类型',
       dataIndex: 'type',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

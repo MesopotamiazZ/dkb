@@ -77,11 +77,20 @@ const StaffRole = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '员工角色',
+        onActionClick: async () => {
+          const res = await removeRole({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -102,7 +111,7 @@ const StaffRole = () => {
     {
       title: '员工数量',
       dataIndex: 'count',
-      align: 'center',
+      align: 'left',
     },
     // {
     //   title: '状态',
@@ -123,7 +132,7 @@ const StaffRole = () => {
           return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

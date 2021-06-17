@@ -22,12 +22,23 @@ export const sendSms = data => request({
 })
 
 /**
- * 
+ * 注册
  * @param {*} data 
  * @returns 
  */
 export const registerApi = data => request({
   url: '/Publics/User/add',
+  method: 'post',
+  data
+})
+
+/**
+ * 重置密码
+ * @param {*} data 
+ * @returns 
+ */
+export const resetPassApi = data => request({
+  url: '/Publics/User/rsPassword',
   method: 'post',
   data
 })

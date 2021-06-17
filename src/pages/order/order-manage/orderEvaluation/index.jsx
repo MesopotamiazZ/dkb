@@ -277,14 +277,14 @@ const OrderEvaluation = () => {
         />
       ),
       width: '30%',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '订单信息',
       render: (record) => (
         <span>￥{record?.product_price} x {record?.product_number}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '客户',
@@ -294,7 +294,7 @@ const OrderEvaluation = () => {
           subTitle={record?.shop_name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

@@ -7,7 +7,6 @@ import {
   Modal,
   Form,
   Switch,
-  Cascader,
   TreeSelect,
   Input,
   message
@@ -197,11 +196,16 @@ const Classification = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '分类',
+        onActionClick: async () => {
+          const res = await delCategory({ id: record.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            // setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
         },
       }
     ]
@@ -223,12 +227,13 @@ const Classification = memo(() => {
     {
       title: '商品数',
       dataIndex: 'goods_count',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '创建时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      align: 'left'
     },
     {
       title: '状态',
@@ -239,7 +244,7 @@ const Classification = memo(() => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

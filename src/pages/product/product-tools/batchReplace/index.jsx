@@ -100,23 +100,23 @@ const BatchReplace = memo(() => {
     {
       title: '总替换商品数',
       dataIndex: 'total',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '替换前关键词',
       dataIndex: 'oldKeyword',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '替换后关键词',
       dataIndex: 'newKeyword',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '替换时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作人',

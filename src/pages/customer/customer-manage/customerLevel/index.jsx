@@ -71,11 +71,20 @@ const CustomerLevel = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '客户等级',
+        onActionClick: async () => {
+          const res = await delCustomerLevel({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -88,13 +97,13 @@ const CustomerLevel = () => {
       render: (text) => (
         <span style={{ color: '#FF4949' }}>{text}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '等级名称',
       dataIndex: 'name',
       width: '30%',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '升级条件',
@@ -102,12 +111,12 @@ const CustomerLevel = () => {
       render: (text) => (
         <span>{text ? text : 0}成长值</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '会员人数',
       dataIndex: 'count',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '等级状态',
@@ -118,7 +127,7 @@ const CustomerLevel = () => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

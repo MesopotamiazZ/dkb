@@ -91,11 +91,20 @@ const StorePickUp = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '门店',
+        onActionClick: async () => {
+          const res = await delStore({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -110,19 +119,19 @@ const StorePickUp = memo(() => {
     {
       title: '联系人',
       dataIndex: 'su_name',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '联系电话',
       dataIndex: 'su_tel',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '门店地址',
       render: (record) => (
         <span>{record?.address?.address}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -133,7 +142,7 @@ const StorePickUp = memo(() => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

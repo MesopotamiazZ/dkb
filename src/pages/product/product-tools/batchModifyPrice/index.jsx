@@ -104,25 +104,25 @@ const BatchModifyPrice = memo(() => {
     {
       title: '总改价商品数',
       dataIndex: 'total',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '改价金额',
       dataIndex: 'money',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '改价时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作进度',
       render: (record) => (
         <Progress percent={record.progress} size="small" />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作人',

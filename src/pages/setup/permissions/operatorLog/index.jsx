@@ -176,17 +176,17 @@ const OperactorLog = () => {
     {
       title: '操作账号',
       dataIndex: 'op_uphone',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作节点',
       dataIndex: 'op_node',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作终端',
       dataIndex: 'op_client',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作时间',
@@ -196,7 +196,7 @@ const OperactorLog = () => {
           return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作内容',

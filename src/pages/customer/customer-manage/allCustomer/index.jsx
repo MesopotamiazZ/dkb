@@ -181,19 +181,19 @@ const AllCustomer = memo(() => {
         />
       ),
       width: '20%',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '等级',
       render: (record) => (
         <span>{record?.levelInfo?.name}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '积分',
       dataIndex: 'point',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '储值余额',
@@ -203,7 +203,7 @@ const AllCustomer = memo(() => {
           return <span>￥{text}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '下单次数',
@@ -211,7 +211,7 @@ const AllCustomer = memo(() => {
       render: (text) => (
         text ? <span>{text}</span> : 0
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '上次下单时间',
@@ -220,7 +220,7 @@ const AllCustomer = memo(() => {
           return moment(parseInt(record?.lastOrderTime?.create_at) * 1000).format('YYYY-MM-DD HH:mm:ss')
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -231,7 +231,7 @@ const AllCustomer = memo(() => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

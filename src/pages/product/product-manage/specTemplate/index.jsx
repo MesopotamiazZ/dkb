@@ -74,11 +74,20 @@ const SpecTemplate = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '规格模板',
+        onActionClick: async () => {
+          const res = await delSpecTemplate({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            // setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -113,7 +122,7 @@ const SpecTemplate = memo(() => {
       title: '创建时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -124,7 +133,7 @@ const SpecTemplate = memo(() => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

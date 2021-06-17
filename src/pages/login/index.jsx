@@ -13,6 +13,7 @@ import {
   loginApi,
   sendSms,
   registerApi,
+  resetPassApi,
 } from '@/services/login'
 import { behaviorVerification, validatorPhone } from '@/utils'
 // import sha1 from '@/utils/sha1'
@@ -61,7 +62,7 @@ export default memo(function () {
   }, [history])
 
   /**
-   * 后台登录
+   * 后台登录/重置密码
    * @param {object} values 
    */
   const onFinish = async values => {
@@ -98,6 +99,18 @@ export default memo(function () {
         case PageStatus.WECHAT_LOGIN: // 微信登录
           break;
         case PageStatus.RESET: // 重置密码
+          result = await resetPassApi({
+            phone: values.phone,
+            newPassword: values.newPassword,
+            smscode: values.smscode,
+          });
+          setLoading(false);
+          if (result.code === 200) {
+            message.success('重置成功');
+            setPageStatus(PageStatus.LOGIN);
+          } else {
+            message.error(result.msg);
+          }
           break;
         case PageStatus.RESIGER: // 注册
           result = await registerApi({
@@ -346,7 +359,7 @@ export default memo(function () {
         </div>
         <Form.Item
           className="reset-new-password"
-          name="password"
+          name="newPassword"
           rules={[{ required: true, message: '请填写密码' }]}
         >
           <Input.Password

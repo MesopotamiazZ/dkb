@@ -99,7 +99,7 @@ const ComplainOrder = () => {
         />
       ),
       width: '30%',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '投诉客户',
@@ -109,12 +109,12 @@ const ComplainOrder = () => {
           subTitle={record?.shop_name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '投诉渠道',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '投诉金额',
@@ -124,17 +124,17 @@ const ComplainOrder = () => {
           return <span>￥{text}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '投诉时间',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '原因',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -144,7 +144,7 @@ const ComplainOrder = () => {
           status={record.status}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

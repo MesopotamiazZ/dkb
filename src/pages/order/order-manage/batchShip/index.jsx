@@ -64,32 +64,32 @@ const BatchShip = () => {
           avatar={avatarPic}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '文件名称',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '导入订单数',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '成功数',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '导入时间',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作人',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

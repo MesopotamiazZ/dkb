@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Divider } from 'antd';
+import { Button, Divider, Popconfirm } from 'antd';
 import './style.less';
 
 type tType =
@@ -14,6 +14,7 @@ type actionType = 'row' | 'column';
 interface btnObj {
   key: string | number;
   text: string;
+  title?: string;
   type: tType;
   classNames: Array<classNameType>;
   onActionClick: (key: string | number, record: Object) => void;
@@ -42,13 +43,30 @@ const RenderAction: React.FC<RenderActionProps> = (props) => {
       {
         btns?.map((btn, index) => (
           <div key={btn.key}>
-            <Button
-              // className={btn.classNames.join(' ')}
-              type={btn.type || 'link'}
-              onClick={() => btn.onActionClick(btn.key, record)}
-            >
-              {btn.text}
-            </Button>
+            {
+              btn.text !== '删除' ? <Button
+                // className={btn.classNames.join(' ')}
+                type={btn.type || 'link'}
+                onClick={() => btn.onActionClick(btn.key, record)}
+              >
+                {btn.text}
+              </Button> : <Popconfirm
+                title={`确认删除${btn.title}?`}
+                onConfirm={() => btn.onActionClick(btn.key, record)}
+                // onCancel={cancel}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  // className={btn.classNames.join(' ')}
+                  type={btn.type || 'link'}
+                // onClick={() => btn.onActionClick(btn.key, record)}
+                >
+                  {btn.text}
+                </Button>
+              </Popconfirm>
+            }
+
             {
               // index !== len - 1 && <Divider type="vertical" />
             }

@@ -155,11 +155,20 @@ const StaffManage = () => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '员工',
+        onActionClick: async () => {
+          const res = await removeStaff({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -177,12 +186,12 @@ const StaffManage = () => {
     {
       title: '员工姓名',
       dataIndex: 'name',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '联系方式',
       dataIndex: 'tel',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '员工角色',
@@ -190,7 +199,7 @@ const StaffManage = () => {
       render: (text) => (
         <span>{text?.name}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '二次验证',
@@ -198,7 +207,7 @@ const StaffManage = () => {
       render: (text) => (
         <span>{text ? '是' : '否'}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -209,7 +218,7 @@ const StaffManage = () => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

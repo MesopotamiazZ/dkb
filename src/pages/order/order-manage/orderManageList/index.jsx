@@ -448,7 +448,7 @@ const OrderManageList = () => {
       render: (record) => (
         <span>￥{record?.product_price} x {record?.product_number}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '买家',
@@ -458,7 +458,7 @@ const OrderManageList = () => {
           subTitle={record?.shop_name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '收件人',
@@ -468,14 +468,14 @@ const OrderManageList = () => {
           subTitle={record?.revice_mobile}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '实收款',
       render: (record) => (
         <span>￥{NP.times(record?.product_price, record?.product_number) || 0.00}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -485,7 +485,7 @@ const OrderManageList = () => {
           status={record.status}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

@@ -1,6 +1,6 @@
 /**
  * @author tigris
- * @description 商品类表页面
+ * @description 商品列表页面
  */
 import React, { useState } from 'react';
 // import { Button, Checkbox } from 'antd';
@@ -9,7 +9,6 @@ import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
-import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 import './style.less';
 import Avatar from 'antd/lib/avatar/avatar';
@@ -156,7 +155,7 @@ const ProductManageList = () => {
       render: (record) => (
         <Avatar src={record.thumb} size={80} shape="square" />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '商品名称/编号/分类',
@@ -186,23 +185,23 @@ const ProductManageList = () => {
           return <span>￥{record.price_low}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '库存',
       dataIndex: 'stock',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '销量',
       dataIndex: 'salenum',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '创建时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      align: 'center'
+      align: 'left'
     },
     {
       title: '状态',
@@ -213,7 +212,7 @@ const ProductManageList = () => {
           badge_text={statusEnum[record.status]?.name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

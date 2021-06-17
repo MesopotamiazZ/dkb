@@ -92,11 +92,20 @@ const ExpressDelivery = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '运费模板',
+        onActionClick: async () => {
+          const res = await delExpress({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -107,7 +116,7 @@ const ExpressDelivery = memo(() => {
       key: 'name',
       title: '模板名称',
       dataIndex: 'name',
-      align: 'center',
+      align: 'left',
       render: (text, record) => {
         if (record.is_default) {
           return (
@@ -126,7 +135,7 @@ const ExpressDelivery = memo(() => {
       render: (text) => (
         text === 1 ? <Tag>按件计费</Tag> : <Tag>按重量计费</Tag>
       ),
-      align: 'center',
+      align: 'left',
     },
     // {
     //   key: 'price',
@@ -150,7 +159,7 @@ const ExpressDelivery = memo(() => {
           return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -161,7 +170,7 @@ const ExpressDelivery = memo(() => {
           badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       key: 'operactor',

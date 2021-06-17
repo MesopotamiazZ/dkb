@@ -200,11 +200,20 @@ const ExpressDelivery = memo(() => {
         key: '2',
         text: '删除',
         type: 'link',
-        onActionClick: () => {
-          setCurRecord(record);
-          setTimeout(() => {
-            setDelTipModal(true);
-          }, 0)
+        title: '地址',
+        onActionClick: async () => {
+          const res = await delAddress({ id: curRecord.id });
+          if (res.code === 200) {
+            message.success('删除成功');
+            setDelTipModal(false);
+            setRefresh(!refresh);
+          } else {
+            message.warning('删除失败');
+          }
+          // setCurRecord(record);
+          // setTimeout(() => {
+          //   setDelTipModal(true);
+          // }, 0)
         },
       },
     ]
@@ -219,7 +228,7 @@ const ExpressDelivery = memo(() => {
     {
       title: '联系电话',
       dataIndex: 'tel',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '所在地',
@@ -228,14 +237,14 @@ const ExpressDelivery = memo(() => {
           {record?.address?.area_name[0]}, {record?.address?.area_name[1]}, {record?.address?.area_name[2]}
         </span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '详细地址',
       render: (record) => (
         <span>{record?.address?.address}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '更新时间',
@@ -245,7 +254,7 @@ const ExpressDelivery = memo(() => {
           return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

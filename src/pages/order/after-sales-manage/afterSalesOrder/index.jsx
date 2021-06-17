@@ -304,7 +304,7 @@ const AfterSalesOrder = () => {
         />
       ),
       width: '30%',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '客户',
@@ -314,7 +314,7 @@ const AfterSalesOrder = () => {
           subTitle={record?.shop_name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '退款金额',
@@ -324,17 +324,17 @@ const AfterSalesOrder = () => {
           return <span>￥{text}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '申请时间',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '类型/原因',
       dataIndex: '',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '状态',
@@ -344,7 +344,7 @@ const AfterSalesOrder = () => {
           status={record.status}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作',

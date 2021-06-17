@@ -120,7 +120,7 @@ const StorageManage = () => {
           subTitle={record?.userInfo?.name}
         />
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '变更前',
@@ -130,7 +130,7 @@ const StorageManage = () => {
           return <span>￥{text}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '金额',
@@ -138,7 +138,7 @@ const StorageManage = () => {
       render: (text) => (
         text ? `+${text}` : ''
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '变更后',
@@ -148,19 +148,19 @@ const StorageManage = () => {
           return <span>￥{text}</span>
         }
       },
-      align: 'center',
+      align: 'left',
     },
     {
       title: '类型',
       dataIndex: 'type',
-      align: 'center',
+      align: 'left',
     },
     {
       title: '操作人',
       render: (record) => (
         <span>{record?.opUserInfo?.name}</span>
       ),
-      align: 'center',
+      align: 'left',
     },
     {
       title: '日期',
@@ -169,7 +169,7 @@ const StorageManage = () => {
           return moment(parseInt(record?.create_at) * 1000).format('YYYY-MM-DD HH:mm:ss')
         }
       },
-      align: 'center',
+      align: 'left',
     },
   ]
 
