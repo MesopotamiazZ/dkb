@@ -3,6 +3,7 @@ import {
   Table, Form, InputNumber, Button, Typography, Modal, Checkbox
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import _ from 'lodash';
 import './style.less';
 
 const CheckboxGroup = Checkbox.Group;
@@ -25,7 +26,7 @@ const AddDeliveryArea = memo((props) => {
   const [checkAll, setCheckAll] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
 
-  const isEditing = (record) => record.id === editingKey;
+  // const isEditing = (record) => record.id === editingKey;
 
   /**
    * 获取省份
@@ -42,7 +43,7 @@ const AddDeliveryArea = memo((props) => {
       // console.log('defaultData', defaultData[0].area_name);
       setData(defaultData.map((item) => ({
         id: item.id,
-        areas: item.area_name,
+        areas: item.area_name.join(','),
         first_unit: Number(item.frist_unit),
         first_money: Number(item.frist_money),
         next_unit: Number(item.next_unit),
@@ -56,7 +57,7 @@ const AddDeliveryArea = memo((props) => {
    */
   useEffect(() => {
     const getAreaCode = (obj) => {
-      console.log('obj', obj)
+      console.log('obj', obj?.areas)
       const code = [];
       if (obj?.areas instanceof Array) {
         obj?.areas?.forEach((item) => {
@@ -67,7 +68,7 @@ const AddDeliveryArea = memo((props) => {
           })
         })
       }
-      if (obj?.areas instanceof String) {
+      if (typeof obj?.areas === 'string') {
         obj?.areas?.split(',').forEach((item) => {
           provinceList.forEach((pro) => {
             if (item === pro.name) {
@@ -76,7 +77,6 @@ const AddDeliveryArea = memo((props) => {
           })
         })
       }
-
       return {
         area_code: code
       }
@@ -95,15 +95,20 @@ const AddDeliveryArea = memo((props) => {
    * @param {*} record 
    */
   const edit = (record) => {
-    form.setFieldsValue({
-      areas: '',
-      first_unit: '',
-      first_money: '',
-      next_unit: '',
-      next_money: '',
-      ...record,
-    });
+    // console.log(record)
+    // form.setFieldsValue({
+    //   areas: '',
+    //   first_unit: '',
+    //   first_money: '',
+    //   next_unit: '',
+    //   next_money: '',
+    //   ...record,
+    // });
+    setCheckedList(record.areas.split(','));
     setEditingKey(record.id);
+    setTimeout(() => {
+      setDeliverAreaModal(true);
+    }, 0)
   };
 
   /**
@@ -116,30 +121,30 @@ const AddDeliveryArea = memo((props) => {
     setData(newData);
   }
 
-  const cancel = () => {
-    setEditingKey('');
-  };
+  // const cancel = () => {
+  //   setEditingKey('');
+  // };
 
-  const save = async (id) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => id === item.id);
+  // const save = async (id) => {
+  //   try {
+  //     const row = await form.validateFields();
+  //     const newData = [...data];
+  //     const index = newData.findIndex((item) => id === item.id);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
+  //     if (index > -1) {
+  //       const item = newData[index];
+  //       newData.splice(index, 1, { ...item, ...row });
+  //       setData(newData);
+  //       setEditingKey('');
+  //     } else {
+  //       newData.push(row);
+  //       setData(newData);
+  //       setEditingKey('');
+  //     }
+  //   } catch (errInfo) {
+  //     console.log('Validate Failed:', errInfo);
+  //   }
+  // };
 
   /**
    * 选择所有
@@ -169,47 +174,47 @@ const AddDeliveryArea = memo((props) => {
     )
   }
 
-  const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType = 'number',
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    // console.log(editing,
-    //   dataIndex,
-    //   title,
-    //   inputType = 'number',
-    //   record,
-    //   index,
-    //   children);
-    const inputNode = <InputNumber />;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: `请输入${title}!`,
-              },
-            ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
+  // const EditableCell = ({
+  //   editing,
+  //   dataIndex,
+  //   title,
+  //   inputType = 'number',
+  //   record,
+  //   index,
+  //   children,
+  //   ...restProps
+  // }) => {
+  //   // console.log(editing,
+  //   //   dataIndex,
+  //   //   title,
+  //   //   inputType = 'number',
+  //   //   record,
+  //   //   index,
+  //   //   children);
+  //   const inputNode = <InputNumber />;
+  //   return (
+  //     <td {...restProps}>
+  //       {editing ? (
+  //         <Form.Item
+  //           name={dataIndex}
+  //           style={{
+  //             margin: 0,
+  //           }}
+  //           rules={[
+  //             {
+  //               required: true,
+  //               message: `请输入${title}!`,
+  //             },
+  //           ]}
+  //         >
+  //           {inputNode}
+  //         </Form.Item>
+  //       ) : (
+  //         children
+  //       )}
+  //     </td>
+  //   );
+  // };
 
   const columns = [
     {
@@ -224,84 +229,129 @@ const AddDeliveryArea = memo((props) => {
       width: 180,
       align: 'center',
       render: (_, record, index) => {
-        const editable = isEditing(record);
-        return editable ? (
+        // const editable = isEditing(record);
+        return (
           <>
-            <Typography.Link style={{ marginRight: 10 }} onClick={() => save(record.id)}>
-              保存
-            </Typography.Link>
-            <Typography.Link onClick={() => cancel()}>
-              取消
-            </Typography.Link>
-          </>
-        ) : (
-          <>
-            <Typography.Link style={{ marginRight: 10 }} disabled={editingKey !== ''} onClick={() => edit(record)}>
+            <Typography.Link style={{ marginRight: 10 }} onClick={() => edit(record, index)}>
               修改
             </Typography.Link>
-            <Typography.Link disabled={editingKey !== ''} onClick={() => del(record, index)}>
+            <Typography.Link onClick={() => del(record, index)}>
               删除
             </Typography.Link>
           </>
         );
+        // (
+        //   <>
+        //     <Typography.Link style={{ marginRight: 10 }} onClick={() => save(record.id)}>
+        //       保存
+        //     </Typography.Link>
+        //     <Typography.Link onClick={() => cancel()}>
+        //       取消
+        //     </Typography.Link>
+        //   </>
+        // ) : 
       },
     },
     {
       title: '首件(个)',
       dataIndex: 'first_unit',
-      editable: true,
+      // editable: true,
       align: 'center',
+      render: (text, row, index) => (
+        <InputNumber
+          value={text}
+          onChange={(val) => {
+            // console.log(val)
+            let dataClone = _.cloneDeep(data);
+            dataClone[index]['first_unit'] = val;
+            setData(dataClone);
+          }}
+        />
+      ),
     },
     {
       title: '运费(元)',
       dataIndex: 'first_money',
-      editable: true,
+      // editable: true,
       align: 'center',
+      render: (text, row, index) => (
+        <InputNumber
+          value={text}
+          onChange={(val) => {
+            // console.log(val)
+            let dataClone = _.cloneDeep(data);
+            dataClone[index]['first_money'] = val;
+            setData(dataClone);
+          }}
+        />
+      ),
     },
     {
       title: '续件(个)',
       dataIndex: 'next_unit',
-      editable: true,
+      // editable: true,
       align: 'center',
+      render: (text, row, index) => (
+        <InputNumber
+          value={text}
+          onChange={(val) => {
+            // console.log(val)
+            let dataClone = _.cloneDeep(data);
+            dataClone[index]['next_unit'] = val;
+            setData(dataClone);
+          }}
+        />
+      ),
     },
     {
       title: '运费(元)',
       dataIndex: 'next_money',
-      editable: true,
+      // editable: true,
       align: 'center',
+      render: (text, row, index) => (
+        <InputNumber
+          value={text}
+          onChange={(val) => {
+            // console.log(val)
+            let dataClone = _.cloneDeep(data);
+            dataClone[index]['next_money'] = val;
+            setData(dataClone);
+          }}
+        />
+      ),
     },
   ];
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
+  // const mergedColumns = columns.map((col) => {
+  //   if (!col.editable) {
+  //     return col;
+  //   }
 
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
+  //   return {
+  //     ...col,
+  //     onCell: (record) => ({
+  //       record,
+  //       inputType: col.dataIndex === 'age' ? 'number' : 'text',
+  //       dataIndex: col.dataIndex,
+  //       title: col.title,
+  //       editing: isEditing(record),
+  //     }),
+  //   };
+  // });
 
   return (
     <div className="add-delivery-area">
       <Form.Item>
         <Form form={form} component={false}>
           <Table
-            components={{
-              body: {
-                cell: EditableCell,
-              },
-            }}
+            // components={{
+            //   body: {
+            //     cell: EditableCell,
+            //   },
+            // }}
             rowKey="id"
             bordered
             dataSource={data}
-            columns={mergedColumns}
+            columns={columns}
             rowClassName="editable-row"
             pagination={false}
             footer={footer}
@@ -318,8 +368,31 @@ const AddDeliveryArea = memo((props) => {
         cancelText="取消"
         destroyOnClose
         onOk={() => {
-          setData(data.concat({ areas: checkedList.join(','), id: `${Date.now()}` }));
+          // console.log(checkedList)
+          if (!checkedList.length) {
+            setDeliverAreaModal(false);
+            return
+          }
+          if (editingKey) {
+            const dataClone = _.cloneDeep(data);
+            dataClone.forEach((item) => {
+              if (item.id === editingKey) {
+                item.areas = checkedList.join(',');
+              }
+            })
+            setData(dataClone);
+          } else {
+            setData(data.concat({
+              areas: checkedList.join(','),
+              id: `${Date.now()}`,
+              first_unit: 0,
+              first_money: 0,
+              next_unit: 0,
+              next_money: 0
+            }));
+          }
           setCheckedList([]);
+          setEditingKey('');
           setIndeterminate(false);
           setDeliverAreaModal(false);
         }}

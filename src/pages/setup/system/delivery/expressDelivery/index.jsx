@@ -125,6 +125,8 @@ const ExpressDelivery = memo(() => {
               <Tag>默认</Tag>
             </div >
           )
+        } else {
+          return <span>{text}</span>
         }
       }
     },
