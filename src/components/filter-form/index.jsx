@@ -7,6 +7,7 @@ import ProCheckbox from "@/components/pro-checkbox"
 import ProUpload from "@/components/pro-upload"
 import ProFormList from "./child/pro-form-list"
 import ProSelects from '@/components/pro-selects'
+import InputGroupNumber from '../input-group-number';
 import './style.less'
 
 const { Option } = Select;
@@ -34,7 +35,10 @@ export default memo(function ({ formProps = {} }) {
         case 'input':
           ele = <Input allowClear {...searchProps} className="input-height input-width" />;
           break;
-
+        case 'inputgroupnumber':
+          ele = <InputGroupNumber {...searchProps} />;
+          // ele = <div allowClear {...searchProps}>11111</div>;
+          break;
         case 'select':
           ele = <Select allowClear {...searchProps} className="input-height input-width">
             {searchProps.enum.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)}

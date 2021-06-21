@@ -1,5 +1,7 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useCallback, useRef, useState } from 'react';
 import { Table, message } from 'antd';
+import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 import request from '../../services/request';
 import { IdkbTable } from './type';
 import SwitchStatusBar from './components/switch-status-bar';
@@ -25,6 +27,8 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     onRow,
     successCb = () => { },
     renderCell = false,
+    components,
+    drag,
   } = props;
 
   // const {
@@ -146,6 +150,47 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     renderCell: renderCell
   };
 
+  const SortableItem = sortableElement(props => <tr {...props} />);
+  const SortableContainer = sortableContainer(props => <tbody {...props} />);
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    console.log(oldIndex, newIndex);
+    if (oldIndex !== newIndex) {
+      const newData = arrayMove([].concat(tableData?.list), oldIndex, newIndex).filter(el => !!el);
+      console.log('Sorted items: ', newData);
+      // this.setState({ dataSource: newData });
+      setTableData({ ...tableData, list: newData });
+    }
+  };
+
+  const DraggableContainer = props => (
+    <SortableContainer
+      useDragHandle
+      disableAutoscroll
+      helperClass="row-dragging"
+      onSortEnd={onSortEnd}
+      {...props}
+    />
+  );
+
+  const DraggableBodyRow = useCallback(({ className, style, ...restProps }) => {
+    // function findIndex base on Table rowKey props and should always be a right array index
+    console.log(tableData)
+    const index = tableData?.list?.findIndex(x => x.id === restProps['data-row-key']);
+    console.log('index', index)
+    return <SortableItem index={index} {...restProps} />;
+  }, [tableData]);
+
+  /**
+   * 拖拽
+   */
+  const dragComponent = {
+    body: {
+      wrapper: DraggableContainer,
+      row: DraggableBodyRow,
+    },
+  }
+
   return (
     <div className="dkb-table">
       <div className="inner-area">
@@ -167,6 +212,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
         // expandIconAsCell={expandIconAsCell}
         expandIconColumnIndex={expandIconColumnIndex}
         onRow={onRow}
+        components={drag ? dragComponent : {}}
       />
     </div>
   )

@@ -5,9 +5,10 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Radio, message } from 'antd';
 // import { useHistory, useLocation } from 'react-router-dom';
-// import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-// import { actions } from '../store/slice';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../../../setup/permissions/store/slice';
 import { addVcMoneyDetail } from '@/services/customer';
+import { parseFilterValue } from '@/utils';
 import ProUpload from '@/components/pro-upload';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
@@ -16,23 +17,33 @@ import { validatorPositiveNumber } from '@/utils';
 import { baseUrl } from '@/utils/upload';
 
 import './style.less';
+import { useEffect } from 'react';
 
 const StorageManage = () => {
   // const history = useHistory();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
 
-  // const {
+  const {
+    getStaffListActionAsync,
+  } = actions;
 
-  // } = actions;
+  let {
+    staffList,
+  } = useSelector(state => state.permissions, shallowEqual);
 
-  // let {
-
-  // } = useSelector(state => state['customer-manage'], shallowEqual) //store数据
+  /**
+   * initital
+   */
+  useEffect(() => {
+    dispatch(getStaffListActionAsync({ page: 1, limit: 99 }));
+  }, []);
 
   const [refresh, setRefresh] = useState(false);
   const [keywords, setKeywords] = useState('');
   const [accountModal, setAccountModal] = useState(false);
+  const [filterObj, setFilterObj] = useState({});
 
   const tabs = {
     defaultKey: 0,
@@ -102,7 +113,120 @@ const StorageManage = () => {
       text: '筛选',
       antdProps: {
       },
-      onClick: () => { }
+      formProps: {
+        title: '调账筛选',
+        form: form1,
+        initValue: {},
+        formArr: [
+          {
+            search: [
+              {
+                wrap: {
+                  key: 'phone',
+                  name: 'phone',
+                  label: '客户账号',
+                  type: 'input'
+                },
+                props: {
+                  style: { width: '100%' },
+                  placeholder: '请输入客户手机号码',
+                }
+              },
+              {
+                wrap: {
+                  key: 'date',
+                  name: 'date',
+                  label: '储值时间',
+                  type: 'rangepicker',
+                },
+                props: {
+                  ranges: {
+                    '今天': [moment(), moment()],
+                    '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '近7天': [moment().subtract('days', 6), moment()],
+                    '近30天': [moment().subtract('days', 29), moment()]
+                  }
+                }
+              },
+              {
+                wrap: {
+                  key: 'op_uid',
+                  name: 'op_uid',
+                  label: '关联员工(操作人)',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择员工',
+                  enum: staffList?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) || []
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'type',
+                  name: 'type',
+                  label: '储值类型',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '全部',
+                  enum: [
+                    {
+                      label: '全部',
+                      value: 0
+                    },
+                    {
+                      label: '入账',
+                      value: 1
+                    },
+                    {
+                      label: '出账',
+                      value: 2
+                    },
+                  ]
+                }
+              },
+            ],
+          }
+        ],
+        config: [{
+          text: "确认",
+          wrap: {
+            type: "primary"
+          },
+          htype: "submit", // submit || reset
+          onBtnClick: (value) => {
+            console.log("按钮点击的事件222", value);
+            const obj = parseFilterValue(value)
+            setFilterObj(obj);
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        },
+        {
+          text: "取消",
+          wrap: {
+            //按钮的一些属性配置
+          },
+          htype: "", // submit || reset
+          onBtnClick: (value) => {
+            //value 返回的是表单的数据
+            // type=submit 按钮有提交功能 会自动数据验证
+            // type=reset  重置表单
+            // 其余的不用传type值
+            console.log("按钮点击的事件111", value);
+            setFilterObj({});
+            form1.resetFields();
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        }],
+      }
     }
   }
 
@@ -185,7 +309,8 @@ const StorageManage = () => {
               : '/Scrm/VcMoney/getList/smartSearch'
           }
           requestData={
-            !keywords ? {} : { keywords }
+            !keywords ? Object.assign({}, filterObj)
+              : Object.assign({ keywords }, filterObj)
           }
           // row
           // renderCell={renderCell}

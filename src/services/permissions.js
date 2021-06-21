@@ -35,6 +35,17 @@ export const removeStaff = data => request({
 })
 
 /**
+ * 员工列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getStaffList = data => request({
+  url: '/Setting/Staff/getList',
+  method: 'get',
+  params: { ...data }
+})
+
+/**
  * 查询员工详情
  * @param {*} data 
  * @returns 

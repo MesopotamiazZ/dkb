@@ -9,6 +9,7 @@
 import {
   useLocation,
 } from 'react-router-dom';
+import moment from 'moment';
 
 const isDev = process.env.NODE_ENV === 'development'; // 开发 or 生产
 
@@ -197,4 +198,22 @@ export function getMonthDays(year, month) {
       `${index + 1}日`
     ))
   }
+}
+
+/**
+   * 格式化筛选数据
+   */
+export const parseFilterValue = (values) => {
+  let obj = {}
+  for (let key in values) {
+    if (values[key]) {
+      if (key === 'date') {
+        obj.start_time = moment(values[key][0]).valueOf();
+        obj.end_time = moment(values[key][1]).valueOf();
+      } else {
+        obj[key] = values[key];
+      }
+    }
+  }
+  return obj;
 }

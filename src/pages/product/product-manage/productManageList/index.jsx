@@ -3,13 +3,14 @@
  * @description 商品列表页面
  */
 import React, { useState } from 'react';
-// import { Button, Checkbox } from 'antd';
+import { Form } from 'antd';
 import { useHistory } from 'react-router-dom';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
 import RenderAction from '@/components/renderAction';
 import moment from 'moment';
+import { parseFilterValue } from '@/utils';
 import './style.less';
 import Avatar from 'antd/lib/avatar/avatar';
 
@@ -38,8 +39,14 @@ const statusEnum = {
 
 const ProductManageList = () => {
   const history = useHistory();
+  const [form] = Form.useForm();
   const [refresh, setRefresh] = useState(false);
   const [keywords, setKeywords] = useState('');
+  const [filterObj, setFilterObj] = useState({});
+  const [defaultSales, setDefaultSales] = useState([]);
+  // const [salesNumbers, setSalesNumbers] = useState([]);
+  const [defaultPrice, setDefaultPrice] = useState([]);
+  // const [priceNumbers, setPriceNumbers] = useState([]);
 
   const tabs = {
     defaultKey: 0,
@@ -109,7 +116,151 @@ const ProductManageList = () => {
       text: '筛选',
       antdProps: {
       },
-      onClick: () => { }
+      formProps: {
+        title: '商品筛选',
+        form,
+        initValue: {},
+        formArr: [
+          {
+            search: [
+              {
+                wrap: {
+                  key: 'goods_title',
+                  name: 'goods_title',
+                  label: '商品名称',
+                  type: 'input'
+                },
+                props: {
+                  style: { width: '100%' },
+                  placeholder: '请输入商品名称',
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'goods_class',
+                  name: 'goods_class',
+                  label: '商品分类',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择商品分类',
+                  enum: []
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'goods_status',
+                  name: 'goods_status',
+                  label: '商品状态',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择商品分类',
+                  enum: [
+                    {
+                      label: '全部',
+                      value: 0
+                    },
+                    {
+                      label: '出售中',
+                      value: 1
+                    },
+                    {
+                      label: '已售罄',
+                      value: 2
+                    },
+                    {
+                      label: '已下架',
+                      value: 3
+                    },
+                    {
+                      label: '回收站',
+                      value: 4
+                    },
+                  ]
+                }
+              },
+              {
+                wrap: {
+                  key: 'sales',
+                  name: 'sales',
+                  label: '商品销量',
+                  type: 'inputgroupnumber'
+                },
+                props: {
+                  // placeholder: '请选择商品分类',
+                  numbers: defaultSales,
+                  onChange: ([statr, end]) => {
+                    console.log(statr, end);
+                    // setSalesNumbers([statr, end]);
+                  }
+                }
+              },
+              {
+                wrap: {
+                  key: 'price',
+                  name: 'price',
+                  label: '商品价格',
+                  type: 'inputgroupnumber'
+                },
+                props: {
+                  // placeholder: '请选择商品分类',
+                  numbers: defaultPrice,
+                  onChange: ([statr, end]) => {
+                    console.log(statr, end)
+                    // setPriceNumbers([statr, end]);
+                  }
+                }
+              },
+            ],
+          }
+        ],
+        config: [{
+          text: "确认",
+          wrap: {
+            type: "primary"
+          },
+          htype: "submit", // submit || reset
+          onBtnClick: (value) => {
+            console.log("按钮点击的事件222", value);
+            const obj = parseFilterValue(value);
+            const { sales, price, ...restProps } = obj;
+            setFilterObj(Object.assign(
+              restProps,
+              { start_salenum: value?.sales ? value?.sales[0] : null },
+              { end_salenum: value?.sales ? value?.sales[1] : null },
+              { start_price: value?.price ? value?.price[0] : null },
+              { end_price: value?.price ? value?.price[1] : null },
+            ));
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        },
+        {
+          text: "取消",
+          wrap: {
+            //按钮的一些属性配置
+          },
+          htype: "", // submit || reset
+          onBtnClick: (value) => {
+            //value 返回的是表单的数据
+            // type=submit 按钮有提交功能 会自动数据验证
+            // type=reset  重置表单
+            // 其余的不用传type值
+            console.log("按钮点击的事件111", value);
+            setFilterObj({});
+            form.resetFields();
+            setDefaultSales([]);
+            setDefaultPrice([]);
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        }],
+      }
     }
   }
 
@@ -243,7 +394,8 @@ const ProductManageList = () => {
           row
           // renderCell={renderCell}
           requestData={
-            !keywords ? {} : { keywords }
+            !keywords ? Object.assign({}, filterObj)
+              : Object.assign({ keywords }, filterObj)
           }
           columns={columns}
           rowKey="id"

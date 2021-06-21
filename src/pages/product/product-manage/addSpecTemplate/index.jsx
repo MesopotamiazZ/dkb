@@ -91,7 +91,7 @@ const AddSpecTemplate = memo(() => {
               name: 'name',
               label: '模板名称',
               type: 'input',
-              help: '商品规格模板名称建议在60字以内。',
+              // help: '商品规格模板名称建议在60字以内。',
               rules: [
                 { required: true, message: '请填写模板名称' },
               ],
@@ -109,7 +109,7 @@ const AddSpecTemplate = memo(() => {
               name: 'sort',
               label: '模板排序',
               type: 'inputnumber',
-              help: '请设为整数，且数值越小越靠前。',
+              // help: '请设为整数，且数值越小越靠前。',
               rules: [
                 { required: true, message: '请填写模板排序' },
               ],

@@ -4,19 +4,39 @@
  */
 import React, { useState } from 'react';
 import { Form, message } from 'antd';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../store/slice';
 import { clearAllLog } from '@/services/permissions';
+import { parseFilterValue } from '@/utils'
 import DkbTable from '@/components/dkb-table';
 import DelTipModal from '@/components/delete-tip-modal';
 import moment from 'moment';
 
 import './style.less';
+import { useEffect } from 'react';
 
 const OperactorLog = () => {
-
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [refresh, setRefresh] = useState(false);
   const [keywords, setKeywords] = useState('');
   const [delTipModal, setDelTipModal] = useState(false);
+  const [filterObj, setFilterObj] = useState({});
+
+  const {
+    getStaffListActionAsync,
+  } = actions;
+
+  let {
+    staffList,
+  } = useSelector(state => state.permissions, shallowEqual);
+
+  /**
+   * initital
+   */
+  useEffect(() => {
+    dispatch(getStaffListActionAsync({ page: 1, limit: 99 }));
+  }, []);
 
   const tools = {
     btns: [
@@ -52,19 +72,17 @@ const OperactorLog = () => {
             search: [
               {
                 wrap: {
-                  key: 'op_node',
-                  name: 'op_node',
+                  key: 'op_uid',
+                  name: 'op_uid',
                   label: '选择员工',
                   type: 'select'
                 },
                 props: {
-                  placeholder: '全部',
-                  enum: [
-                    {
-                      label: '全部',
-                      value: 1
-                    },
-                  ]
+                  placeholder: '请选择员工',
+                  enum: staffList?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) || []
                 }
               },
               {
@@ -80,7 +98,7 @@ const OperactorLog = () => {
                   enum: [
                     {
                       label: '全部',
-                      value: 1
+                      value: 0
                     },
                   ]
                 }
@@ -98,15 +116,31 @@ const OperactorLog = () => {
                   enum: [
                     {
                       label: '全部',
+                      value: 0
+                    },
+                    {
+                      label: 'PC端',
                       value: 1
+                    },
+                    {
+                      label: '手机端',
+                      value: 2
+                    },
+                    {
+                      label: '微信公众号',
+                      value: 3
+                    },
+                    {
+                      label: '小程序',
+                      value: 4
                     },
                   ]
                 }
               },
               {
                 wrap: {
-                  key: 'op_at',
-                  name: 'op_at',
+                  key: 'date',
+                  name: 'date',
                   label: '操作时间',
                   type: 'rangepicker',
                 },
@@ -130,6 +164,11 @@ const OperactorLog = () => {
           htype: "submit", // submit || reset
           onBtnClick: (value) => {
             console.log("按钮点击的事件222", value);
+            const obj = parseFilterValue(value)
+            setFilterObj(obj);
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
           }
         },
         {
@@ -144,6 +183,11 @@ const OperactorLog = () => {
             // type=reset  重置表单
             // 其余的不用传type值
             console.log("按钮点击的事件111", value);
+            setFilterObj({});
+            form.resetFields();
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
           }
         }],
       }
@@ -219,7 +263,8 @@ const OperactorLog = () => {
               : '/Setting/Log/getList/smartSearch'
           }
           requestData={
-            !keywords ? {} : { keywords }
+            !keywords ? Object.assign({}, filterObj)
+              : Object.assign({ keywords }, filterObj)
           }
           // row
           // renderCell={renderCell}

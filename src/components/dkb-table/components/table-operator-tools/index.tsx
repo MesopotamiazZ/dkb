@@ -52,7 +52,7 @@ const TableOperatorTools: React.FC<tableToolsProps> = memo((props) => {
             onClick={() => setVisible(true)}
           >
             筛选
-        </Button>
+          </Button>
         }
       </div>
       {
@@ -79,8 +79,8 @@ const TableOperatorTools: React.FC<tableToolsProps> = memo((props) => {
                         if (typeof item.onBtnClick === "function") {
                           if (item.htype === "submit") {
                             filterBtn?.formProps?.form.validateFields().then((values) => {
-                              // console.log('数据验证通过', values);
                               item.onBtnClick(values);
+                              setVisible(false);
                             }, () => {
                             });
                           } else if (item.htype === "reset") {
@@ -88,6 +88,7 @@ const TableOperatorTools: React.FC<tableToolsProps> = memo((props) => {
                             item.onBtnClick(FormFields);
                           } else {
                             item.onBtnClick(FormFields);
+                            setVisible(false);
                           }
                         }
 

@@ -6,6 +6,7 @@ import './index.less'
 import vip from '@/assets/images/vip.png';
 import home from '@/assets/images/home.svg';
 import help from '@/assets/images/help.svg';
+import black from '@/assets/images/anhei.png';
 import arrowBottom from '@/assets/images/arrow-triangle.svg';
 
 
@@ -85,6 +86,10 @@ export default memo(function ({ routers, pathname, toggle }) {
                         帮助中心
                     </a>
                 </div>
+                <div className="right-item help">
+                    <img src={black} alt="" />
+                    <span>暗黑模式</span>
+                </div>
                 <Dropdown overlay={menu} trigger={['click']} placement="bottomCenter">
                     <div className="right-item avatar">
                         <Avatar
@@ -96,7 +101,7 @@ export default memo(function ({ routers, pathname, toggle }) {
                             }}
                         >
                             张明
-                    </Avatar>
+                        </Avatar>
                         <img src={arrowBottom} alt="" />
                     </div>
                 </Dropdown>

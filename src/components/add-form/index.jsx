@@ -257,7 +257,7 @@ export default memo(function ({ formProps = {} }) {
                     // {...formProps.layoutConfig}
                     initialValues={{ ...formProps?.initValue }}
                     form={formProps.form || form}
-
+                    scrollToFirstError
                 >
                     <Form.Item style={{ marginBottom: '0', background: "#fff" }} >
                         {formProps?.formArr?.map(item => {
@@ -283,25 +283,29 @@ export default memo(function ({ formProps = {} }) {
                                         <Button
                                             key={item.text + index}
                                             {...item.wrap}
-                                            onClick={() => {
+                                            onClick={async () => {
+                                                console.log('提交数据');
                                                 // 提交数据
-                                                const FormFields = form.getFieldsValue();
-                                                // console.log("FormFields",FormFields);
-                                                if (typeof item.onBtnClick === "function") {
-                                                    if (item.htype === "submit") {
-                                                        form.validateFields().then((values) => {
-                                                            // console.log('数据验证通过', values);
-                                                            item.onBtnClick(values);
-                                                        }, () => {
-                                                        });
-                                                    } else if (item.htype === "reset") {
-                                                        form.resetFields();
-                                                        item.onBtnClick(FormFields);
-                                                    } else {
-                                                        item.onBtnClick(FormFields);
+                                                try {
+                                                    const FormFields = await form.validateFields();
+                                                    // console.log("FormFields",FormFields);
+                                                    if (typeof item.onBtnClick === "function") {
+                                                        if (item.htype === "submit") {
+                                                            form.validateFields().then((values) => {
+                                                                // console.log('数据验证通过', values);
+                                                                item.onBtnClick(values);
+                                                            }, () => {
+                                                            });
+                                                        } else if (item.htype === "reset") {
+                                                            form.resetFields();
+                                                            item.onBtnClick(FormFields);
+                                                        } else {
+                                                            item.onBtnClick(FormFields);
+                                                        }
                                                     }
+                                                } catch (errorInfo) {
+                                                    form.scrollToField(errorInfo.errorFields[0].name.toString());
                                                 }
-
                                             }}
                                             style={{ marginRight: "24px" }}
                                             key={item.text}

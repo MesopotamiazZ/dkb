@@ -15,6 +15,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
 import { addCustomer, updateCustomer } from '@/services/customer';
+import { parseFilterValue } from '@/utils';
 import DkbTable from '@/components/dkb-table';
 import RenderTitle from '@/components/renderTitle';
 import RenderStatus from '@/components/renderStatus';
@@ -27,6 +28,7 @@ const AllCustomer = memo(() => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
 
   const {
     getCustomerDetailActionAsync,
@@ -45,6 +47,7 @@ const AllCustomer = memo(() => {
   const [keywords, setKeywords] = useState('');
   const [createCustomerModal, setCreateCustomerModal] = useState(false);
   const [curId, setCurId] = useState('');
+  const [filterObj, setFilterObj] = useState({});
   // const [delTipModal, setDelTipModal] = useState(false);
   // const [curRecord, setCurRecord] = useState(null);
 
@@ -141,7 +144,167 @@ const AllCustomer = memo(() => {
       text: '筛选',
       antdProps: {
       },
-      onClick: () => { }
+      formProps: {
+        title: '客户筛选',
+        form: form1,
+        initValue: {},
+        formArr: [
+          {
+            search: [
+              {
+                col: 12,
+                wrap: {
+                  key: 'phone',
+                  name: 'phone',
+                  label: '注册手机',
+                  type: 'input'
+                },
+                props: {
+                  style: { width: '100%' },
+                  placeholder: '请输入客户手机号码',
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'name',
+                  name: 'name',
+                  label: '客户昵称',
+                  type: 'input'
+                },
+                props: {
+                  style: { width: '100%' },
+                  placeholder: '请输入客户昵称',
+                }
+              },
+              {
+                wrap: {
+                  key: 'date',
+                  name: 'date',
+                  label: '注册时间',
+                  type: 'rangepicker',
+                },
+                props: {
+                  ranges: {
+                    '今天': [moment(), moment()],
+                    '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '近7天': [moment().subtract('days', 6), moment()],
+                    '近30天': [moment().subtract('days', 29), moment()]
+                  }
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'source',
+                  name: 'source',
+                  label: '客户来源',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择客户来源',
+                  enum: [
+                    {
+                      label: '全部',
+                      value: 0
+                    },
+                    {
+                      label: 'PC端',
+                      value: 1
+                    },
+                    {
+                      label: 'H5端',
+                      value: 2
+                    },
+                    {
+                      label: '微信公众号',
+                      value: 3
+                    },
+                    {
+                      label: '微信小程序',
+                      value: 4
+                    },
+                    {
+                      label: '后台创建',
+                      value: 5
+                    },
+                    {
+                      label: '其他',
+                      value: 6
+                    },
+                  ]
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'type',
+                  name: 'type',
+                  label: '客户等级',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择客户等级',
+                  enum: customerLevelList?.list?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) || []
+                }
+              },
+              {
+                col: 12,
+                wrap: {
+                  key: 'tag',
+                  name: 'tag',
+                  label: '客户标签',
+                  type: 'select'
+                },
+                props: {
+                  placeholder: '请选择标签',
+                  enum: customerTagList?.list?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) || []
+                }
+              },
+            ],
+          }
+        ],
+        config: [{
+          text: "确认",
+          wrap: {
+            type: "primary"
+          },
+          htype: "submit", // submit || reset
+          onBtnClick: (value) => {
+            console.log("按钮点击的事件222", value);
+            const obj = parseFilterValue(value)
+            setFilterObj(obj);
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        },
+        {
+          text: "取消",
+          wrap: {
+            //按钮的一些属性配置
+          },
+          htype: "", // submit || reset
+          onBtnClick: (value) => {
+            //value 返回的是表单的数据
+            // type=submit 按钮有提交功能 会自动数据验证
+            // type=reset  重置表单
+            // 其余的不用传type值
+            console.log("按钮点击的事件111", value);
+            setFilterObj({});
+            form1.resetFields();
+            setTimeout(() => {
+              setRefresh(!refresh);
+            }, []);
+          }
+        }],
+      }
     }
   }
 
@@ -259,7 +422,8 @@ const AllCustomer = memo(() => {
               : '/Scrm/CsrManage/getList/smartSearch'
           }
           requestData={
-            !keywords ? {} : { keywords }
+            !keywords ? Object.assign({}, filterObj)
+              : Object.assign({ keywords }, filterObj)
           }
           row
           // renderCell={renderCell}

@@ -5,6 +5,7 @@ import {
   getRoleDetail,
   getRoleList,
   getRoleAuth,
+  getStaffList,
 } from '@/services/permissions';
 
 /**
@@ -15,6 +16,7 @@ const initialState = {
   roleDetail: {},
   roleList: {},
   roleAuthList: [], // 权限集
+  staffList: [],
 }
 
 /**
@@ -55,6 +57,17 @@ const getStaffDetailActionAsync = createAsyncThunk(
 /**
  * 员工列表
  */
+const getStaffListActionAsync = createAsyncThunk(
+  'permissions/getStaffListActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getStaffList(data);
+    return res.result.list;
+  }
+)
+
+/**
+ * 角色列表
+ */
 const getRoleListActionAsync = createAsyncThunk(
   'permissions/getRoleListActionAsync',
   async (data, thunkAPI) => {
@@ -93,6 +106,9 @@ const extraReducers = builder => {
   builder.addCase(getStaffDetailActionAsync.fulfilled, (state, action) => {
     state.staffDetail = action.payload
   })
+  builder.addCase(getStaffListActionAsync.fulfilled, (state, action) => {
+    state.staffList = action.payload
+  })
   builder.addCase(getRoleListActionAsync.fulfilled, (state, action) => {
     state.roleList = action.payload
   })
@@ -118,5 +134,6 @@ export const actions = {
   getRoleListActionAsync,
   getRoleAuthActionAsync,
   getRoleDetailActionAsync,
+  getStaffListActionAsync,
 };
 export default shopSlice.reducer;

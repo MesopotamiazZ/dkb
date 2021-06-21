@@ -71,4 +71,8 @@ export interface IdkbTable {
   successCb: (tableData: any, setTableData: any) => void;
     // 重写行选择
   renderCell: () => ReactElement;
+
+  components: any;
+
+  drag: boolean;
 }

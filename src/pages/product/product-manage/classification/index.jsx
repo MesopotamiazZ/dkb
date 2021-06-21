@@ -11,7 +11,9 @@ import {
   Input,
   message
 } from 'antd';
-// import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import { MenuOutlined } from '@ant-design/icons';
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
@@ -211,7 +213,16 @@ const Classification = memo(() => {
     ]
   }
 
+  const DragHandle = sortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
+
   const columns = [
+    {
+      title: 'Sort',
+      dataIndex: 'sort',
+      width: 30,
+      className: 'drag-visible',
+      render: () => <DragHandle />,
+    },
     {
       title: '分类名称',
       // dataIndex: 'name',
@@ -281,6 +292,7 @@ const Classification = memo(() => {
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
           refresh={refresh}
+          drag={true}
         />
       </div>
       {/* 新建分类 */}
