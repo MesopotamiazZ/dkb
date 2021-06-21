@@ -175,9 +175,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
 
   const DraggableBodyRow = useCallback(({ className, style, ...restProps }) => {
     // function findIndex base on Table rowKey props and should always be a right array index
-    console.log(tableData)
     const index = tableData?.list?.findIndex(x => x.id === restProps['data-row-key']);
-    console.log('index', index)
     return <SortableItem index={index} {...restProps} />;
   }, [tableData]);
 

@@ -2,10 +2,11 @@
  * @author tigris
  * @description 商品分类页面
  */
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState, } from 'react';
 import {
   Modal,
   Form,
+  Table,
   Switch,
   TreeSelect,
   Input,
@@ -27,6 +28,8 @@ import DelTipModal from '@/components/delete-tip-modal';
 import { baseUrl } from '@/utils/upload';
 
 import './style.less';
+import jia from '@/assets/images/jia.png';
+import jian from '@/assets/images/jian.png';
 
 const Classification = memo(() => {
   const history = useHistory();
@@ -50,6 +53,7 @@ const Classification = memo(() => {
   const [delTipModal, setDelTipModal] = useState(false);
   const [curRecord, setCurRecord] = useState(null);
   const [keywords, setKeywords] = useState('');
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
   const initialData = () => {
     dispatch(getCategoryTreeActionAsync({ pid: 0 })); // 获取商品分类树结构
@@ -213,7 +217,25 @@ const Classification = memo(() => {
     ]
   }
 
-  const DragHandle = sortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
+  const DragHandle = sortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#007bff' }} />);
+
+  /**
+   * 展开与收起
+   */
+  const toggleExpand = useCallback(
+    (record) => {
+      const keys = [...expandedRowKeys];
+      const index = keys.indexOf(record.id);
+      if (index > -1) {
+        keys.splice(index, 1);
+        setExpandedRowKeys(keys);
+      } else {
+        keys.push(record.id);
+        setExpandedRowKeys(keys);
+      }
+    },
+    [expandedRowKeys],
+  );
 
   const columns = [
     {
@@ -228,23 +250,34 @@ const Classification = memo(() => {
       // dataIndex: 'name',
       render: (record) => (
         <div>
+          <span onClick={() => toggleExpand(record)} className="link-btn">
+            {
+              expandedRowKeys.includes(record.id) ? (
+                <img src={jian} alt="" />
+              ) : (
+                <img src={jia} alt="" />
+              )
+            }
+          </span>
           {record.name}
           <span className="sub-color">({record.child_count})</span>
         </div>
       ),
-      width: '50%',
+      width: 600,
       align: 'left',
     },
     {
       title: '商品数',
       dataIndex: 'goods_count',
       align: 'left',
+      width: 200,
     },
     {
       title: '创建时间',
       dataIndex: 'create_at',
       render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
-      align: 'left'
+      align: 'left',
+      width: 300
     },
     {
       title: '状态',
@@ -256,6 +289,7 @@ const Classification = memo(() => {
         />
       ),
       align: 'left',
+      width: 200
     },
     {
       title: '操作',
@@ -270,6 +304,85 @@ const Classification = memo(() => {
       fixed: 'right'
     }
   ]
+
+  const columns1 = [
+    // {
+    //   title: 'Sort',
+    //   dataIndex: 'sort',
+    //   width: 30,
+    //   className: 'drag-visible',
+    //   render: () => <DragHandle />,
+    // },
+    {
+      title: '分类名称',
+      // dataIndex: 'name',
+      render: (record) => (
+        <div>
+          <span style={{ marginRight: '10px' }}>L</span>
+          {record.name}
+          {/* <span className="sub-color">({record.child_count})</span> */}
+        </div>
+      ),
+      width: 600,
+      align: 'left',
+    },
+    {
+      title: '商品数',
+      dataIndex: 'child_count',
+      align: 'left',
+      width: 200
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'create_at',
+      render: (text) => moment(parseInt(text) * 1000).format('YYYY-MM-DD HH:mm:ss'),
+      align: 'left',
+      width: 300
+    },
+    {
+      title: '状态',
+      render: (record) => (
+        <RenderStatus
+          type="circle"
+          badge_status={(record.status === 1 || record.status) ? 'success' : 'default'}
+          badge_text={(record.status === 1 || record.status) ? '开启' : '关闭'}
+        />
+      ),
+      align: 'left',
+      width: 200
+    },
+    {
+      title: '操作',
+      render: (record) => (
+        <RenderAction
+          record={record}
+          type="row"
+          getBtns={() => getBtns(record)}
+        />
+      ),
+      align: 'center',
+      fixed: 'right',
+    }
+  ]
+
+  /**
+   * 展开项目
+   * @param {*} record 
+   * @returns 
+   */
+  const expandedRowRender = (record) => {
+    const curItem = categoryTrees.filter((item) => item.id === record.id);
+    return (
+      <div className="expand-wrap">
+        <Table
+          columns={columns1}
+          dataSource={curItem ? curItem[0].child : []}
+          showHeader={false}
+          pagination={false}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="product-classification outer-area">
@@ -291,6 +404,13 @@ const Classification = memo(() => {
           rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
+          // expandedRowRender={(record) => renderExpandedRow(record)}
+          // expandedRowKeys={expandedRowKeys}
+          expandable={{
+            expandedRowRender,
+            expandedRowKeys,
+            // indentSize: 50,
+          }}
           refresh={refresh}
           drag={true}
         />
