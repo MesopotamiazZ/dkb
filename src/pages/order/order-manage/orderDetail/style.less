@@ -1,0 +1,46 @@
+.order-detail {
+  height: 100%;
+  overflow: auto;
+  .order-detail-inner {
+    min-height: 100%;
+    padding: 25px;
+    .order-product-info {
+      padding: 25px 25px 20px;
+    }
+  }
+  .ant-table-footer {
+    position: relative;
+    background: transparent;
+  }
+  .footer-total {
+    float: right;
+    right: 0;
+    width: 300px;
+    .footer-total-item {
+      display: flex;
+      // width: 300px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      .item-label {
+        text-align: right;
+        flex: 1;
+      }
+      .item-amount {
+        flex: 1;
+        text-align: right;
+      }
+    }
+    .actual-price {
+      margin-top: 20px;
+      font-weight: bold;
+      .item-amount {
+        font-weight: 400;
+        font-size: 18px;
+        color: rgb(212, 0, 0);
+      }
+    }
+  }
+  .clearBoth {
+    clear: both;
+  }
+}

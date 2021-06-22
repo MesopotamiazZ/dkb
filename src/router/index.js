@@ -62,6 +62,15 @@ const routers = () => {
                             exact: true,
                             hidden: true
                         },
+                        {
+                            path: "/order/order-manage/order-detail",
+                            key: "/order/order-manage/order-detail",
+                            title: '订单详情',
+                            icon: 'HomeOutlined',
+                            componentPath: "pages/order/order-manage/orderDetail",
+                            exact: true,
+                            hidden: true
+                        },
                     ]
                 },
                 {

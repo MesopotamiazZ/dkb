@@ -52,18 +52,18 @@ const OrderManageList = () => {
 
   // 商品信息
   const [productObj, setProductObj] = useState({
-    default: 'product_name',
+    default: 'name',
     arr: [
       {
-        key: 'product_name',
+        key: 'name',
         name: '商品名称',
-        value: 'product_name',
+        value: 'name',
         placeholder: '请输入商品名称'
       },
       {
-        key: 'product_id',
+        key: 'id',
         name: '商品编号',
-        value: 'product_id',
+        value: 'id',
         placeholder: '请输入商品编号'
       },
     ]
@@ -413,7 +413,14 @@ const OrderManageList = () => {
         key: '1',
         text: '查看订单',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/order/order-manage/order-detail',
+            state: {
+              id: record.id
+            }
+          })
+        },
       },
       {
         key: '2',
@@ -435,7 +442,7 @@ const OrderManageList = () => {
       title: '商品',
       render: (record) => (
         <RenderTitle
-          mainTitle={record?.product_name}
+          mainTitle={record?.name}
           subTitle={`颜色：${record?.spec?.color}/尺寸：${record?.spec?.size}`}
           avatar={avatarPic}
         />
@@ -509,7 +516,7 @@ const OrderManageList = () => {
         <Checkbox />
         <div className="order-no">
           <span>订单编号：</span>
-          <span>{record.product_id}</span>
+          <span>{record.id}</span>
         </div>
         <div className="order-date">
           <span>下单时间：</span>
@@ -528,7 +535,7 @@ const OrderManageList = () => {
           tools={tools}
           url={
             !keywords
-              ? ''
+              ? '/data'
               : '/smartSearch'
           }
           requestData={
@@ -537,7 +544,7 @@ const OrderManageList = () => {
           row
           renderCell={renderCell}
           columns={columns}
-          rowKey="product_id"
+          rowKey="id"
           expandIconAsCell={false}
           expandIconColumnIndex={-1}
           refresh={refresh}
