@@ -21,8 +21,8 @@
               "create_at": "2021-04-21 12:00:00"
           },
           {
-            "product_id": "201224685432833080346",
-            "product_name": "鱼肝油",
+            "id": "201224685432833080346",
+            "name": "鱼肝油",
             "product_price": 100,
             "product_number": 1,
             "shop_mobile": "1122221111",
@@ -38,5 +38,57 @@
           }
         ]
       }
+  },
+  "evaluation": {
+    "code": 200,
+    "msg": "success",
+    "result": {
+      "list": [
+        {
+            "id": "201224685432833080345",
+            "name": "鱼肝油",
+            "img": "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png",
+            "evaluation": {
+              "star": 2,
+              "message": "好看 比较满意",
+              "imgs": [
+                "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png"
+              ]
+            },
+            "client": {
+              "name": "取名字很难",
+              "phone": "132222222222",
+              "avatar": "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png"
+            },
+            "spec": {
+                "color": "黑色",
+                "size": "35"
+            },
+            "create_at": "2021-04-21 12:00:00"
+        },
+        {
+          "product_id": "201224685432833080346",
+          "product_name": "鱼肝油",
+          "evaluation": {
+            "star": 3,
+            "message": "好看 比较满意,好看 比较满意,好看 比较满意,好看 比较满意,好看 比较满意,好看 比较满意",
+            "imgs": [
+              "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png",
+              "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png"
+            ]
+          },
+          "client": {
+            "name": "取名字很难",
+            "phone": "132222222222",
+            "avatar": "https://file.dangkoubao.com/50026/2021/06/10/0fe305d1a846d8627dac730dd9838d6c01623306610232.png"
+          },
+          "spec": {
+              "color": "黑色",
+              "size": "35"
+          },
+          "create_at": "2021-04-21 12:00:00"
+        }
+      ]
+    }
   }
 }

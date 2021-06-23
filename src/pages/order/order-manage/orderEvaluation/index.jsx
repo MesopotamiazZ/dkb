@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Form, Select } from 'antd';
+import { Button, Checkbox, Form, Select, Rate, Avatar } from 'antd';
 import NP from 'number-precision';
 import moment from 'moment';
 import DkbTable from '@/components/dkb-table';
@@ -270,11 +270,20 @@ const OrderEvaluation = () => {
     {
       title: '订单评价',
       render: (record) => (
-        <RenderTitle
-          mainTitle={record?.product_name}
-          subTitle={`颜色：${record?.spec?.color}/尺寸：${record?.spec?.size}`}
-          avatar={avatarPic}
-        />
+        <div className="order-evaluation">
+          <Rate value={record?.evaluation?.star} disabled />
+          <div className="evaluation-message">{record?.evaluation?.message}</div>
+          <div className="evaluation-imgs">
+            {
+              record?.evaluation?.imgs.map((img) => (
+                <Avatar src={img} size={60} shape="square" />
+              ))
+            }
+          </div>
+          <div className="evaluation-date">
+            {record?.create_at}
+          </div>
+        </div>
       ),
       width: '30%',
       align: 'left',
@@ -282,7 +291,12 @@ const OrderEvaluation = () => {
     {
       title: '订单信息',
       render: (record) => (
-        <span>￥{record?.product_price} x {record?.product_number}</span>
+        <RenderTitle
+          mainTitle={record?.name}
+          subTitle={`颜色：${record?.spec?.color}/尺寸：${record?.spec?.size}`}
+          avatar={record?.img}
+          avatar_size={60}
+        />
       ),
       align: 'left',
     },
@@ -290,8 +304,11 @@ const OrderEvaluation = () => {
       title: '客户',
       render: (record) => (
         <RenderTitle
-          mainTitle={record?.shop_mobile}
-          subTitle={record?.shop_name}
+          mainTitle={record?.client?.phone}
+          subTitle={record?.client?.name}
+          avatar={record?.client?.avatar}
+          avatar_size={40}
+          avatar_shape="circle"
         />
       ),
       align: 'left',
@@ -337,7 +354,7 @@ const OrderEvaluation = () => {
           tools={tools}
           url={
             !keywords
-              ? ''
+              ? '/evaluation'
               : '/smartSearch'
           }
           requestData={

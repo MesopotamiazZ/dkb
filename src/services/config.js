@@ -7,8 +7,8 @@
 /**
  * 档口宝后台
  */
-const devBaseURL = "http://localhost:3000";
-// const devBaseURL = "https://b.api.dangkoubao.com";
+// const devBaseURL = "http://localhost:3000";
+const devBaseURL = "https://b.api.dangkoubao.com";
 const proBaseURL = "https://b.api.dangkoubao.com";
 
 export const BASE_URL = process.env.NODE_ENV === 'development' ? devBaseURL : proBaseURL;
