@@ -62,7 +62,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
     }
   ]); // 新增规格modal --》 规格值（临时数据）
 
-  // console.log(2222, specs);
+  console.log(2222, specDataTemp);
 
   useEffect(() => {
     if (dataSource.length) {
@@ -146,7 +146,12 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
           //   return
           // }
           form.resetFields();
-          setSpecDataTemp([]);
+          setSpecDataTemp([
+            {
+              id: Date.now(),
+              specVal: ''
+            }
+          ]);
           setAddSpecModal(true);
         }}
       >
@@ -284,8 +289,8 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
       align: 'center' as 'center',
       render: (text, record) => (
         <Switch
-          checkedChildren="开启"
-          unCheckedChildren="关闭"
+          // checkedChildren=""
+          // unCheckedChildren=""
           checked={text}
           onChange={(checked) => {
             let specsClone = JSON.parse(JSON.stringify(specs));
@@ -441,8 +446,8 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
             valuePropName="checked"
           >
             <Switch
-              checkedChildren="开启"
-              unCheckedChildren="关闭"
+            // checkedChildren="开启"
+            // unCheckedChildren="关闭"
             />
           </Form.Item>
           <Form.Item

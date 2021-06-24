@@ -25,8 +25,8 @@ const ToogleTipWrap: React.FC<toogleTipWrapProps> = (props) => {
         </div>
         <div className="wrap-title-right">
           <Switch
-            checkedChildren="开"
-            unCheckedChildren="关"
+            // checkedChildren="开"
+            // unCheckedChildren="关"
             checked={isOpen}
             onChange={onToogle}
           />

@@ -185,8 +185,8 @@ const AddExpress = memo(() => {
             },
             props: {
               // onChange: handleDefaultChange,
-              checkedChildren: '开',
-              unCheckedChildren: '关'
+              // checkedChildren: '开',
+              // unCheckedChildren: '关'
             }
           },
           {
@@ -202,8 +202,8 @@ const AddExpress = memo(() => {
             },
             props: {
               // onChange: handleStatusChange,
-              checkedChildren: '开',
-              unCheckedChildren: '关'
+              // checkedChildren: '开',
+              // unCheckedChildren: '关'
             }
           },
         ]

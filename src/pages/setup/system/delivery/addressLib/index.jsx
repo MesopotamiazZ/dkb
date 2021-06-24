@@ -367,8 +367,8 @@ const ExpressDelivery = memo(() => {
             valuePropName="checked"
           >
             <Switch
-              checkedChildren="默认地址"
-              unCheckedChildren="其它地址"
+            // checkedChildren="默认地址"
+            // unCheckedChildren="其它地址"
             />
           </Form.Item>
           <Form.Item
@@ -380,8 +380,8 @@ const ExpressDelivery = memo(() => {
             valuePropName="checked"
           >
             <Switch
-              checkedChildren="默认地址"
-              unCheckedChildren="其它地址"
+            // checkedChildren="默认地址"
+            // unCheckedChildren="其它地址"
             />
           </Form.Item>
           <Form.Item

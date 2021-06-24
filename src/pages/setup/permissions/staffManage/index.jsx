@@ -362,8 +362,8 @@ const StaffManage = () => {
               valuePropName="checked"
             >
               <Switch
-                checkedChildren="开启"
-                unCheckedChildren="关闭"
+              // checkedChildren="开启"
+              // unCheckedChildren="关闭"
               />
             </Form.Item>
             <Form.Item
@@ -375,8 +375,8 @@ const StaffManage = () => {
               valuePropName="checked"
             >
               <Switch
-                checkedChildren="开启"
-                unCheckedChildren="禁用"
+              // checkedChildren="开启"
+              // unCheckedChildren="禁用"
               />
             </Form.Item>
           </Form>

@@ -338,8 +338,8 @@ const AddStore = memo(() => {
               // ],
             },
             props: {
-              checkedChildren: '开',
-              unCheckedChildren: '关'
+              // checkedChildren: '开',
+              // unCheckedChildren: '关'
             }
           },
         ]

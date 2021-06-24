@@ -134,8 +134,8 @@ const AddSpecTemplate = memo(() => {
               valuePropName: 'checked'
             },
             props: {
-              checkedChildren: '开启',
-              unCheckedChildren: '关闭'
+              // checkedChildren: '开启',
+              // unCheckedChildren: '关闭'
             }
           },
           // {

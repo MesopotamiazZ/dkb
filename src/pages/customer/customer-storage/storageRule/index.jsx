@@ -312,8 +312,8 @@ const StorageRule = () => {
             valuePropName="checked"
           >
             <Switch
-              checkedChildren="开启"
-              unCheckedChildren="禁用"
+            // checkedChildren="开启"
+            // unCheckedChildren="禁用"
             />
           </Form.Item>
         </Form>

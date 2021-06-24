@@ -511,8 +511,8 @@ const Classification = memo(() => {
             style={{ marginBottom: 0 }}
           >
             <Switch
-              checkedChildren="开启"
-              unCheckedChildren="关闭"
+            // checkedChildren="开启"
+            // unCheckedChildren="关闭"
             />
           </Form.Item>
           <Form.Item

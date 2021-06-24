@@ -541,8 +541,8 @@ const AllCustomer = memo(() => {
             valuePropName="checked"
           >
             <Switch
-              checkedChildren="开启"
-              unCheckedChildren="拉黑"
+            // checkedChildren="开启"
+            // unCheckedChildren="拉黑"
             />
           </Form.Item>
           <Form.Item

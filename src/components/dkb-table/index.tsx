@@ -131,7 +131,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
     limit: tableData?.limit,
     current: tableData?.page,
     showSizeChanger: true,
-    showTotal: (total) => `总共${total}个项目`,
+    showTotal: (total) => `总共${total}条`,
     size: 'default'
   }
 
