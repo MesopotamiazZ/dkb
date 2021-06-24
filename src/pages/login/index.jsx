@@ -88,7 +88,7 @@ export default memo(function () {
             message.success('登录成功');
             setLoading(false);
             localStorage.setItem('Dense-Diary-Authorization', result?.result?.token);
-            dispatch(getCurAccountInfoActionAsync())
+            dispatch(getCurAccountInfoActionAsync({ phone: parseInt(values.phone) }))
             history.push({
               pathname: '/shop'
             })
@@ -371,16 +371,16 @@ export default memo(function () {
         <div className="ant-row ant-form-item">
           <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
             确定
-        </Button>
+          </Button>
         </div>
         <div className="login-and-register">
           已有账号？
-        <Button
+          <Button
             type="link"
             onClick={() => setPageStatus(PageStatus.LOGIN)}
           >
             马上登录
-        </Button>
+          </Button>
         </div>
       </Form >
     </div>
@@ -457,16 +457,16 @@ export default memo(function () {
         <div className="ant-row ant-form-item">
           <Button className="form-button" type="primary" htmlType="submit" loading={loading}>
             确定
-        </Button>
+          </Button>
         </div>
         <div className="login-and-register">
           已有账号？
-        <Button
+          <Button
             type="link"
             onClick={() => setPageStatus(PageStatus.LOGIN)}
           >
             马上登录
-        </Button>
+          </Button>
         </div>
       </Form >
     </div>

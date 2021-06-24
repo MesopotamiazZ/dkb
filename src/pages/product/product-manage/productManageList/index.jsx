@@ -50,7 +50,7 @@ const ProductManageList = () => {
 
   const tabs = {
     defaultKey: 0,
-    name: 'goods_status',
+    name: 'status',
     onChange: (key, value, reqValue) => {
       return ''
     },
@@ -329,8 +329,7 @@ const ProductManageList = () => {
       render: (record) => {
         if (record.price_low !== record.price_high) {
           return <div>
-            <div>最低价：￥{record.price_low}</div>
-            <div>最高价：￥{record.price_high}</div>
+            ￥{record.price_low} - ￥{record.price_high}
           </div>
         } else {
           return <span>￥{record.price_low}</span>

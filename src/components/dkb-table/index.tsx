@@ -48,11 +48,11 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
   const reqDataDefault = paginationFlag ? {  // 默认请求参数
     page: 1,
     limit: 10,
-    search: {},
-    sort: {},
+    // search: {},
+    // sort: {},
   } : {
-    search: {},
-    sort: {},
+    // search: {},
+    // sort: {},
   }
 
   const tabsReqInit: null | any = useRef(null);

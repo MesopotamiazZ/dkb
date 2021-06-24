@@ -342,7 +342,7 @@ const BatchModifyPrice = memo(() => {
                     return;
                   }
                   const res = await addBatchModifyPrice({
-                    goods: selectRowKeys.join(','),
+                    goods: selectRowKeys,
                     type: Number(values.type),
                     money: Number(values.price).toFixed(2),
                   })

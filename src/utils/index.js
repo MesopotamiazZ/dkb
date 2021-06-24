@@ -159,6 +159,16 @@ export function validatorPhone() {
   };
 }
 
+/**
+ * 验证手机号
+ * @param {*} val 
+ * @returns 
+ */
+export function testPhone(val) {
+  const pattern = /^1[3-9]\d{9}$/;
+  return pattern.test(val);
+}
+
 // 验证邮箱
 export function validatorEmail() {
   return {

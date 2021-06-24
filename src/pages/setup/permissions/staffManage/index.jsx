@@ -10,11 +10,14 @@ import {
   Switch,
   Form,
   message,
+  AutoComplete,
 } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
 import { addStaff, updateStaff, removeStaff } from '@/services/permissions';
+import { validatorPhone, testPhone } from '@/utils';
+import _ from 'lodash';
 import NP from 'number-precision';
 import DkbTable from '@/components/dkb-table';
 import RenderStatus from '@/components/renderStatus';
@@ -31,11 +34,13 @@ const StaffManage = () => {
     getRoleListActionAsync,
     getStaffDetailActionAsync,
     clearStaffDetail,
+    getCurAccountInfoActionAsync,
   } = actions;
 
   let {
     staffDetail,
     roleList,
+    account
   } = useSelector(state => state.permissions, shallowEqual) //store数据
 
   const [curId, setCurId] = useState('');
@@ -138,6 +143,17 @@ const StaffManage = () => {
     placeholder: '请输入员工信息',
     searchBtnText: '搜索',
   }
+
+  /**
+   * auto-complete onsearch
+   */
+  const onSearch = _.debounce(async (val) => {
+    if (testPhone(val)) {
+      dispatch(getCurAccountInfoActionAsync({
+        phone: val
+      }));
+    }
+  }, 500)
 
   const getBtns = (record) => {
     return [
@@ -292,9 +308,17 @@ const StaffManage = () => {
               name="userPhone"
               rules={[
                 { required: true, message: '请填写员工账号' },
+                validatorPhone
               ]}
             >
-              <Input type="text" placeholder="请填写员工账号" className="input-height" disabled={curId} />
+              <AutoComplete
+                placeholder="请输入员工手机号"
+                className="input-height"
+                options={[{ label: account.phone ? `(${account?.name})${account?.phone}` : '', value: account?.phone }]}
+                onSearch={onSearch}
+              // 18510974721
+              />
+              {/* <Input type="text" placeholder="请填写员工账号" className="input-height" disabled={curId} /> */}
             </Form.Item>
             <Form.Item
               label="员工姓名"

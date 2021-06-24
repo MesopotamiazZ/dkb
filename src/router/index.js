@@ -6,11 +6,11 @@
 const routers = () => {
     return [
         {
-            path: "/overview",
-            key: "/overview",
+            path: "/dashboard",
+            key: "/dashboard",
             title: '概览',
             icon: 'HomeOutlined',
-            componentPath: "pages/overview",
+            componentPath: "pages/dashboard",
             exact: true,
         },
         {

@@ -7,13 +7,15 @@ import {
   Modal,
   Avatar,
   message,
+  AutoComplete
 } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
-import { hangUpAndSubmit } from '@/services/order';
+import { hangUpAndSubmit, upProductListImg } from '@/services/order';
 import _ from 'lodash';
 import NP from 'number-precision';
+import { validatorPhone, testPhone } from '@/utils';
 import CategoryItemComp from '@/components/category-item-comp';
 import SearchAndSort from '@/components/searchAndSort';
 import ProductCard from '@/components/product-card';
@@ -36,8 +38,10 @@ const InsteadOrder = memo(() => {
 
   const {
     getCategoryListActionAsync,
-    getProductListTextActionAsync,
-    getProductListImgActionAsync,
+    // getProductListTextActionAsync,
+    getProductListActionAsync,
+    getProductListByKeywordsActionAsync,
+    // getProductListImgActionAsync,
     getProductSkuInfoActionAsync,
     addProductOrderList,
     calculateOrderActionAsync, // 费用计算
@@ -46,6 +50,7 @@ const InsteadOrder = memo(() => {
     clearProductOrderList,
     saveRemarkInfo,
     clearRemarkInfo,
+    getCurAccountInfoActionAsync,
   } = actions;
 
   let {
@@ -56,9 +61,9 @@ const InsteadOrder = memo(() => {
     calculateOrderInfo,
     customerAddress,
     remarkInfo,
+    account,
   } = useSelector(state => state['order-manage'], shallowEqual) //store数据
 
-  // console.log(customerAddress)
   const [cateActive, setCateActive] = useState(1);
   const [productDescModal, setProductDescModal] = useState(false);
   const [curTextSpecs, setCurTextSpecs] = useState({}); // 所有商品文字sku对象
@@ -76,7 +81,7 @@ const InsteadOrder = memo(() => {
       page: 1,
       limit: 20
     }));
-    dispatch(getProductListTextActionAsync({ page: 1, limit: 16 }))
+    dispatch(getProductListActionAsync({ page: 1, limit: 16 }))
   }
 
   useEffect(() => {
@@ -92,7 +97,7 @@ const InsteadOrder = memo(() => {
    * 
    * @returns 计算、挂起、下单
    */
-  const parseCalculateOrder = (payCode = null, toOrder = true) => {
+  const parseCalculateOrder = (isCcpay = false, isToOrder = true) => {
     return {
       userPhone: form.getFieldValue('userPhone'),
       goods: productOrderList.map((product) => ({
@@ -102,9 +107,9 @@ const InsteadOrder = memo(() => {
       })),
       ...remarkInfo,
       delivery: customerAddress.delivery,
-      storesId: localStorage.getItem('dkb-id'),
+      storeId: localStorage.getItem('dkb-id'),
       orderAlter: null,
-      freight: null,
+      freightAlter: null,
       address: {
         name: customerAddress.name,
         phone: customerAddress.phone,
@@ -115,8 +120,8 @@ const InsteadOrder = memo(() => {
         ],
         address: customerAddress.address
       },
-      payCode,
-      toOrder,
+      isCcpay,
+      isToOrder,
     }
   }
 
@@ -153,7 +158,7 @@ const InsteadOrder = memo(() => {
       message.warning('请先填写配送信息');
       return
     }
-    const res = await hangUpAndSubmit(parseCalculateOrder(7, false));
+    const res = await hangUpAndSubmit(parseCalculateOrder(true, false));
     if (res.code === 200 && res.result.orderId) {
       message.success('挂单成功');
     } else {
@@ -181,7 +186,7 @@ const InsteadOrder = memo(() => {
       message.warning('请先填写配送信息');
       return
     }
-    const res = await hangUpAndSubmit(parseCalculateOrder(null, false));
+    const res = await hangUpAndSubmit(parseCalculateOrder(false, false));
     if (res.code === 200 && res.result.orderId) {
       message.success('下单成功');
     } else {
@@ -309,12 +314,19 @@ const InsteadOrder = memo(() => {
    * 图片搜索筛选
    * @param {*} base64 
    */
-  const handleGetBase64 = (base64) => {
+  const handleGetBase64 = async (base64) => {
     let formData = new FormData();
     formData.append('image', base64);
-    formData.append('page', 1);
-    formData.append('limit', 10);
-    dispatch(getProductListImgActionAsync(formData));
+    // formData.append('page', 1);
+    // formData.append('limit', 10);
+    const res = await upProductListImg(formData);
+    if (res.code === 200) {
+      dispatch(getProductListByKeywordsActionAsync({
+        keyword: res?.result?.searchId
+      }));
+    } else {
+      message.warning('没有找到合适的商品');
+    }
   }
 
   /**
@@ -329,6 +341,17 @@ const InsteadOrder = memo(() => {
     // list.unshift(parent);
     return list
   }, [getCategoryList])
+
+  /**
+   * auto-complete onsearch
+   */
+  const onSearch = _.debounce(async (val) => {
+    if (testPhone(val)) {
+      dispatch(getCurAccountInfoActionAsync({
+        phone: val
+      }));
+    }
+  }, 500)
 
   return (
     <div className="instead-order outer-area">
@@ -419,8 +442,19 @@ const InsteadOrder = memo(() => {
             <Form.Item
               label="客户账号"
               name="userPhone"
+              rules={[
+                { required: true, message: '请填写手机号' },
+                validatorPhone,
+              ]}
             >
-              <Input placeholder="请输入客户手机号" className="input-height" />
+              <AutoComplete
+                placeholder="请输入客户手机号"
+                className="input-height"
+                options={[{ label: account.phone ? `(${account?.name})${account?.phone}` : '', value: account?.phone }]}
+                onSearch={onSearch}
+              // 18510974721
+              />
+              {/* <Input placeholder="请输入客户手机号" className="input-height" /> */}
             </Form.Item>
             {/* <Form.Item
               label=""

@@ -29,9 +29,10 @@ const ProductCard: React.FC<IProductCard> = memo((props) => {
   return (
     <div className="product-card">
       <div className="card-avatar">
+        {/* productInfo?.images[productInfo?.thumb] */}
         <Avatar
           className=""
-          src={productInfo?.images[productInfo?.thumb]}
+          src={productInfo?.thumb}
           shape="square"
         />
       </div>

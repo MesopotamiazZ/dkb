@@ -7,6 +7,9 @@ import {
   getRoleAuth,
   getStaffList,
 } from '@/services/permissions';
+import {
+  getCurAccountInfo
+} from '@/services/global.js';
 
 /**
  * 初始化数据
@@ -17,6 +20,7 @@ const initialState = {
   roleList: {},
   roleAuthList: [], // 权限集
   staffList: [],
+  account: {},
 }
 
 /**
@@ -41,6 +45,17 @@ const reducers = {
  * signal
  * rejectWithValue
  */
+
+/**
+ * 获取账号信息
+ */
+const getCurAccountInfoActionAsync = createAsyncThunk(
+  'customer-storage/getCurAccountInfoActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getCurAccountInfo(data);
+    return res.result;
+  }
+)
 
 
 /**
@@ -118,6 +133,9 @@ const extraReducers = builder => {
   builder.addCase(getRoleDetailActionAsync.fulfilled, (state, action) => {
     state.roleDetail = action.payload
   })
+  builder.addCase(getCurAccountInfoActionAsync.fulfilled, (state, action) => {
+    state.account = action.payload
+  })
 }
 
 const shopSlice = createSlice({
@@ -135,5 +153,6 @@ export const actions = {
   getRoleAuthActionAsync,
   getRoleDetailActionAsync,
   getStaffListActionAsync,
+  getCurAccountInfoActionAsync,
 };
 export default shopSlice.reducer;

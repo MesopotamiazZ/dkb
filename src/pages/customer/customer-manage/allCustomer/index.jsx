@@ -10,10 +10,13 @@ import {
   Select,
   Switch,
   message,
+  AutoComplete,
 } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
+import _ from 'lodash';
+import { validatorPhone, testPhone } from '@/utils';
 import { addCustomer, updateCustomer } from '@/services/customer';
 import { parseFilterValue } from '@/utils';
 import DkbTable from '@/components/dkb-table';
@@ -35,12 +38,14 @@ const AllCustomer = memo(() => {
     clearCustomerDetail,
     getCustomerLevelActionAsync,
     getCustomerTagActionAsync,
+    getCurAccountInfoActionAsync,
   } = actions;
 
   let {
     customerDetail,
     customerLevelList,
-    customerTagList
+    customerTagList,
+    account,
   } = useSelector(state => state['customer-manage'], shallowEqual) //store数据
 
   const [refresh, setRefresh] = useState(false);
@@ -107,6 +112,17 @@ const AllCustomer = memo(() => {
       }
     }
   }
+
+  /**
+   * auto-complete onsearch
+   */
+  const onSearch = _.debounce(async (val) => {
+    if (testPhone(val)) {
+      dispatch(getCurAccountInfoActionAsync({
+        phone: val
+      }));
+    }
+  }, 500)
 
   const tools = {
     btns: [
@@ -467,7 +483,14 @@ const AllCustomer = memo(() => {
               { required: true, message: '请填写联系客户账号' },
             ]}
           >
-            <Input type="text" placeholder="请填写联系客户账号" className="input-height" disabled={curId} />
+            {/* <Input type="text" placeholder="请填写联系客户账号" className="input-height" disabled={curId} /> */}
+            <AutoComplete
+              placeholder="请输入客户手机号"
+              className="input-height"
+              options={[{ label: account.phone ? `(${account?.name})${account?.phone}` : '', value: account?.phone }]}
+              onSearch={onSearch}
+            // 18510974721
+            />
           </Form.Item>
           <Form.Item
             label="客户等级"

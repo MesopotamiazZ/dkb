@@ -2,12 +2,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getCategoryList,
-  getProductListText,
   getProductSkuInfo,
   calculateOrder,
   getArea,
-  getProductListImg,
+  // getProductListImg,
+  getProductListByKeywords,
+  getProductList,
 } from '@/services/order';
+import {
+  getCurAccountInfo
+} from '@/services/global.js';
 
 /**
  * 初始化数据
@@ -15,6 +19,7 @@ import {
 const initialState = {
   getCategoryList: {},
   productList: {},
+  // searchImgObj: {},
   productSkuInfo: {}, // 当前添加商品的sku信息/single信息
   productOrderList: [], // 订货单
   calculateOrderInfo: {}, // 费用计算信息
@@ -22,7 +27,8 @@ const initialState = {
   cityList: [],
   areaList: [],
   customerAddress: {},
-  remarkInfo: {}
+  remarkInfo: {},
+  account: {}
 }
 
 /**
@@ -90,6 +96,17 @@ const reducers = {
  */
 
 /**
+ * 获取账号信息
+ */
+const getCurAccountInfoActionAsync = createAsyncThunk(
+  'order-manage/getCurAccountInfoActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getCurAccountInfo(data);
+    return res.result;
+  }
+)
+
+/**
  * 分类列表
  */
 const getCategoryListActionAsync = createAsyncThunk(
@@ -103,24 +120,35 @@ const getCategoryListActionAsync = createAsyncThunk(
 /**
  * 商品列表
  */
-const getProductListTextActionAsync = createAsyncThunk(
-  'order-manage/getProductListTextActionAsync',
+const getProductListActionAsync = createAsyncThunk(
+  'order-manage/getProductListActionAsync',
   async (data, thunkAPI) => {
-    const res = await getProductListText(data);
+    const res = await getProductList(data);
     return res.result;
   }
 )
 
 /**
- * 商品列表 (图片搜索)
+ * 商品列表搜索
  */
-const getProductListImgActionAsync = createAsyncThunk(
-  'order-manage/getProductListImgActionAsync',
+const getProductListByKeywordsActionAsync = createAsyncThunk(
+  'order-manage/getProductListByKeywordsActionAsync',
   async (data, thunkAPI) => {
-    const res = await getProductListImg(data);
+    const res = await getProductListByKeywords(data);
     return res.result;
   }
 )
+
+// /**
+//  * 商品列表 (图片搜索)
+//  */
+// const getProductListImgActionAsync = createAsyncThunk(
+//   'order-manage/getProductListImgActionAsync',
+//   async (data, thunkAPI) => {
+//     const res = await getProductListImg(data);
+//     return res.result;
+//   }
+// )
 
 /**
  * 商品sku列表
@@ -175,12 +203,15 @@ const extraReducers = builder => {
   builder.addCase(getCategoryListActionAsync.fulfilled, (state, action) => {
     state.getCategoryList = action.payload
   })
-  builder.addCase(getProductListTextActionAsync.fulfilled, (state, action) => {
+  builder.addCase(getProductListActionAsync.fulfilled, (state, action) => {
     state.productList = action.payload
   })
-  builder.addCase(getProductListImgActionAsync.fulfilled, (state, action) => {
+  builder.addCase(getProductListByKeywordsActionAsync.fulfilled, (state, action) => {
     state.productList = action.payload
   })
+  // builder.addCase(getProductListImgActionAsync.fulfilled, (state, action) => {
+  //   state.searchImgObj = action.payload
+  // })
   builder.addCase(getProductSkuInfoActionAsync.fulfilled, (state, action) => {
     state.productSkuInfo = action.payload
   })
@@ -198,6 +229,9 @@ const extraReducers = builder => {
       state.areaList = action.payload
     }
   })
+  builder.addCase(getCurAccountInfoActionAsync.fulfilled, (state, action) => {
+    state.account = action.payload
+  })
 }
 
 const orderSlice = createSlice({
@@ -211,11 +245,13 @@ const orderSlice = createSlice({
 export const actions = {
   ...orderSlice.actions,
   getCategoryListActionAsync,
-  getProductListTextActionAsync,
-  getProductListImgActionAsync,
+  getProductListActionAsync,
+  getProductListByKeywordsActionAsync,
+  // getProductListImgActionAsync,
   getProductSkuInfoActionAsync,
   calculateOrderActionAsync,
   getAreaActionAsync,
+  getCurAccountInfoActionAsync,
   // hangUpAndSubmitActionAsync,
 };
 export default orderSlice.reducer;

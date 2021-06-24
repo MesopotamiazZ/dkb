@@ -8,6 +8,9 @@ import {
   getVcRuleDetail,
   getCustomerLevelDetail,
 } from '@/services/customer';
+import {
+  getCurAccountInfo
+} from '@/services/global.js';
 
 /**
  * 初始化数据
@@ -19,6 +22,7 @@ const initialState = {
   tagDetail: {},
   vcRuleDetail: {},
   customerLevelDetail: {},
+  account: {},
 }
 
 /**
@@ -50,6 +54,16 @@ const reducers = {
  * rejectWithValue
  */
 
+/**
+ * 获取账号信息
+ */
+const getCurAccountInfoActionAsync = createAsyncThunk(
+  'customer-manage/getCurAccountInfoActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getCurAccountInfo(data);
+    return res.result;
+  }
+)
 
 /**
  * 客户详情
@@ -141,6 +155,9 @@ const extraReducers = builder => {
   builder.addCase(getCustomerLevelDetailActionAsync.fulfilled, (state, action) => {
     state.customerLevelDetail = action.payload
   })
+  builder.addCase(getCurAccountInfoActionAsync.fulfilled, (state, action) => {
+    state.account = action.payload
+  })
 }
 
 const customerSlice = createSlice({
@@ -159,5 +176,6 @@ export const actions = {
   getTagDetailActionAsync,
   getVcRuleDetailActionAsync,
   getCustomerLevelDetailActionAsync,
+  getCurAccountInfoActionAsync,
 };
 export default customerSlice.reducer;

@@ -335,7 +335,7 @@ const BatchReplace = memo(() => {
                     return;
                   }
                   const res = await addBatchReplace({
-                    goods: selectRowKeys.join(','),
+                    goods: selectRowKeys,
                     ...values
                   })
                   if (res.code === 200) {

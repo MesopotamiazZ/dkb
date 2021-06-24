@@ -55,7 +55,12 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
   const [spec, setSpec] = useState<specDetails>({}); // 单个规格明细
   const [addSpecModal, setAddSpecModal] = useState<boolean>(false); // 新增规格modal
   const [specData, setSpecData] = useState<Array<specValueData>>([]); // 新增规格modal --》 规格值
-  const [specDataTemp, setSpecDataTemp] = useState<Array<specValueData>>([]); // 新增规格modal --》 规格值（临时数据）
+  const [specDataTemp, setSpecDataTemp] = useState<Array<specValueData>>([
+    {
+      id: Date.now(),
+      specVal: ''
+    }
+  ]); // 新增规格modal --》 规格值（临时数据）
 
   // console.log(2222, specs);
 
@@ -115,6 +120,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
           //   message.warning('超过最大添加数量');
           //   return
           // }
+          console.log('specDataTemp', specDataTemp);
           let dataClone = JSON.parse(JSON.stringify(specDataTemp));
           dataClone.push({
             id: Date.now(),

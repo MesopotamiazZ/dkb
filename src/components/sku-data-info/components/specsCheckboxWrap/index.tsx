@@ -30,7 +30,7 @@ interface specProps {
   reveal: number;
   search: boolean;
   sort: number;
-  value: string;
+  value: string | Array<string>;
 }
 
 interface wrapProps {
@@ -53,7 +53,8 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
 
   const [specsData, setSpecsData] = useState([]);
   const [chekedObj, setCheckedObj] = useState({});
-  const [addSpecValueModal, setAddSpecValueModal] = useState(false);
+  const [addSpecValueModal, setAddSpecValueModal] = useState(false); // 新增规格值
+  const [addSpecModal, setAddSpecModal] = useState(false); // 新增规格
   const [curIndex, setCurIndex] = useState(0);
 
   /**
@@ -116,9 +117,6 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
                 {spec.name}：
               </div>
               <div className="spec-item-checkbox">
-                {
-                  console.log(spec?.value)
-                }
                 <Checkbox.Group
                   options={spec?.values.map((item) => `${item}`)}
                   value={chekedObj ? chekedObj[spec.name] : []}
@@ -143,9 +141,9 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
       <div className="spec-item">
         <Button
           type="link"
-          onClick={() =>
-            history.push({ pathname: '/product/product-manage/add-spec-template' })
-          }
+          onClick={() => {
+            setAddSpecModal(true);
+          }}
         >
           新增规格
         </Button>
@@ -153,7 +151,7 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
       {/* 新增规格值 */}
       <Modal
         className="create-customer-modal"
-        title="新增规格"
+        title="新增规格值"
         visible={addSpecValueModal}
         destroyOnClose
         width={570}
@@ -161,25 +159,43 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
         cancelText="取消"
         onOk={async () => {
           let dataClone = JSON.parse(JSON.stringify(specsData));
+          let dataSpec = dataClone[curIndex];
           const values = await form.validateFields();
-          const oldSpecArr = dataClone[curIndex].value;
           let newSpecArr = values.value.split('\n');
-          newSpecArr = newSpecArr.filter((item) => {
-            return (oldSpecArr.indexOf(item) === -1);
-          })
-          const all = oldSpecArr.concat(newSpecArr);
-          dataClone[curIndex].value = all.join(',');
-          const res = await updateSpecTemplate({
-            ...specsDetail,
-            spec: dataClone,
-          })
-          if (res.code === 200) {
-            message.success('新增成功');
-            onRefresh();
+          console.log('dataSpec', dataSpec)
+          if (dataSpec?.is_temp) { // 是否是新增规格临时规格，或是模板规格
+            // 临时规格
+            dataClone.forEach((data, index) => {
+              if (index === curIndex) {
+                newSpecArr = newSpecArr.filter((item) => {
+                  return (data?.value?.indexOf(item) === -1 && item);
+                })
+                data.value = data.value.concat(newSpecArr);
+              }
+            })
+            setSpecsData(dataClone);
             setAddSpecValueModal(false);
           } else {
-            message.warning('新增失败');
+            // 模板规格
+            const oldSpecArr = dataSpec.value;
+            newSpecArr = newSpecArr.filter((item) => {
+              return (oldSpecArr.indexOf(item) === -1 && item);
+            })
+            const all = oldSpecArr.concat(newSpecArr);
+            dataSpec.value = all;
+            const res = await updateSpecTemplate({
+              ...specsDetail,
+              spec: dataClone,
+            })
+            if (res.code === 200) {
+              message.success('新增成功');
+              onRefresh();
+              setAddSpecValueModal(false);
+            } else {
+              message.warning('新增失败');
+            }
           }
+
         }}
         onCancel={() => {
           setAddSpecValueModal(false);
@@ -198,6 +214,69 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
           }}
         // colon={false}
         >
+          <Form.Item
+            label="规格值"
+            name="value"
+            rules={[
+              { required: true, message: '请输入规格值' },
+            ]}
+            help="格式: 规格值 [每行一个]"
+          >
+            <Input.TextArea placeholder="请输入规格值" style={{ height: '148px' }} />
+          </Form.Item>
+        </Form>
+      </Modal>
+      {/* 新增规格 */}
+      <Modal
+        className="create-customer-modal"
+        title="新增规格"
+        visible={addSpecModal}
+        destroyOnClose
+        width={570}
+        okText="确定"
+        cancelText="取消"
+        onOk={async () => {
+          let dataClone = JSON.parse(JSON.stringify(specsData));
+          const values = await form.validateFields();
+          let newSpecArr = values.value.split('\n');
+          dataClone.push({
+            id: Date.now(),
+            name: values.name,
+            reveal: 1,
+            search: true,
+            sort: 100,
+            value: newSpecArr.filter((item) => item),
+            is_temp: true,
+          })
+          setSpecsData(dataClone);
+          setAddSpecModal(false);
+        }}
+        onCancel={() => {
+          setAddSpecModal(false);
+        }}
+      >
+        <Form
+          form={form}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 18 }}
+          labelAlign="right"
+          requiredMark={false}
+          initialValues={{
+            search: true,
+            reveal: '1',
+            sort: 100,
+          }}
+        // colon={false}
+        >
+          <Form.Item
+            label="规格名称"
+            name="name"
+            rules={[
+              { required: true, message: '请输入规格名称' },
+            ]}
+          >
+            <Input placeholder="请输入规格名称" />
+          </Form.Item>
           <Form.Item
             label="规格值"
             name="value"

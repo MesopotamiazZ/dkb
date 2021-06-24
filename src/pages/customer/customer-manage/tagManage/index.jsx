@@ -252,7 +252,7 @@ const TagManage = () => {
               <Select.Option value="1" key="1">
                 手动标签
               </Select.Option>
-              <Select.Option value="2" key="2">
+              <Select.Option value="2" key="2" disabled>
                 自动标签
               </Select.Option>
             </Select>

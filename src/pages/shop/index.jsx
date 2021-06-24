@@ -87,7 +87,7 @@ const Shop = () => {
     localStorage.setItem('dkb-id', dkb_id);
     dispatch(getSHopInfoActionAsync())
     history.push({
-      pathname: '/overview'
+      pathname: '/dashboard'
     })
   }
 

@@ -37,8 +37,8 @@ export const getProductListText = data => request({
  * @param {*} data 
  * @returns 
  */
-export const getProductListImg = data => request({
-  url: '/Goods/MdseManage/getListText',
+export const upProductListImg = data => request({
+  url: '/Goods/MdseManage/upImg',
   method: 'post',
   // headers: {
   //   'Content-Type': 'application/x-www-form-urlencoded'
@@ -77,6 +77,27 @@ export const hangUpAndSubmit = data => request({
   url: '/Order/SoManage/add',
   method: 'post',
   data
+})
+
+/**
+ * 商品列表关键词查询
+ * @param {*} data 
+ * @returns 
+ */
+export const getProductListByKeywords = data => request({
+  url: '/Goods/MdseManage/getList/smartSearch',
+  method: 'get',
+  params: { ...data }
+})
+/**
+ * 商品列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getProductList = data => request({
+  url: '/Goods/MdseManage/getList',
+  method: 'get',
+  params: { ...data }
 })
 
 // =============== common ================
