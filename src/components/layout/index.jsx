@@ -97,7 +97,7 @@ export default memo(() => {
  * @param {String} currentPath 当前路由
  */
 const createMenu = (routes, goto, location, currentPath) => {
-    console.log('------------------routes:', routes, 'routersAll:', routersAll, 'goto:', goto, 'llocation:', location, 'currentPath:', currentPath)
+    // console.log('------------------routes:', routes, 'routersAll:', routersAll, 'goto:', goto, 'llocation:', location, 'currentPath:', currentPath)
     const parent = routersAll.find(item => item.children?.some(cItem => cItem.path === location.pathname))
     // console.log('parent', parent)
     // 菜单默认选中为当前路由

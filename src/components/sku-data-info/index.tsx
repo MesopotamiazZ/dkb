@@ -340,9 +340,6 @@ const SkuDataInfo: React.FC<skuDataInfoProps> = memo((props) => {
               dataSource={singleData}
               pagination={false}
             /> : <div>
-              {
-                console.log('detail:', detail, 'selectCheck:', selectCheck,)
-              }
               <SpecsCheckboxWrap
                 specsDetail={detail}
                 checked={selectCheck}

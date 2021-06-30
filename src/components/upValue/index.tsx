@@ -79,7 +79,6 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
         modalLineDatas[i].ruleDetail[1].value = rule.reward;
         modalLineDatas[i].status = rule.status;
       })
-      console.log('modalLineDatas', modalLineDatas)
       setDataSource(modalLineDatas);
     }
   }, [upVal, upRules])

@@ -62,7 +62,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
     }
   ]); // 新增规格modal --》 规格值（临时数据）
 
-  console.log(2222, specDataTemp);
+  // console.log(2222, specDataTemp);
 
   useEffect(() => {
     if (dataSource.length) {
@@ -120,7 +120,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
           //   message.warning('超过最大添加数量');
           //   return
           // }
-          console.log('specDataTemp', specDataTemp);
+          // console.log('specDataTemp', specDataTemp);
           let dataClone = JSON.parse(JSON.stringify(specDataTemp));
           dataClone.push({
             id: Date.now(),

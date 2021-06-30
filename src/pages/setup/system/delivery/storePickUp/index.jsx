@@ -39,7 +39,7 @@ const StorePickUp = memo(() => {
   let {
     toogleStore,
   } = useSelector(state => state.system, shallowEqual) //store数据
-  console.log(toogleStore)
+  // console.log(toogleStore)
 
   const tools = {
     btns: [
@@ -158,7 +158,7 @@ const StorePickUp = memo(() => {
   ]
 
   const onStorePickUp = async (checked) => {
-    console.log(checked)
+    // console.log(checked)
     let formData = new FormData();
     formData.append('is_stores', checked);
     const res = await updateToogleStore(formData);

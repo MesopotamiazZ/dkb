@@ -103,7 +103,7 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
    * @param value 
    */
   const onStatusChangeHandler = (name, value) => {
-    console.log(name, value);
+    // console.log(name, value);
     if (value) {
       setReqData({ ...reqData, ...{ [name]: value } });
     } else {
@@ -117,8 +117,11 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
      * @param limit 
      */
   const handlePageChange = (page, limit) => {
-    console.log(page, limit);
+    // console.log(page, limit);
     setReqData({ ...reqData, page, limit });
+    setTimeout(() => {
+      document.querySelector('.ant-layout-content div').scrollTop = 0;
+    }, 0)
   }
 
   /**
@@ -154,10 +157,10 @@ const DkbTable: React.FC<IdkbTable> = memo((props) => {
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log(oldIndex, newIndex);
+    // console.log(oldIndex, newIndex);
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(tableData?.list), oldIndex, newIndex).filter(el => !!el);
-      console.log('Sorted items: ', newData);
+      // console.log('Sorted items: ', newData);
       // this.setState({ dataSource: newData });
       setTableData({ ...tableData, list: newData });
     }

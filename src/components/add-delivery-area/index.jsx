@@ -57,7 +57,7 @@ const AddDeliveryArea = memo((props) => {
    */
   useEffect(() => {
     const getAreaCode = (obj) => {
-      console.log('obj', obj?.areas)
+      // console.log('obj', obj?.areas)
       const code = [];
       if (obj?.areas instanceof Array) {
         obj?.areas?.forEach((item) => {

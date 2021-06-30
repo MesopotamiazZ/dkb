@@ -69,7 +69,7 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(checked).length) {
-      console.log('checked', checked, specsData);
+      // console.log('checked', checked, specsData);
       // let specsDataClone = JSON.parse(JSON.stringify(specsData));
       let specsDataClone = _.cloneDeep(specsData);
       specsDataClone.forEach((data) => {
@@ -163,7 +163,7 @@ const SpecsCheckboxWrap: React.FC<wrapProps> = memo((props) => {
           let dataSpec = dataClone[curIndex];
           const values = await form.validateFields();
           let newSpecArr = values.value.split('\n');
-          console.log('dataSpec', dataSpec)
+          // console.log('dataSpec', dataSpec)
           if (dataSpec?.is_temp) { // 是否是新增规格临时规格，或是模板规格
             // 临时规格
             dataClone.forEach((data, index) => {

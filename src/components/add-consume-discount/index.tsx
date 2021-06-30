@@ -17,7 +17,6 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
   const [data, setData] = useState(dataSource);
 
   useEffect(() => {
-    console.log('dataSource', dataSource)
     setData(dataSource);
   }, [dataSource])
 

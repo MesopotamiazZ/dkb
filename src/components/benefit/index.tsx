@@ -58,7 +58,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(initValue).length) {
-      console.log('初始赋值', initValue)
+      // console.log('初始赋值', initValue)
       setBenefitDefaultValues({
         ...initValue,
         segmentDiscount: initValue.segmentDiscount.map((item, index) => ({
@@ -70,7 +70,6 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
   }, [initValue])
 
   useEffect(() => {
-    console.log('benefitDefaultValues', benefitDefaultValues)
     onGetBenefit({
       ...benefitDefaultValues
     })
@@ -165,9 +164,6 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
               }}
             />
             : <>
-              {
-                console.log('benefitDefaultValues?.segmentDiscount', benefitDefaultValues?.segmentDiscount)
-              }
               <AddConsumeDiscount
                 dataSource={benefitDefaultValues?.segmentDiscount}
                 onGetCondition={onGetConditionhandle}
