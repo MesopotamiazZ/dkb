@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useLayoutEffect, useRef } from 'react';
 import { message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
@@ -12,6 +12,7 @@ const AddExpress = memo(() => {
   const location = useLocation();
   const dispatch = useDispatch();
   const id = location?.state?.id;
+  const selfRef = useRef(null);
 
   let {
     expressDetail,
@@ -74,6 +75,20 @@ const AddExpress = memo(() => {
    */
   useEffect(() => {
     dispatch(getAreaActionAsync({ pid: 0, level: 1 }))
+  }, [])
+
+  const resizeListener = (e) => {
+    console.log('resizeListener')
+  }
+
+  useEffect(() => {
+    // const content = selfRef.current;
+    // const formWrapper = content.querySelector('.form-wrapper');
+    // console.log(formWrapper)
+    window.addEventListener('resize', resizeListener, false)
+    return () => {
+      window.removeEventListener('resize', resizeListener, false)
+    }
   }, [])
 
   /**
@@ -269,7 +284,7 @@ const AddExpress = memo(() => {
   }
 
   return (
-    <div className="add-express outer-area">
+    <div className="add-express outer-area" ref={selfRef}>
       <SelfForm
         formProps={formProps}
       />

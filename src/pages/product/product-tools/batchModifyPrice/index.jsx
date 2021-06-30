@@ -281,6 +281,7 @@ const BatchModifyPrice = memo(() => {
         title="添加改价商品"
         visible={modifyPriceTaskModal}
         width={980}
+        centered
         onOk={() => setDrawerVisible(true)}
         okText="下一步"
         cancelText="取消"

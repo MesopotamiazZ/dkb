@@ -9,7 +9,6 @@ interface selectColorProps {
 }
 
 const SelectColor: React.FC<selectColorProps> = memo(({ color, onGetBgColor }) => {
-
   const [selectColor, setSelectColor] = useState(color);
 
   /**
@@ -27,17 +26,20 @@ const SelectColor: React.FC<selectColorProps> = memo(({ color, onGetBgColor }) =
 
   const content = (
     <section className="custom-layout example">
-      <HexColorPicker onChange={(color) => {
-        // console.log(obj)
-        // setSelectColor(`rgba(${obj.r}, ${obj.g}, ${obj.b}, ${obj.a})`)
-        setSelectColor(color);
-      }} />
+      <HexColorPicker
+        color={color}
+        onChange={(color) => {
+          // console.log(obj)
+          // setSelectColor(`rgba(${obj.r}, ${obj.g}, ${obj.b}, ${obj.a})`)
+          setSelectColor(color);
+        }} />
     </section>
   );
 
   return (
     <>
       <Popover
+        className="select-color-popover"
         placement="rightTop"
         content={content}
         trigger="click"

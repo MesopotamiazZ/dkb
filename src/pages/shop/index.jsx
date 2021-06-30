@@ -174,6 +174,7 @@ const Shop = () => {
         visible={createShopModal}
         destroyOnClose
         width={840}
+        centered
         okText="创建店铺"
         cancelText="取消"
         onOk={confirmAddShop}

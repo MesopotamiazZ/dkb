@@ -2,6 +2,7 @@ import React, { useState, memo, useEffect } from 'react';
 import {
   Table, Form, Input, Button, message
 } from 'antd';
+import NP from 'number-precision';
 import { PlusOutlined } from '@ant-design/icons';
 import './style.less';
 
@@ -14,6 +15,11 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
   const [form] = Form.useForm();
 
   const [data, setData] = useState(dataSource);
+
+  useEffect(() => {
+    console.log('dataSource', dataSource)
+    setData(dataSource);
+  }, [dataSource])
 
   /**
    * 返回新的打折条件数据
@@ -132,5 +138,11 @@ const AddConsumeDiscount: React.FC<addConsumeDiscountProps> = memo(({ dataSource
     </div>
   )
 });
+
+// AddConsumeDiscount.defaultProps = {
+//   dataSource: [
+
+//   ]
+// }
 
 export default AddConsumeDiscount;

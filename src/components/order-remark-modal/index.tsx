@@ -79,6 +79,7 @@ const OrderRemarkModal: React.FC<IOrderRemarkModal> = memo((props) => {
       title={title}
       visible={visible}
       destroyOnClose
+      centered
       onOk={() => onOk(form, curFlag)}
       onCancel={() => {
         form.resetFields();

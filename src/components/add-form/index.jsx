@@ -239,7 +239,8 @@ export default memo(function ({ formProps = {} }) {
         return search.map((item, index) => {
             return (
                 <div className="form-item-line" key={item.wrap.name + index}>
-                    <Form.Item colon={false}  {...item.wrap} key={item.wrap.name}>
+                    {/* colon */}
+                    <Form.Item  {...item.wrap} key={item.wrap.name}>
                         {renderFormEle(item.wrap.type, item.props)}
                     </Form.Item>
                 </div>
@@ -247,7 +248,7 @@ export default memo(function ({ formProps = {} }) {
         })
     }
     return (
-        <div className="form-page-layout">
+        <div className="form-page-layout bg-white">
             {/* <div className="head-title">
                 {formProps?.propTitle}
             </div> */}
@@ -274,7 +275,7 @@ export default memo(function ({ formProps = {} }) {
                             )
                         })}
                     </Form.Item>
-                    <Form.Item style={{ display: "flex", textAlign: "center", marginBottom: 0 }} >
+                    <Form.Item className="ant-form-btns" style={{ display: "flex", textAlign: "center", marginBottom: 0 }} >
                         <div className="form-wrap-item form-wrap-btn">
                             {/* <Col xs={14} sm={14} xl={14} offset={5} > */}
                             {

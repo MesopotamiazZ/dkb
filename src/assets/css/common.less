@@ -1,7 +1,7 @@
 @import './global.less';
 // Button
 .ant-btn {
-  height: 36px;
+  // height: 36px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -69,6 +69,11 @@
   padding-left: 25px;
 }
 
+// form
+.ant-form-item-label > label::after {
+  margin: 0 10px 0 2px;
+}
+
 // textarea
 .ant-form-item textarea.ant-input {
   height: 72px;
@@ -88,6 +93,11 @@
 
 .btn-list-style + .btn-list-style {
   margin-left: 10px;
+}
+
+// modal
+.ant-modal-body {
+  padding: 30px 24px;
 }
 
 .btn-modal-style { // 详情页/对话框
@@ -123,12 +133,10 @@
 }
 
 .ant-popover-inner-content {
+  padding: 12px 16px;
   button {
     height: 22px;
     padding: 0 7px;
   }
-}
-.ant-popover-inner-content {
-  padding: 12px 16px;
 }
 

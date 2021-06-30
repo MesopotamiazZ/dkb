@@ -65,7 +65,14 @@ const CustomerLevel = () => {
         key: '1',
         text: '编辑',
         type: 'link',
-        onActionClick: () => { },
+        onActionClick: () => {
+          history.push({
+            pathname: '/customer/customer-manage/add-level',
+            state: {
+              id: record.id
+            }
+          })
+        },
       },
       {
         key: '2',

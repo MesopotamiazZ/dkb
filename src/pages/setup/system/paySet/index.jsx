@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PaySetWrap from '@/components/pay-set-wrap';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { actions } from '../store/slice';
 import './style.less';
 import alipay from '@/assets/images/alipay.svg';
 import wechat from '@/assets/images/wechat.svg';
 
 const Overview = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+
+  let {
+    payment,
+  } = useSelector(state => state['system'], shallowEqual) //store数据
+
+  const {
+    getPaymentListActionAsync
+  } = actions;
+
+  const initialData = () => {
+    dispatch(getPaymentListActionAsync());
+  }
+
+  useEffect(() => {
+    initialData();
+  }, [])
+  console.log('payment', payment)
+
   return (
     <div className="pay-set outer-area">
       <div className="pay-set-inner bg-white">

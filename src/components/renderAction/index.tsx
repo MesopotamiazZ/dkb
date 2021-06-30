@@ -54,8 +54,9 @@ const RenderAction: React.FC<RenderActionProps> = (props) => {
                 title={`确认删除${btn.title}?`}
                 onConfirm={() => btn.onActionClick(btn.key, record)}
                 // onCancel={cancel}
-                okText="Yes"
-                cancelText="No"
+                placement="topRight"
+                okText="确认"
+                cancelText="取消"
               >
                 <Button
                   // className={btn.classNames.join(' ')}

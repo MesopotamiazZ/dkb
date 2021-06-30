@@ -208,6 +208,18 @@ export const updateToogleSameCity = data => request({
   data
 })
 
+// ================= 支付设置 ===================
+/**
+ * 获取支付列表
+ * @param {*} data 
+ * @returns 
+ */
+export const getPaymentList = data => request({
+  url: '/Setting/Payment/getList',
+  method: 'get',
+  params: { ...data }
+})
+
 // =============== common ================
 /**
  * 行政区域查询

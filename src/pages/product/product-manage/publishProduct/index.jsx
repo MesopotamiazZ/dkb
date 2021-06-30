@@ -333,33 +333,17 @@ const PublishProduct = memo(() => {
               key: 'title',
               name: 'title',
               label: '商品名称',
-              type: 'input',
+              type: 'textarea',
               rules: [
                 { required: true, message: '请填写商品名称' },
               ],
               labelCol: {
                 span: 2,
               },
+              className: 'input-textarea'
             },
             props: {
               placeholder: '请填写商品名称',
-            }
-          },
-          {
-            wrap: {
-              key: 'sort',
-              name: 'sort',
-              label: '排序',
-              type: 'inputnumber',
-              rules: [
-                { required: true, message: '请填写排序' },
-              ],
-              labelCol: {
-                span: 2,
-              },
-            },
-            props: {
-              placeholder: '请填写排序',
             }
           },
           {
@@ -402,10 +386,10 @@ const PublishProduct = memo(() => {
             wrap: {
               key: 'tip1',
               name: 'tip1',
-              label: ' ',
+              // label: ' ',
               type: 'formtiptext',
-              labelCol: {
-                span: 2,
+              wrapperCol: {
+                offset: 2,
               },
               // style: { marginBottom: 0 },
             },
@@ -457,7 +441,24 @@ const PublishProduct = memo(() => {
               ],
               style: { width: 300, marginRight: '15px' }
             }
-          }
+          },
+          {
+            wrap: {
+              key: 'sort',
+              name: 'sort',
+              label: '排序',
+              type: 'inputnumber',
+              rules: [
+                { required: true, message: '请填写排序' },
+              ],
+              labelCol: {
+                span: 2,
+              },
+            },
+            props: {
+              placeholder: '请填写排序',
+            }
+          },
         ]
       },
       {
@@ -485,10 +486,10 @@ const PublishProduct = memo(() => {
             wrap: {
               key: 'tip2',
               name: 'tip2',
-              label: ' ',
+              // label: ' ',
               type: 'formtiptext',
-              labelCol: {
-                span: 2,
+              wrapperCol: {
+                offset: 2,
               },
               // style: { marginBottom: 0 },
             },

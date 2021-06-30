@@ -364,6 +364,7 @@ const AddSpecDetails: React.FC<addSpecDetailsProps> = memo(({ dataSource = [], o
         title="新增规格"
         visible={addSpecModal}
         width={570}
+        centered
         okText="确定"
         cancelText="取消"
         destroyOnClose

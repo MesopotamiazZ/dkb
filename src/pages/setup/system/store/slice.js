@@ -11,6 +11,7 @@ import {
   // updateToogleStore,
   toogleSameCity,
   // updateToogleSameCity,
+  getPaymentList,
 } from '@/services/system';
 
 /**
@@ -26,6 +27,7 @@ const initialState = {
   toogleExpress: { is_express: false },
   toogleStore: { is_stores: false },
   toogleCity: { is_localexp: false },
+  payment: {},
 }
 
 /**
@@ -162,6 +164,17 @@ const toogleSameCityActionAsync = createAsyncThunk(
 )
 
 /**
+ * 获取开关状态
+ */
+const getPaymentListActionAsync = createAsyncThunk(
+  'system/getPaymentListActionAsync',
+  async (data, thunkAPI) => {
+    const res = await getPaymentList(data);
+    return res.result;
+  }
+)
+
+/**
  * 更新开关状态
  */
 // const updateToogleSameCityActionAsync = createAsyncThunk(
@@ -213,6 +226,9 @@ const extraReducers = builder => {
   builder.addCase(toogleSameCityActionAsync.fulfilled, (state, action) => {
     state.toogleCity = action.payload
   })
+  builder.addCase(getPaymentListActionAsync.fulfilled, (state, action) => {
+    state.payment = action.payload
+  })
   // builder.addCase(updateToogleSameCityActionAsync.fulfilled, (state, action) => {
   //   state.toogleCity = action.payload
   // })
@@ -237,6 +253,7 @@ export const actions = {
   toogleStoreActionAsync,
   // updateToogleStoreActionAsync,
   toogleSameCityActionAsync,
+  getPaymentListActionAsync,
   // updateToogleSameCityActionAsync,
 };
 export default shopSlice.reducer;

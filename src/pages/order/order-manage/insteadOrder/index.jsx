@@ -567,6 +567,7 @@ const InsteadOrder = memo(() => {
         title="商品规格"
         visible={productDescModal}
         width={500}
+        centered
         okText="确定"
         cancelText="取消"
         destroyOnClose

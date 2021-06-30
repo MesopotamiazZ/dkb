@@ -343,6 +343,7 @@ const StorageManage = () => {
         visible={accountModal}
         destroyOnClose
         width={620}
+        centered
         okText='确定'
         cancelText="取消"
         onOk={() => addAccountModal()}

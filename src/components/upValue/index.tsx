@@ -11,7 +11,7 @@ import './style.less';
 
 interface upValuesProps {
   upVal: string | number;
-  upRules: Array<any>;
+  upRules: Array<any> | any;
   onChangeUpCondition: (data: any) => void;
 }
 
@@ -57,7 +57,6 @@ const modalLineDatas = [
  * 获取条件
  */
 const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, upVal }) => {
-
   const [upValue, setUpValue] = useState(upVal);
   const [ruleModal, setRuleModal] = useState(false);
   const [dataSource, setDataSource] = useState(modalLineDatas);
@@ -71,19 +70,16 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
     if (upVal) {
       setUpValue(upVal);
     }
-    if (upRules.length) {
-      modalLineDatas.forEach((data, index) => {
-        upRules.forEach((rule, i) => {
-          if (index === i && index === 0) {
-            data.ruleDetail[index].value = rule.count;
-            data.status = rule.status;
-          }
-          if (index === i && index === 1) {
-            data.ruleDetail[index].value = rule.reward;
-            data.status = rule.status;
-          }
-        })
+    if (Object.keys(upRules).length) {
+      let rules = [];
+      rules.push(upRules.payMoney);
+      rules.push(upRules.okPay);
+      rules.forEach((rule, i) => {
+        modalLineDatas[i].ruleDetail[0].value = rule.count;
+        modalLineDatas[i].ruleDetail[1].value = rule.reward;
+        modalLineDatas[i].status = rule.status;
       })
+      console.log('modalLineDatas', modalLineDatas)
       setDataSource(modalLineDatas);
     }
   }, [upVal, upRules])
@@ -247,6 +243,7 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
         visible={ruleModal}
         destroyOnClose
         width={740}
+        centered
         onOk={() => setRuleFnc()}
         onCancel={() => {
           setDataSource(dataSourceTemp);

@@ -47,7 +47,10 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
     consumeDiscount: true, // 是否开启消费折扣
     discountType: '1', // 折扣类型
     unifiedDiscount: '', // 统一折扣
-    segmentDiscount: [], // 分段折扣
+    segmentDiscount: [{
+      meet: 0,
+      discount: 0
+    }], // 分段折扣
   });
 
   /**
@@ -55,18 +58,19 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
    */
   useEffect(() => {
     if (Object.keys(initValue).length) {
-      // console.log('初始赋值', initValue)
-      // setBenefitDefaultValues({
-      //   ...initValue,
-      //   segmentDiscount: initValue.segmentDiscount.map((item, index) => ({
-      //     ...item,
-      //     id: index
-      //   })),
-      // });
+      console.log('初始赋值', initValue)
+      setBenefitDefaultValues({
+        ...initValue,
+        segmentDiscount: initValue.segmentDiscount.map((item, index) => ({
+          ...item,
+          id: index
+        })),
+      });
     }
   }, [initValue])
 
   useEffect(() => {
+    console.log('benefitDefaultValues', benefitDefaultValues)
     onGetBenefit({
       ...benefitDefaultValues
     })
@@ -78,7 +82,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
   const onGetConditionhandle = (data) => {
     // console.log(data);
     // setSegmentDiscount(data);
-    const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
+    const cloneData = benefitDefaultValues && JSON.parse(JSON.stringify(benefitDefaultValues));
     cloneData.segmentDiscount = data;
     setBenefitDefaultValues(cloneData);
   }
@@ -89,7 +93,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
       <div className="benefit-wrap-item free-ship-wrap">
         <Form.Item>
           <Checkbox
-            checked={benefitDefaultValues.freeShip}
+            checked={benefitDefaultValues?.freeShip}
             onChange={(e) => {
               const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
               cloneData.freeShip = e.target.checked;
@@ -103,7 +107,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
           <div className="free-ship-input">
             <span>消费满</span>
             <InputNumber
-              value={Number(benefitDefaultValues.freeShipValue)}
+              value={Number(benefitDefaultValues?.freeShipValue)}
               placeholder="仅支持整数"
               onChange={(value) => {
                 const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
@@ -118,7 +122,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
       <div className="benefit-wrap-item consume-discount-wrap">
         <Form.Item>
           <Checkbox
-            checked={benefitDefaultValues.consumeDiscount}
+            checked={benefitDefaultValues?.consumeDiscount}
             onChange={(e) => {
               const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
               cloneData.consumeDiscount = e.target.checked;
@@ -131,7 +135,7 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
         <div className="free-ship-input">
           <Form.Item>
             <Radio.Group
-              value={benefitDefaultValues.discountType}
+              value={benefitDefaultValues?.discountType}
               onChange={(e) => {
                 const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
                 cloneData.discountType = e.target.value;
@@ -140,30 +144,35 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
             >
               <Radio value="1">
                 统一折扣
-            </Radio>
+              </Radio>
               <Radio value="2">
                 分段折扣
-            </Radio>
+              </Radio>
             </Radio.Group>
           </Form.Item>
         </div>
         {
-          benefitDefaultValues.discountType === '1'
+          benefitDefaultValues?.discountType === '1'
             ? <Input
               type="number"
               addonAfter="折"
               style={{ width: '140px' }}
-              value={Number(benefitDefaultValues.unifiedDiscount)}
+              value={Number(benefitDefaultValues?.unifiedDiscount)}
               onChange={(e) => {
                 const cloneData = JSON.parse(JSON.stringify(benefitDefaultValues));
                 cloneData.unifiedDiscount = e.target.value;
                 setBenefitDefaultValues(cloneData);
               }}
             />
-            : <AddConsumeDiscount
-              dataSource={benefitDefaultValues.segmentDiscount}
-              onGetCondition={onGetConditionhandle}
-            />
+            : <>
+              {
+                console.log('benefitDefaultValues?.segmentDiscount', benefitDefaultValues?.segmentDiscount)
+              }
+              <AddConsumeDiscount
+                dataSource={benefitDefaultValues?.segmentDiscount}
+                onGetCondition={onGetConditionhandle}
+              />
+            </>
         }
       </div>
     </div>

@@ -364,6 +364,7 @@ const AddDeliveryArea = memo((props) => {
         title="选择配送区域"
         visible={deliveryModal}
         width={620}
+        centered
         okText="确定"
         cancelText="取消"
         destroyOnClose

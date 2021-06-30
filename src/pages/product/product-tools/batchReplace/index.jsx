@@ -274,6 +274,7 @@ const BatchReplace = memo(() => {
         title="添加替换商品"
         visible={batchReplaceModal}
         width={980}
+        centered
         onOk={() => setDrawerVisible(true)}
         okText="下一步"
         cancelText="取消"

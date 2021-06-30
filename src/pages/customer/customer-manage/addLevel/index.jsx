@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { actions } from '../store/slice';
+import NP from 'number-precision';
 import { addCustomerLevel, updateCustomerLevel } from '@/services/customer';
 import { baseUrl } from '@/utils/upload';
 import SelfForm from '@/components/add-form';
@@ -30,7 +31,7 @@ const AddLevel = memo(() => {
   const [bgType, setBgType] = useState('1'); // 等级背景
   const [bgPic, setBgPic] = useState([]); // 背景图片
   // 背景色
-  const [bgColor, setBgColor] = useState(''); // 背景颜色
+  const [bgColor, setBgColor] = useState('#d9001b'); // 背景颜色
   const [newBgColor, setNewBgColor] = useState(''); // 背景颜色修改
   // 成长值/成长规则
   const [upValue, setUpValue] = useState(''); // 成长值
@@ -39,13 +40,16 @@ const AddLevel = memo(() => {
   const [newUpRules, setNewUpRules] = useState([]);
 
   // 权益
-  const [benefitDefaultValues, setBenefitDefaultValues] = useState({ // 权益组件初始值
+  const [benefitDefaultValues, setBenefitDefaultValues] = useState({
     freeShip: true, // 是否开启满金额包邮
     freeShipValue: '', // 包邮金额
     consumeDiscount: true, // 是否开启消费折扣
     discountType: '1', // 折扣类型
     unifiedDiscount: '', // 统一折扣
-    segmentDiscount: [], // 分段折扣
+    segmentDiscount: [{
+      meet: 0,
+      discount: 0
+    }], // 分段折扣
   });
   const [newBenefitDefaultValues, setNewBenefitDefaultValues] = useState(null); // 权益组件修改值
 
@@ -64,14 +68,44 @@ const AddLevel = memo(() => {
       initialData();
     }
     return () => {
+      localStorage.removeItem('level_id');
       dispatch(clearCustomerLevelDetail({}));
     }
   }, [id])
 
   // 编辑赋值
   useEffect(() => {
-
-  }, [])
+    if (Object.keys(customerLevelDetail).length) {
+      setInitValue({
+        name: customerLevelDetail?.name,
+        bgType: `${customerLevelDetail?.bgtype}`,
+      })
+      setBgColor(customerLevelDetail?.bgcolor);
+      setUpValue(customerLevelDetail?.upvalue);
+      setUpRules(customerLevelDetail?.uprules)
+      if (customerLevelDetail?.bgpic) {
+        setBgPic([
+          {
+            path: customerLevelDetail?.bgpic.split('.com')[1],
+            is_cover: 0 //是否为封面图
+          }
+        ])
+      }
+      setBenefitDefaultValues({
+        freeShip: customerLevelDetail?.benefit?.postAge?.status, // 是否开启满金额包邮
+        freeShipValue: customerLevelDetail?.benefit?.postAge?.condition, // 包邮金额
+        consumeDiscount: customerLevelDetail?.benefit?.discount?.status, // 是否开启消费折扣
+        discountType: `${customerLevelDetail?.benefit?.discount?.disType}`, // 折扣类型
+        unifiedDiscount:
+          typeof customerLevelDetail?.benefit?.discount?.condition !== 'object'
+            ? NP.divide(Number(customerLevelDetail?.benefit?.discount?.condition), 10) : 0, // 统一折扣
+        segmentDiscount: customerLevelDetail?.benefit?.discount?.condition.map((item) => ({
+          meet: item.meet,
+          discount: NP.divide(Number(item.discount), 10)
+        }))// 分段折扣
+      });
+    }
+  }, [customerLevelDetail])
 
   /**
    * 返回新的权益数据
@@ -161,18 +195,18 @@ const AddLevel = memo(() => {
             wrap: {
               key: '背景色',
               name: 'bgColor',
-              label: ' ',
+              // label: '',
               type: 'selectcolor', // 与antd对应 
               // rules: [
               //   { required: true },
               // ],
-              labelCol: {
-                span: 2,
+              wrapperCol: {
+                offset: 2,
               },
               hidden: bgType !== '1'
             },
             props: {
-              initColor: bgColor,
+              color: bgColor,
               onGetBgColor: onGetBgColorhandle,
             }
           },
@@ -180,10 +214,10 @@ const AddLevel = memo(() => {
             wrap: {
               key: 'bgPic',
               name: 'bgPic',
-              label: ' ',
+              // label: ' ',
               type: 'proupload', // 上传图片
-              labelCol: {
-                span: 2,
+              wrapperCol: {
+                offset: 2,
               },
               hidden: bgType !== '2'
             },
@@ -251,9 +285,7 @@ const AddLevel = memo(() => {
               },
             },
             props: {
-              initValue: {
-                ...benefitDefaultValues
-              },
+              initValue: benefitDefaultValues,
               onGetBenefit: onGetBenefitHandle,
             }
           }
@@ -268,7 +300,7 @@ const AddLevel = memo(() => {
         },
         htype: "submit", // submit || reset
         onBtnClick: async (value) => {
-          console.log("按钮点击的事件222", value);
+          console.log("按钮点击的事件222", value, newUpRules, newBenefitDefaultValues);
           if (id || localStorage.getItem('level_id')) {
             const res = await updateCustomerLevel({
               id: id || localStorage.getItem('level_id'),
@@ -350,9 +382,7 @@ const AddLevel = memo(() => {
           // type=reset  重置表单
           // 其余的不用传type值
           console.log("按钮点击的事件111", value);
-          history.push({
-            pathname: '/setup/system/delivery'
-          })
+          history.go(-1);
         }
       }
     ]

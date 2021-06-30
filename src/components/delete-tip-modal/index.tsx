@@ -26,6 +26,7 @@ const DeleteTipModal: React.FC<deleteModalProps> = memo((props) => {
       className="delete-tip-modal"
       title={title}
       visible={visible}
+      centered
       onOk={() => onOk()}
       onCancel={() => onCancel()}
       width={width}

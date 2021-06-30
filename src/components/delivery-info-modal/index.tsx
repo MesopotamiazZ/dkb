@@ -129,6 +129,7 @@ const DeliveryInfoModal: React.FC<IDeliveryInfo> = memo((props) => {
       className="delivery-info-modal"
       title={title}
       visible={visible}
+      centered
       destroyOnClose
       onOk={() => onOk(form)}
       onCancel={() => {
