@@ -81,6 +81,18 @@ const PublishProduct = memo(() => {
     }
   }, [specTemplateList])
 
+  /**
+   * 设置默认运费模板
+   */
+  useEffect(() => {
+    if (deliveryTemplateList.length) {
+      let defaultList = deliveryTemplateList.filter((item) => {
+        return item.is_default;
+      })
+      setInitValue({ ...initValue, expId: defaultList[0].id })
+    }
+  }, [deliveryTemplateList])
+
   useEffect(() => {
     setSpecType(initValue.specsType);
   }, [initValue])
@@ -439,7 +451,7 @@ const PublishProduct = memo(() => {
                   }
                 }
               ],
-              style: { width: 300, marginRight: '15px' }
+              style: { width: 440, marginRight: '15px' }
             }
           },
           {
@@ -539,7 +551,7 @@ const PublishProduct = memo(() => {
                 // console.log(val)
                 dispatch(getSpecTemplateDetailActionAsync({ id: val }));
               },
-              style: { width: 300, marginRight: '15px' },
+              style: { width: 440, marginRight: '15px' },
             }
           },
           {
@@ -632,7 +644,7 @@ const PublishProduct = memo(() => {
                   }
                 }
               ],
-              style: { width: 300, marginRight: '15px' },
+              style: { width: 440, marginRight: '15px' },
             }
           },
         ]
