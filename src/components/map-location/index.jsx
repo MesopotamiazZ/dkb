@@ -2,8 +2,11 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Form, Select } from 'antd';
 import { getLal, getAddress, getIpLocation } from '../../utils/map';
 import * as _ from 'lodash';
-// import TMap from 'TMap';
 import './style.less';
+
+let markerLayer = null;
+
+let map = null;
 
 const MapLocation = memo((props) => {
   const {
@@ -12,6 +15,7 @@ const MapLocation = memo((props) => {
     editAddress
   } = props;
 
+  const [hasMap, setHasMap] = useState(false);
   const [loc, setLoc] = useState(null);
   const [addressList, setAddressList] = useState([]);
 
@@ -20,24 +24,81 @@ const MapLocation = memo((props) => {
     setLoc(location);
   }
 
+  /**
+   * 获取地址列表
+   * @param {*} loc 
+   */
+  const getAddressAsync = async (lat, lng) => {
+    const result = await getAddress(lat, lng);
+    setAddressList(result.nearPois);
+  }
+
+  /**
+   * 初始化地图
+   */
+  const initMap = () => {
+    var center = new window.TMap.LatLng(loc?.lat, loc?.lng);//设置中心点坐标
+    map = new window.TMap.Map("map-wrap", {
+      center: center
+    });
+
+    //初始化marker图层
+    markerLayer = new window.TMap.MultiMarker({
+      id: 'marker-layer',
+      map: map,
+      geometries: [
+        {
+          "id": "1",   //点标记唯一标识，后续如果有删除、修改位置等操作，都需要此id
+          "styleId": 'myStyle',  //指定样式id
+          "position": new window.TMap.LatLng(loc?.lat, loc?.lng),  //点标记坐标位置
+          "properties": {//自定义属性
+            "title": "marker1"
+          }
+        }
+      ]
+    });
+
+    //监听点击事件添加marker
+    map.on("click", async (evt) => {
+      const id = markerLayer.geometries[0].id;
+      markerLayer.remove([id]);
+      markerLayer.add({
+        position: evt.latLng
+      });
+      await getAddressAsync(evt.latLng.lat, evt.latLng.lng);
+      // const result = await getAddress(evt.latLng.lat, evt.latLng.lng);
+      // setAddressList(result.nearPois);
+      setLoc({ ...evt.latLng });
+      onSetLatLng({ ...evt.latLng });
+    });
+  }
+
   useEffect(() => {
     initialData();
   }, [])
 
+  /**
+   * 地图赋值
+   */
   useEffect(() => {
-    if (loc) {
-      // var center = new TMap.LatLng(...loc);//设置中心点坐标
-      // var map = new TMap.Map("map-wrap", {
-      //   center: center
-      // });
-
-      // //初始化marker图层
-      // var markerLayer = new TMap.MultiMarker({
-      //   id: 'marker-layer',
-      //   map: map
-      // });
+    if (editAddress && Object.keys(editAddress).length) {
+      form.setFieldsValue({
+        address: editAddress.address
+      });
+      map?.setCenter({ lat: editAddress.lat, lng: editAddress.lng });
+      const id = markerLayer?.geometries[0].id;
+      markerLayer?.remove([id]);
+      markerLayer?.add({ position: new window.TMap.LatLng(editAddress.lat, editAddress.lng) });
+      getAddressAsync(editAddress.lat, editAddress.lng);
     }
-  }, [loc])
+  }, [editAddress])
+
+  useEffect(() => {
+    if (loc && !hasMap) {
+      setHasMap(true);
+      initMap();
+    }
+  }, [loc, hasMap])
 
   /**
    * 输入搜索
@@ -75,7 +136,11 @@ const MapLocation = memo((props) => {
           onSearch={handleOnSelectSearch}
           filterOption={false}
           onChange={(value) => {
-            onSetLatLng({ ...loc })
+            onSetLatLng({ ...loc });
+            map?.setCenter({ lat: loc.lat, lng: loc.lng });
+            const id = markerLayer?.geometries[0].id;
+            markerLayer?.remove([id]);
+            markerLayer?.add({ position: new window.TMap.LatLng(loc.lat, loc.lng) });
           }}
         >
           {
@@ -86,7 +151,7 @@ const MapLocation = memo((props) => {
       <Form.Item>
         <div className="map-wrap" id="map-wrap"></div>
       </Form.Item>
-    </div>
+    </div >
   )
 })
 

@@ -75,6 +75,7 @@ const AddStore = memo(() => {
         is_cover: 0
       })))
       setAreas1(storeDetail?.address?.area_code);
+      setEditAddress(storeDetail?.address);
     }
   }, [storeDetail])
 
@@ -354,7 +355,7 @@ const AddStore = memo(() => {
         htype: "submit", // submit || reset
         onBtnClick: async (value) => {
           console.log("按钮点击的事件222", value);
-          saveStoreHandle(value)
+          saveStoreHandle(value);
         }
       },
       {

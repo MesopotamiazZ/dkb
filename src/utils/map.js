@@ -44,23 +44,24 @@ const getAddress = async (lat, lng) => {
   });
 };
 
-const getIpLocation = () => {
-  const res = request({
-    url: 'https://apis.map.qq.com/ws/location/v1/ip',
-    method: 'get',
-    params: {
-      key: '7W3BZ-H3WWJ-ZV7FE-KMYWE-4A44Q-CSBZ2'
-    }
-  })
-  if (res.status === 0) {
-    return {
-      ...res.result.location
-    }
-  } else {
-    return {
-      lat: 39.90469,
-      lng: 116.40717,
-    }
+const getIpLocation = async () => {
+  // const res = await request({
+  //   url: 'https://apis.map.qq.com/ws/location/v1/ip',
+  //   method: 'get',
+  //   params: {
+  //     key: '7W3BZ-H3WWJ-ZV7FE-KMYWE-4A44Q-CSBZ2'
+  //   }
+  // })
+  // if (res.status === 0) {
+  //   return {
+  //     ...res.result.location
+  //   }
+  // } else {
+
+  // }
+  return {
+    lat: 39.90469,
+    lng: 116.40717,
   }
 }
 
