@@ -484,7 +484,7 @@ const Classification = memo(() => {
             key="img"
             label="分类图标"
             name="img"
-            style={{ marginBottom: 0 }}
+          // style={{ marginBottom: 0 }}
           >
             <ProUpload
               imageParams={{}}
@@ -498,13 +498,13 @@ const Classification = memo(() => {
               }}
             />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             // labelCol={{ span: 4 }}
             wrapperCol={{ span: 18, offset: 4 }}
           // style={{ marginBottom: 0 }}
           >
             <span className="sub-color">用于分类显示，建议尺寸：200px*200px。</span>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="等级状态"
             name="status"
@@ -516,13 +516,13 @@ const Classification = memo(() => {
             // unCheckedChildren="关闭"
             />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             // labelCol={{ span: 4 }}
             wrapperCol={{ span: 18, offset: 4 }}
           // style={{ marginBottom: 0 }}
           >
             <span className="sub-color">等级状态关闭时将不对外展示</span>
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
       {/* 确认删除 */}

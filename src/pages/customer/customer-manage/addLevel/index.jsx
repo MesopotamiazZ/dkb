@@ -173,6 +173,7 @@ const AddLevel = memo(() => {
               labelCol: {
                 span: 2,
               },
+              style: { marginBottom: '10px' }
             },
             props: {
               // placeholder: '请填写等级名称',

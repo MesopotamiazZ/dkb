@@ -215,7 +215,7 @@ const TagManage = () => {
         destroyOnClose
         width={620}
         centered
-        okText={!curId ? '新建标签' : '更新标签'}
+        okText="确认"
         cancelText="取消"
         onOk={() => addAndEditTag()}
         onCancel={() => {

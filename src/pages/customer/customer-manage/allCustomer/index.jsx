@@ -458,7 +458,7 @@ const AllCustomer = memo(() => {
         destroyOnClose
         width={620}
         centered
-        okText={!curId ? '新建客户' : '更新客户'}
+        okText="确认"
         cancelText="取消"
         onOk={() => addAndEditCustmer()}
         onCancel={() => {

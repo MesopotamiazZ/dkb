@@ -367,6 +367,7 @@ const PublishProduct = memo(() => {
               labelCol: {
                 span: 2,
               },
+              // style: { marginBottom: 0 }
             },
             props: {
               //请求的参数
@@ -394,21 +395,21 @@ const PublishProduct = memo(() => {
               // ],
             }
           },
-          {
-            wrap: {
-              key: 'tip1',
-              name: 'tip1',
-              // label: ' ',
-              type: 'formtiptext',
-              wrapperCol: {
-                offset: 2,
-              },
-              // style: { marginBottom: 0 },
-            },
-            props: {
-              tip: '不超过15张，建议上传jpg格式图片，图片大小建议：640*640像素'
-            }
-          },
+          // {
+          //   wrap: {
+          //     key: 'tip1',
+          //     name: 'tip1',
+          //     // label: ' ',
+          //     type: 'formtiptext',
+          //     wrapperCol: {
+          //       offset: 2,
+          //     },
+          //     // style: { marginBottom: 0 },
+          //   },
+          //   props: {
+          //     tip: '不超过15张，建议上传jpg格式图片，图片大小建议：640*640像素'
+          //   }
+          // },
           {
             wrap: {
               key: 'catId-outer',
@@ -485,7 +486,7 @@ const PublishProduct = memo(() => {
               labelCol: {
                 span: 2,
               },
-              style: { marginBottom: 0 }
+              // style: { marginBottom: 0 }
             },
             props: {
               enum: [{ label: '单规格', value: '1' }, { label: '多规格', value: '2' }],
@@ -494,21 +495,21 @@ const PublishProduct = memo(() => {
               },
             }
           },
-          {
-            wrap: {
-              key: 'tip2',
-              name: 'tip2',
-              // label: ' ',
-              type: 'formtiptext',
-              wrapperCol: {
-                offset: 2,
-              },
-              // style: { marginBottom: 0 },
-            },
-            props: {
-              tip: '如有颜色、尺码等多种规格，请选择多规格'
-            }
-          },
+          // {
+          //   wrap: {
+          //     key: 'tip2',
+          //     name: 'tip2',
+          //     // label: ' ',
+          //     type: 'formtiptext',
+          //     wrapperCol: {
+          //       offset: 2,
+          //     },
+          //     // style: { marginBottom: 0 },
+          //   },
+          //   props: {
+          //     tip: '如有颜色、尺码等多种规格，请选择多规格'
+          //   }
+          // },
           {
             wrap: {
               key: 'specsId-outer',

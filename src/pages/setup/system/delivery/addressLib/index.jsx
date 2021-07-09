@@ -297,7 +297,7 @@ const ExpressDelivery = memo(() => {
         destroyOnClose
         width={620}
         centered
-        okText={!curId ? '新建地址' : '更新地址'}
+        okText="确认"
         cancelText="取消"
         onOk={() => createAddressHandle()}
         onCancel={() => {

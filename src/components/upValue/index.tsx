@@ -233,9 +233,9 @@ const UpValue: React.FC<upValuesProps> = memo(({ upRules, onChangeUpCondition, u
           设置规则
         </Button>
       </div>
-      <div className="up-value-foot">
+      {/* <div className="up-value-foot">
         更新等级成长值后，部分客户可能因不满足该成长值产生等级变化
-      </div>
+      </div> */}
       <Modal
         className="rule-modal"
         title="成长规则"

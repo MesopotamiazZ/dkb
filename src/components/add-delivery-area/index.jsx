@@ -14,6 +14,8 @@ const AddDeliveryArea = memo((props) => {
     provinceList,
     defaultData,
     onSetDeliveryArea,
+    type,
+    selectAreas, // 已经选择的区域
   } = props;
 
   const [form] = Form.useForm();
@@ -32,8 +34,13 @@ const AddDeliveryArea = memo((props) => {
    * 获取省份
    */
   useEffect(() => {
-    setProvinceListTemp(provinceList.map((item) => (item.name)))
-  }, [provinceList])
+    setProvinceListTemp(provinceList.map((item) => ({
+      label: item.name,
+      value: item.name,
+      disabled: editingKey ? false : selectAreas.indexOf(item.name) !== -1
+    })))
+    // setProvinceListTemp(provinceList.map((item) => (item.name)))
+  }, [provinceList, selectAreas, editingKey])
 
   /**
    * 编辑默认可配区域
@@ -151,7 +158,8 @@ const AddDeliveryArea = memo((props) => {
    * @param {*} e 
    */
   const onCheckAllChange = e => {
-    setCheckedList(e.target.checked ? provinceListTemp : []);
+    console.log(e, provinceListTemp.filter(item => (selectAreas.indexOf(item.name) === -1)).map(item => item.value))
+    setCheckedList(e.target.checked ? provinceListTemp.filter(item => (selectAreas.indexOf(item.value) === -1)).map(item => item.value) : []);
     setIndeterminate(false);
     setCheckAll(e.target.checked);
   };
@@ -253,7 +261,7 @@ const AddDeliveryArea = memo((props) => {
       },
     },
     {
-      title: '首件(个)',
+      title: type === '1' ? '首件(个)' : '首重(kg)',
       dataIndex: 'first_unit',
       // editable: true,
       align: 'center',
@@ -287,7 +295,7 @@ const AddDeliveryArea = memo((props) => {
       ),
     },
     {
-      title: '续件(个)',
+      title: type === '1' ? '续件(个)' : '续重(kg)',
       dataIndex: 'next_unit',
       // editable: true,
       align: 'center',
@@ -386,7 +394,7 @@ const AddDeliveryArea = memo((props) => {
             setData(data.concat({
               areas: checkedList.join(','),
               id: `${Date.now()}`,
-              first_unit: 0,
+              first_unit: 1,
               first_money: 0,
               next_unit: 0,
               next_money: 0
@@ -395,9 +403,15 @@ const AddDeliveryArea = memo((props) => {
           setCheckedList([]);
           setEditingKey('');
           setIndeterminate(false);
+          setCheckAll(false);
           setDeliverAreaModal(false);
         }}
-        onCancel={() => setDeliverAreaModal(false)}
+        onCancel={() => {
+          setDeliverAreaModal(false);
+          setCheckAll(false);
+          setCheckedList([]);
+          setEditingKey('');
+        }}
       >
         <div>
           <Checkbox style={{ marginBottom: 12 }} indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>

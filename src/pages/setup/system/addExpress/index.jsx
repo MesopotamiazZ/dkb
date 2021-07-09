@@ -32,6 +32,8 @@ const AddExpress = memo(() => {
   })
   const [defaultTemplate, setDefaultTemplate] = useState([]);
   const [template, setTemplate] = useState([]);
+  const [type, setType] = useState('1');
+  const [selectAreas, setSelectAreas] = useState([]); // 已经选择的区域
 
   const initialData = () => {
     dispatch(getExpressDetailActionAsync({ id: id || localStorage.getItem('express_id') }));
@@ -77,25 +79,31 @@ const AddExpress = memo(() => {
     dispatch(getAreaActionAsync({ pid: 0, level: 1 }))
   }, [])
 
-  const resizeListener = (e) => {
-    console.log('resizeListener')
-  }
+  // const resizeListener = (e) => {
+  //   console.log('resizeListener')
+  // }
 
-  useEffect(() => {
-    // const content = selfRef.current;
-    // const formWrapper = content.querySelector('.form-wrapper');
-    // console.log(formWrapper)
-    window.addEventListener('resize', resizeListener, false)
-    return () => {
-      window.removeEventListener('resize', resizeListener, false)
-    }
-  }, [])
+  // useEffect(() => {
+  //   // const content = selfRef.current;
+  //   // const formWrapper = content.querySelector('.form-wrapper');
+  //   // console.log(formWrapper)
+  //   window.addEventListener('resize', resizeListener, false)
+  //   return () => {
+  //     window.removeEventListener('resize', resizeListener, false)
+  //   }
+  // }, [])
 
   /**
    * 可配送区域
    * @param {*} data 
    */
   const onSetDeliveryArea = (data) => {
+    let areas = [];
+    const arrs = data.map(item => item.areas.split(','));
+    arrs.forEach(item => {
+      areas = areas.concat(item);
+    })
+    setSelectAreas(areas);
     setTemplate(data.map(item => ({
       frist_unit: item?.first_unit,
       frist_money: item?.first_money?.toFixed(2),
@@ -160,7 +168,10 @@ const AddExpress = memo(() => {
               ],
             },
             props: {
-              enum: [{ value: '1', label: "按件计费" }, { value: '2', label: "按重量计费" }] //radio 的选项值
+              enum: [{ value: '1', label: "按件计费" }, { value: '2', label: "按重量计费" }], //radio 的选项值
+              onChange: (e) => {
+                setType(e.target.value);
+              }
             }
           },
           {
@@ -180,6 +191,8 @@ const AddExpress = memo(() => {
               provinceList,
               enum: defaultTemplate,
               onSetDeliveryArea,
+              selectAreas,
+              type,
             },
           },
         ]

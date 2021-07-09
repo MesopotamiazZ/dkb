@@ -90,7 +90,9 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
   return (
     <div className="benefit-wrap">
       <div className="benefit-wrap-item free-ship-wrap">
-        <Form.Item>
+        <Form.Item
+          style={{ marginBottom: '10px' }}
+        >
           <Checkbox
             checked={benefitDefaultValues?.freeShip}
             onChange={(e) => {
@@ -102,7 +104,9 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
             满金额包邮
           </Checkbox>
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          style={{ marginBottom: '10px' }}
+        >
           <div className="free-ship-input">
             <span>消费满</span>
             <InputNumber
@@ -119,7 +123,9 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
         </Form.Item>
       </div>
       <div className="benefit-wrap-item consume-discount-wrap">
-        <Form.Item>
+        <Form.Item
+          style={{ marginBottom: '10px' }}
+        >
           <Checkbox
             checked={benefitDefaultValues?.consumeDiscount}
             onChange={(e) => {
@@ -132,7 +138,9 @@ const Benefit: React.FC<benefitProps> = memo((props) => {
           </Checkbox>
         </Form.Item>
         <div className="free-ship-input">
-          <Form.Item>
+          <Form.Item
+            style={{ marginBottom: '10px' }}
+          >
             <Radio.Group
               value={benefitDefaultValues?.discountType}
               onChange={(e) => {

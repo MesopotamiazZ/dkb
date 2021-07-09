@@ -256,7 +256,7 @@ const StorageRule = () => {
         destroyOnClose
         width={620}
         centered
-        okText={!curId ? '新建规则' : '更新规则'}
+        okText="确认"
         cancelText="取消"
         onOk={() => addAndEditVcRule()}
         onCancel={() => {
